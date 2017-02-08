@@ -1,0 +1,6 @@
+---
+- name: Patch and repackage components RPM
+  hosts: [undercloud, tester]
+  tasks:
+  roles:
+      - { role: patch }
