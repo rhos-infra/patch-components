@@ -70,31 +70,31 @@
 - name: Clean dist-git path
   file:
     state: absent
-    path: "{{ ansible_env.HOME }}/dist-git/"
+    path: "{{ tmp_dir }}/dist-git/"
 
 # Clone component dist-git repo
 - name: Clone the component dist-git repo
   git:
     repo="{{ component_dist_git_url }}"
     version="rhos-{{ component.version }}.0-rhel-{{ ansible_distribution_version|int }}"
-    dest="{{ ansible_env.HOME }}/dist-git/{{ component_dist_git_name }}"
+    dest="{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
     accept_hostkey=true
 
 - name: Prepare branch for patching
   shell: "git checkout -b gerrit-patch && git branch rhos-{{ component.version }}.0-patches"
   args:
-    chdir: "{{ ansible_env.HOME }}/{{ component.name }}"
+    chdir: "{{ tmp_dir }}/{{ component.name }}"
   tags:
     - skip_ansible_lint
 
 - name: Prepare dist-git repo for patching
   shell: >
-    git remote add -f patches {{ ansible_env.HOME}}/{{ component.name }} &&
+    git remote add -f patches {{ tmp_dir}}/{{ component.name }} &&
     git fetch patches &&
     git fetch patches --tags &&
     git branch rhos-{{ component.version }}.0-patches patches/gerrit-patch;
   args:
-    chdir: "{{ ansible_env.HOME }}/dist-git/{{ component_dist_git_name }}"
+    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   tags:
     - skip_ansible_lint
 
@@ -105,7 +105,7 @@
     git config --global user.email `whoami`@redhat.com &&
     rdopkg patch;
   args:
-    chdir: "{{ ansible_env.HOME }}/dist-git/{{ component_dist_git_name }}"
+    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   changed_when: true
   tags:
     - skip_ansible_lint
@@ -113,21 +113,20 @@
 # Now that the repo is patched, generate RPMs from it
 - name: Build new RPM from patched dist-git repo
   shell: "rdopkg mockbuild"
-  ignore_errors: true
   args:
-    chdir: "{{ ansible_env.HOME }}/dist-git/{{ component_dist_git_name }}"
+    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   register: rpm_mockbuild
   changed_when: true
   tags:
     - skip_ansible_lint
 
-# Some build errors are lagitimate and should not fail the run
+# Some build errors are legitimate and should not fail the run
 # Like '.gitreview: does not exist in index'
 - name: Check for legitimate build errors
   shell: grep -R -i -E "can't find file to patch|No such file or directory|does not exist in index" results*
   ignore_errors: true
   args:
-    chdir: "{{ ansible_env.HOME }}/dist-git/{{ component_dist_git_name }}"
+    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   register: common_build_errors
   changed_when: false
 
@@ -145,7 +144,7 @@
   when: rpm_mockbuild.rc == 0
 
 - name: Copy new generated RPMs to /patched_rpms
-  shell: "cp {{ ansible_env.HOME }}/dist-git/{{ component_dist_git_name }}/results*/*/*/*.rpm /patched_rpms/"
+  shell: "cp {{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/results*/*/*/*.rpm /patched_rpms/"
   when: rpm_mockbuild.rc == 0
 
 - name: Create patching logs directory
@@ -157,7 +156,7 @@
 
 - name: Save patching logs
   become: yes
-  shell: "cp {{ ansible_env.HOME }}/dist-git/{{ component_dist_git_name }}/results*/*/*/*.log /var/log/patching_logs"
+  shell: "cp {{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/results*/*/*/*.log /var/log/patching_logs"
   changed_when: true
 
 - name: Create repository for patched RPMs

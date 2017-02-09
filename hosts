@@ -1,15 +1,7 @@
-#undercloud ansible_ssh_host=10.8.184.240 ansible_ssh_user=stack ansible_ssh_private_key_file=/home/rhos-ci/.ssh/rhos-jenkins/id_rsa
-#localhost ansible_ssh_host=localhost ansible_ssh_user=dsariel 
+#undercloud ansible_connection=ssh ansible_ssh_host=10.8.187.238 ansible_ssh_user=cloud-user
 localhost ansible_connection=local
 
 
-# Groups
-[local]
-localhost
-
-[undercloud]
-localhost
-
-[tester]
-localhost
+#[undercloud]
+#undercloud
 

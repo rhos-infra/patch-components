@@ -8,3 +8,16 @@ ansible_ssh_user: cloud-user
 component_dist_git_name: 'openstack-cinder'
 component_dist_git_url: 'git://pkgs.devel.redhat.com/rpms/openstack-cinder'
 
+#host:
+#  name: localhost
+#  ip:  localhost
+#  username: dsariel
+#  key_file: 
+
+host:
+  name: undercloud 
+  ip: 10.8.180.25 
+  username: cloud-user
+  key_file: /home/dsariel/.ssh/cloud-user
+# /home/dsariel/.ssh/id_rsa
+
