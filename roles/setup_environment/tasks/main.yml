@@ -1,0 +1,31 @@
+---
+- name: Remove and create logs dir
+  file: path={{ logs_dir | default(ansible_env.HOME) }}/logs/ state={{ item }}
+  with_items:
+    - absent
+    - directory
+
+# To copy the component to remote host
+- name: Install rsync
+  become: yes
+  yum:
+    name='rsync'
+    state=present
+
+- name: Clean previous and create tmp_dir for all the building
+  register: tmp_dir_shell
+  shell: "rm -rf tmp.patch_rpm*; mktemp -d --tmpdir tmp.patch_rpm.XXXXXXXX"
+
+- name: Set tmp_dir for all the building
+  set_fact: tmp_dir={{tmp_dir_shell.stdout}}
+
+- name: Copy component to remote host
+  synchronize:
+    src="{{ item }}"
+    dest="{{ ansible_env.HOME }}"
+  with_first_found:
+    - "{{ component.path | default(omit) }}"
+    - "{{ inventory_dir }}/{{ component.name }}"
+    - "{{ inventory_dir }}/../{{ component.name }}"
+    - "{{ playbook_dir }}/../{{ component.name }}"
+

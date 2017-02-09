@@ -1,6 +1,9 @@
 ---
 - name: Patch and repackage components RPM
-  hosts: [undercloud, tester]
-  tasks:
+  hosts: [undercloud, tester, local]
   roles:
-      - { role: patch }
+    - { role: patch }
+    - { role: setup_repos }
+    - { role: setup_environment }
+    - { role: patch_rpm }
+

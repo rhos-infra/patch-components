@@ -1,0 +1,10 @@
+component:
+  name: cinder
+  version: 9
+
+
+ansible_ssh_user: cloud-user
+
+component_dist_git_name: 'openstack-cinder'
+component_dist_git_url: 'git://pkgs.devel.redhat.com/rpms/openstack-cinder'
+
