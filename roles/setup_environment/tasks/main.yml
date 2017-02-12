@@ -33,3 +33,4 @@
     - "{{ inventory_dir }}/../{{ component.name }}"
     - "{{ playbook_dir }}/../{{ component.name }}"
 
+

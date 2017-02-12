@@ -16,8 +16,7 @@ component_dist_git_url: 'git://pkgs.devel.redhat.com/rpms/openstack-cinder'
 
 host:
   name: undercloud 
-  ip: 10.8.180.25 
+  ip: 10.X.Y.Z 
   username: cloud-user
-  key_file: /home/dsariel/.ssh/cloud-user
-# /home/dsariel/.ssh/id_rsa
+  key_file: /home/rhos-ci/.ssh/rhos-jenkins/id_rsa
 

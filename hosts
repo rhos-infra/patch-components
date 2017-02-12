@@ -1,7 +1,1 @@
-#undercloud ansible_connection=ssh ansible_ssh_host=10.8.187.238 ansible_ssh_user=cloud-user
 localhost ansible_connection=local
-
-
-#[undercloud]
-#undercloud
-

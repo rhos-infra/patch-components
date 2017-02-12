@@ -15,8 +15,8 @@
 - name: Patch and repackage components RPM
   hosts: undercloud 
   roles:
-    - { role: patch }
     - { role: setup_repos }
-    - { role: setup_environment }
+    - { role: setup_environment}
+    - { role: setup_IT_certificates, become: yes }
     - { role: patch_rpm }
 
