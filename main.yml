@@ -4,16 +4,16 @@
   tasks:
     - name: Add undercloud to in-memory inventory
       add_host:
-         name="{{ host.name }}"
-         hostname="{{ host.ip }}"
+         name="tester"
+         hostname="{{ install.host.ip }}"
          groups="all,undercloud,tester,local"
-         ansible_ssh_host="{{ host.ip }}"
-         ansible_fqdn="{{ host.ip }}"
-         ansible_ssh_user="{{ host.username }}"
-         ansible_ssh_private_key_file="{{ host.key_file }}"
+         ansible_ssh_host="{{ install.host.ip }}"
+         ansible_fqdn="{{ install.host.ip }}"
+         ansible_ssh_user="{{ install.host.username }}"
+         ansible_ssh_private_key_file="{{ install.host.key_file }}"
 
 - name: Patch and repackage components RPM
-  hosts: undercloud 
+  hosts: tester 
   roles:
     - { role: setup_repos }
     - { role: setup_environment}
