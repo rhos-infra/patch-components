@@ -22,8 +22,6 @@
     name="http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"
 
 - name: Execute rhos-release to install rhos repos
-  vars:
-    component_version: "{{ component.version }}"
   become: yes
-  shell: "{{ rhos_release_bin }} -x; {{ rhos_release_bin }} {{ component_version }}"
+  shell: "{{ rhos_release_bin }} -x; {{ rhos_release_bin }} {{ install.component.version }}"
   changed_when: true

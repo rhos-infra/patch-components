@@ -1,3 +1,7 @@
+- set_fact:
+      component_dist_git_name: "openstack-{{ install.component.name }}"
+      component_dist_git_url: "git://pkgs.devel.redhat.com/rpms/openstack-{{ install.component.name }}"
+
 # rhpkg is used by rdopkg
 - name: Install rhpkg and rdopkg repos
   become: yes
@@ -15,6 +19,14 @@
   shell: yum localinstall -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
   tags:
     - skip_ansible_lint
+
+# Koji 1.11 will cause 'rdopkg patch' to fail
+# See the following bug: https://bugzilla.redhat.com/show_bug.cgi?id=1406383
+- name: Install Koji 1.10
+  become: yes
+  yum:
+    name="http://mirror.centos.org/centos/7/extras/x86_64/Packages/koji-1.10.1-1.el7.centos.noarch.rpm"
+    state=present
 
 # Although pyrpkg pulled by rhpkg, we install it directly because at the moment, an older
 # version of pyrpkg is pulled (1.40) while we need a newer version (1.43)
@@ -76,23 +88,23 @@
 - name: Clone the component dist-git repo
   git:
     repo="{{ component_dist_git_url }}"
-    version="rhos-{{ component.version }}.0-rhel-{{ ansible_distribution_version|int }}"
+    version="rhos-{{ install.component.version }}.0-rhel-{{ ansible_distribution_version|int }}"
     dest="{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
     accept_hostkey=true
 
 - name: Prepare branch for patching
-  shell: "git checkout -b gerrit-patch && git branch rhos-{{ component.version }}.0-patches"
+  shell: "git checkout -b gerrit-patch && git branch rhos-{{ install.component.version }}.0-patches"
   args:
-    chdir: "{{ tmp_dir }}/{{ component.name }}"
+    chdir: "{{ tmp_dir }}/{{ install.component.name }}"
   tags:
     - skip_ansible_lint
 
 - name: Prepare dist-git repo for patching
   shell: >
-    git remote add -f patches {{ tmp_dir}}/{{ component.name }} &&
+    git remote add -f patches {{ tmp_dir}}/{{ install.component.name }} &&
     git fetch patches &&
     git fetch patches --tags &&
-    git branch rhos-{{ component.version }}.0-patches patches/gerrit-patch;
+    git branch rhos-{{ install.component.version }}.0-patches patches/gerrit-patch;
   args:
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   tags:

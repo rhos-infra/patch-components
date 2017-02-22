@@ -2,30 +2,44 @@
 
 Allows to repackage RPMs with source code directly from Gerrit or local repo.
 
-### How to use this projet
+### How to use this project as an ansible playbook
 
 Create virtual environment:
 
     virtualenv venv
     source venv/bin/activate
-    pip install ansible 
+    pip install ansible
 
-Clone the component and cherry-pick the patch:
+Clone the component <component-name> from <gerrit url> to ~/ and cherry-pick the patch:
 
-    git clone https://<<gerrit url>>/gerrit/cinder
-    git fetch https://<<gerrit url>>/gerrit/cinder refs/changes/62/89862/2 && git checkout FETCH_HEAD
+    git clone https://<gerrit url>/gerrit/<component-name> ~/<component-name>
+    cd ~/<component-name>
+    git fetch https://<gerrit url>/gerrit/<component-name> refs/changes/xy/abcde/x && git checkout FETCH_HEAD
 
 Run:
 
     ansible-playbook -i hosts main.yml --extra-vars @params.yml -vvvv
 
-## Result
+
+### Result
 
 The project will generate one or more RPMs in the following path: dist-git/<component_name>
 
-   ./dist-git/openstack-cinder/results_openstack-cinder/8.1.1/6.el7ost/openstack-cinder-8.1.1-6.el7ost.noarch.rpm
-   ./dist-git/openstack-cinder/results_openstack-cinder/8.1.1/6.el7ost/python-cinder-8.1.1-6.el7ost.noarch.rpm
 
-### InfraRed Support
+### How to use this as an InfraRed plugin
 
-This project is supported by Infrared.
+Clone the component <component-name> from <gerrit url> to ~/ and cherry-pick the patch as described in the section
+"How to use this project as an ansible playbook". Create virtual environmenti and install infrared:
+
+    git clone https://github.com/redhat-openstack/infrared.git
+    cd infrared
+    virtualenv venv
+    source venv/bin/activate
+    pip install -e .
+
+Add patch-components as a plugin:
+
+    infrared plugin add https://github.com/rhos-infra/patch-components.git
+
+Run:
+    infrared patch-components --host-ip A.B.C.D --host-username <user-name> --component-name <component-name>  --host-key_file ~/.ssh/id_rsa  --component-version <rhos version>
