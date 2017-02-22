@@ -28,9 +28,9 @@
     src="{{ item }}"
     dest="{{ tmp_dir }}"
   with_first_found:
-    - "{{ component.path | default(omit) }}"
-    - "{{ inventory_dir }}/{{ component.name }}"
-    - "{{ inventory_dir }}/../{{ component.name }}"
-    - "{{ playbook_dir }}/../{{ component.name }}"
+    - "{{ install.component.path | default(omit) }}"
+    - "{{ inventory_dir }}/{{ install.component.name }}"
+    - "{{ inventory_dir }}/../{{ install.component.name }}"
+    - "{{ playbook_dir }}/../{{ install.component.name }}"
 
 

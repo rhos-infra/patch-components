@@ -1,22 +1,18 @@
-component:
-  name: cinder
-  version: 9
+install:
+  component:
+     name: cinder
+     version: 9
+#install:
+#  host:
+#    name: localhost
+#    ip:  localhost
+#    username: dsariel
+#    key_file: 
 
-
-ansible_ssh_user: cloud-user
-
-component_dist_git_name: 'openstack-cinder'
-component_dist_git_url: 'git://pkgs.devel.redhat.com/rpms/openstack-cinder'
-
-#host:
-#  name: localhost
-#  ip:  localhost
-#  username: dsariel
-#  key_file: 
-
-host:
-  name: undercloud 
-  ip: 10.X.Y.Z 
-  username: cloud-user
-  key_file: /home/rhos-ci/.ssh/rhos-jenkins/id_rsa
+install:
+  host:
+    name: undercloud
+    ip: 10.8.181.173
+    username: cloud-user
+    key_file: /home/rhos-ci/.ssh/rhos-jenkins/id_rsa
 
