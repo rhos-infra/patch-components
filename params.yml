@@ -3,7 +3,7 @@ component:
   version: 9
 
 
-ansible_ssh_user: cloud-user
+#ansible_ssh_user: cloud-user
 
 component_dist_git_name: 'openstack-cinder'
 component_dist_git_url: 'git://pkgs.devel.redhat.com/rpms/openstack-cinder'
@@ -16,7 +16,7 @@ component_dist_git_url: 'git://pkgs.devel.redhat.com/rpms/openstack-cinder'
 
 host:
   name: undercloud 
-  ip: 10.X.Y.Z 
+  ip: 10.8.181.173
   username: cloud-user
   key_file: /home/rhos-ci/.ssh/rhos-jenkins/id_rsa
 
