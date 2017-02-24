@@ -19,11 +19,11 @@ subparsers:
                   host-ip:
                       type: Value
                       help: 'ip of the machine that rpm will be built on'
-                      required: True
+                      required: False 
                   host-username:
                       type: Value
                       help: 'username on the machine that rpm will be built on'
-                      required: True
+                      required: False
                   host-key_file:
                       type: Value
                       help: 'SSH key for the user <username>'

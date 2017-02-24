@@ -31,6 +31,7 @@
     - "{{ install.component.path | default(omit) }}"
     - "{{ inventory_dir }}/{{ install.component.name }}"
     - "{{ inventory_dir }}/../{{ install.component.name }}"
+    - "{{ inventory_dir }}/../../../{{ install.component.name }}"
     - "{{ playbook_dir }}/../{{ install.component.name }}"
 
 
