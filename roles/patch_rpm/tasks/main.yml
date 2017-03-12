@@ -98,7 +98,6 @@
     chdir: "{{ tmp_dir }}/{{ install.component.name }}"
   tags:
     - skip_ansible_lint
-  ignore_errors: yes
 
 - name: Prepare dist-git repo for patching
   shell: >
