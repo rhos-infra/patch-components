@@ -92,12 +92,22 @@
     dest="{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
     accept_hostkey=true
 
-- name: Prepare branch for patching
-  shell: "git checkout -b gerrit-patch && git branch rhos-{{ install.component.version }}.0-patches"
+- name: Prepare branch for patching by creating gerrit-patch branch
+  shell: "git checkout -b gerrit-patch"
   args:
     chdir: "{{ tmp_dir }}/{{ install.component.name }}"
   tags:
     - skip_ansible_lint
+
+
+- name: Checkout rhos-XY.0-patches branch
+  shell: "git branch rhos-{{ install.component.version }}.0-patches"
+  args:
+    chdir: "{{ tmp_dir }}/{{ install.component.name }}"
+  tags:
+    - skip_ansible_lint
+  ignore_errors: yes
+
 
 - name: Prepare dist-git repo for patching
   shell: >
