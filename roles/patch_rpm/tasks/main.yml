@@ -42,6 +42,7 @@
     - 'python-cryptography'
     - 'python-devel'
     - 'libffi-devel'
+    - 'mock'
     - 'rpm-build'
     - 'openssl-devel'
     - 'rhpkg'
