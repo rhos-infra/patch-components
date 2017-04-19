@@ -42,6 +42,7 @@
     - 'python-cryptography'
     - 'python-devel'
     - 'libffi-devel'
+    - 'rpm-build'
     - 'openssl-devel'
     - 'rhpkg'
     - 'git'
