@@ -1,0 +1,33 @@
+map_component_to_distgit:
+  cinder:
+    dist_git: 'openstack-cinder'
+  glance_store:
+    dist_git: 'glance_store'
+  glance:
+    dist_git: 'openstack-glance'
+  manila:
+    dist_git: 'openstack-manila'
+  neutron:
+    dist_git: 'openstack-neutron'
+  nova:
+    dist_git: 'openstack-nova'
+  python-cinderclient:
+    dist_git: 'python-cinderclient'
+  python-glanceclient:
+    dist_git: 'python-glanceclient'
+  python-manilaclient:
+    dist_git: 'python-manilaclient'
+  python-neutronclient:
+    dist_git: 'python-neutronclient'
+  python-novaclient:
+    dist_git: 'python-novaclient'
+  python-os-brick:
+    dist_git: 'python-os-brick'
+  python-saharaclient:
+    dist_git: 'python-saharaclient'
+  sahara:
+    dist_git: 'openstack-sahara'
+  swift:
+    dist_git: 'openstack-swift'
+
+
