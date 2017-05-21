@@ -1,5 +1,6 @@
 - set_fact:
       component_dist_git_name: "{{ map_component_to_distgit[install.component.name].dist_git }}"
+- set_fact:
       component_dist_git_url: "git://pkgs.devel.redhat.com/rpms/{{ component_dist_git_name }}"
 
 # rhpkg is used by rdopkg
