@@ -11,6 +11,8 @@ map_component_to_distgit:
     dist_git: 'openstack-neutron'
   nova:
     dist_git: 'openstack-nova'
+  octavia:
+    dist_git: 'openstack-octavia'
   python-cinderclient:
     dist_git: 'python-cinderclient'
   python-glanceclient:
