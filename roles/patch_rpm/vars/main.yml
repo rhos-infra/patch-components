@@ -2,7 +2,7 @@ map_component_to_distgit:
   cinder:
     dist_git: 'openstack-cinder'
   glance_store:
-    dist_git: 'glance_store'
+    dist_git: 'python-glance-store'
   glance:
     dist_git: 'openstack-glance'
   manila:
