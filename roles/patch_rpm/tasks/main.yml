@@ -15,7 +15,7 @@
     - 'rdopkg'
 
 # TODO(abregman): Switch to yum_repository when Ansible 2.2 is released
-- name: Install epel repoistory
+- name: Install epel repository
   become: yes
   shell: yum localinstall -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
   tags:
@@ -134,12 +134,14 @@
   args:
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   changed_when: true
+  register: result
+  failed_when: "result.rc != 0 or 'No valid patch filtering regex found in the spec file.' in result.stderr"
   tags:
     - skip_ansible_lint
 
 # Now that the repo is patched, generate RPMs from it
 - name: Build new RPM from patched dist-git repo
-  shell: "rdopkg mockbuild"
+  shell: "rdopkg mockbuild --no-cleanup-after"
   args:
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   register: rpm_mockbuild
