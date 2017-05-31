@@ -14,20 +14,19 @@
     - 'rhpkg'
     - 'rdopkg'
 
-# TODO(abregman): Switch to yum_repository when Ansible 2.2 is released
-- name: Install epel repoistory
-  become: yes
-  shell: yum localinstall -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-  tags:
-    - skip_ansible_lint
+- name: Install epel repository
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    baseurl: https://download.fedoraproject.org/pub/epel/$releasever/$basearch/
 
 # Koji 1.11 will cause 'rdopkg patch' to fail
 # See the following bug: https://bugzilla.redhat.com/show_bug.cgi?id=1406383
-- name: Install Koji 1.10
-  become: yes
-  yum:
-    name="http://mirror.centos.org/centos/7/extras/x86_64/Packages/koji-1.10.1-1.el7.centos.noarch.rpm"
-    state=present
+# - name: Install Koji 1.10
+#   become: yes
+#   yum:
+#     name="http://mirror.centos.org/centos/7/extras/x86_64/Packages/koji-1.10.1-1.el7.centos.noarch.rpm"
+#     state=present
 
 # Although pyrpkg pulled by rhpkg, we install it directly because at the moment, an older
 # version of pyrpkg is pulled (1.40) while we need a newer version (1.43)
@@ -37,25 +36,27 @@
     name="{{ item }}"
     state=present
   with_items:
-    - 'pyrpkg'
     - 'createrepo'
-    - 'python-pip'
-    - 'python-cryptography'
-    - 'python-devel'
+    - 'gcc'
+    - 'git'
+    - 'koji'
     - 'libffi-devel'
     - 'mock'
-    - 'rpm-build'
     - 'openssl-devel'
+    - 'pyrpkg'
+    - 'python-cryptography'
+    - 'python-devel'
+    - 'python-pip'
+    - 'rdopkg'
     - 'rhpkg'
-    - 'git'
-    - 'gcc'
+    - 'rpm-build'
 
 # Using 0.38 specifically due to this bug: https://github.com/openstack-packages/rdopkg/issues/80
-- name: Install rdopkg
-  become: yes
-  pip:
-    name=rdopkg
-    version=0.38
+# - name: Install rdopkg
+#   become: yes
+#   pip:
+#     name=rdopkg
+#     version=0.38
 
 # TODO(abregman): Switch to yum_repository when Ansible 2.2 is released
 # EPEL is removed, since it is used only for installing rdopkg
@@ -115,31 +116,32 @@
 
 
 - name: Prepare dist-git repo for patching
-  shell: >
-    git remote add -f patches {{ tmp_dir}}/{{ install.component.name }} &&
-    git fetch patches &&
-    git fetch patches --tags &&
-    git branch rhos-{{ install.component.version }}.0-patches patches/gerrit-patch;
+  shell: |
+    set -ex
+    git remote add -f patches {{ tmp_dir}}/{{ install.component.name }}
+    git fetch patches
+    git fetch patches --tags
+    git branch rhos-{{ install.component.version }}.0-patches patches/gerrit-patch
+    git config --global user.name `whoami`
+    git config --global user.email `whoami`@redhat.com
   args:
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
-  tags:
-    - skip_ansible_lint
+    warn: False
 
 # The actual patching part
 - name: Apply patch(es) on dist-git repo and bump release
-  shell: >
-    git config --global user.name `whoami` &&
-    git config --global user.email `whoami`@redhat.com &&
-    rdopkg patch;
+  shell: REQUESTS_CA_BUNDLE=/etc/pki/tls/certs/ca-bundle.crt rdopkg patch
   args:
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   changed_when: true
-  tags:
-    - skip_ansible_lint
+  register: result
+  failed_when:
+   - result.rc != 0
+   - "'No valid patch filtering regex found in the spec file.' in result.stderr and 'patches_base=' not in result.stdout"
 
 # Now that the repo is patched, generate RPMs from it
 - name: Build new RPM from patched dist-git repo
-  shell: "rdopkg mockbuild"
+  shell: "rdopkg mockbuild --no-cleanup-after"
   args:
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   register: rpm_mockbuild
