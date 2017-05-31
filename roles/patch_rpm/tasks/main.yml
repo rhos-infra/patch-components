@@ -132,6 +132,8 @@
   args:
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   changed_when: true
+  register: result
+  failed_when: "result.rc != 0 or 'No valid patch filtering regex found in the spec file.' in result.stderr"
   tags:
     - skip_ansible_lint
 
