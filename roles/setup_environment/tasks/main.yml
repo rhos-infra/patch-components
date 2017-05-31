@@ -22,17 +22,16 @@
     name='rsync'
     state=present
 
-#synchronize:copy
+# TODO(ssbarnea): find a way to hide files copied from ansible stdout
 - name: Copy component to remote host
-  synchronize: 
+  synchronize:
     src="{{ item }}"
     dest="{{ tmp_dir }}"
     use_ssh_args="yes"
+    rsync_opts="-q"
   with_first_found:
     - "{{ install.component.path | default(omit) }}"
     - "{{ inventory_dir }}/{{ install.component.name }}"
     - "{{ inventory_dir }}/../{{ install.component.name }}"
     - "{{ inventory_dir }}/../../../{{ install.component.name }}"
     - "{{ playbook_dir }}/../{{ install.component.name }}"
-
-
