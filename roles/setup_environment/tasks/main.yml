@@ -24,15 +24,14 @@
 
 #synchronize:copy
 - name: Copy component to remote host
-  synchronize: 
+  synchronize:
     src="{{ item }}"
     dest="{{ tmp_dir }}"
     use_ssh_args="yes"
+    verbosity=0
   with_first_found:
     - "{{ install.component.path | default(omit) }}"
     - "{{ inventory_dir }}/{{ install.component.name }}"
     - "{{ inventory_dir }}/../{{ install.component.name }}"
     - "{{ inventory_dir }}/../../../{{ install.component.name }}"
     - "{{ playbook_dir }}/../{{ install.component.name }}"
-
-
