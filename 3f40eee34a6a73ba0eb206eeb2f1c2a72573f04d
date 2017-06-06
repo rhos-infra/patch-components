@@ -1,0 +1,7 @@
+Code-Review+2: Arie Bregman <abregman@redhat.com>
+Verified+1: David Sariel <dsariel@redhat.com>
+Submitted-by: David Sariel <dsariel@redhat.com>
+Submitted-at: Tue, 06 Jun 2017 12:43:06 -0400
+Reviewed-on: https://review.gerrithub.io/363689
+Project: rhos-infra/patch-components
+Branch: refs/heads/master
