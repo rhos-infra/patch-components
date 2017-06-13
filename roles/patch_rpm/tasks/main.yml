@@ -94,6 +94,8 @@
     version="rhos-{{ install.component.version }}.0-rhel-{{ ansible_distribution_version|int }}"
     dest="{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
     accept_hostkey=true
+  retries: 3
+  delay: 120
 
 - name: Prepare branch for patching by creating gerrit-patch branch
   shell: "git checkout -b gerrit-patch"
