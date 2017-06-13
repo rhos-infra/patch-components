@@ -33,6 +33,24 @@
       "revId": "f36d49f502665cc6342856f8e421e3add10e9edc",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c91ac7e0_c903af98",
+        "filename": "roles/patch_rpm/tasks/main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2017-06-13T15:49:48Z",
+      "side": 1,
+      "message": "hmm if we are only failing on rdopkg patch then it could be the regex/patches_base/missing tag in patches remote/or a number of other issues as well.  Capturing and showing the rdopkg output failure and current state of dist-git vs origin branch are key here if you want to debug right from output.  Otherwise Fail and say investigate why rdopkg patch is failing with enough details to re-produce\n\ngit cherry -v patches/rhos-X-patches rhos-X-patches\ngit describe rhos-X-patches\ngit diff origin/rhos-x-rhel-7 rhos-x-rhel-7\ngit describe rhos-x-rhel-7",
+      "parentUuid": "d9c0376f_6d56c3f2",
+      "revId": "f36d49f502665cc6342856f8e421e3add10e9edc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
