@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7c4b7639_190dda89",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2017-06-13T12:52:47Z",
+      "side": 1,
+      "message": "Can we get the Why in here please?\n\nWe have the What already",
+      "revId": "f36d49f502665cc6342856f8e421e3add10e9edc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d9c0376f_6d56c3f2",
+        "filename": "roles/patch_rpm/tasks/main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2017-06-13T12:52:47Z",
+      "side": 1,
+      "message": "how does this stack up for current components that are currently passing?",
+      "revId": "f36d49f502665cc6342856f8e421e3add10e9edc",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
