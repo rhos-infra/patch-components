@@ -16,6 +16,6 @@
   hosts: undercloud
   roles:
     - { role: setup_repos }
-    - { role: setup_environment}
-    - { role: patch_rpm }
-
+    - { role: setup_environment, when: not install.ovs.build|default('') }
+    - { role: patch_rpm, when: not install.ovs.build|default('') }
+    - { role: build_ovs, when: install.ovs.build|default('') }
