@@ -10,8 +10,6 @@
 - name: Set tmp_dir for all the building
   set_fact: tmp_dir="{{ ansible_env.HOME }}"
 
-#"{{tmp_dir_shell.stdout}}"
-
 - name: Remove and create logs dir
   file: path={{ tmp_dir }}/logs/ state={{ item }}
   with_items:
@@ -25,7 +23,6 @@
     name='rsync'
     state=present
 
-#synchronize:copy
 - name: Copy component to remote host
   synchronize:
     src="{{ item }}"
@@ -37,3 +34,5 @@
     - "{{ inventory_dir }}/../{{ install.component.name }}"
     - "{{ inventory_dir }}/../../../{{ install.component.name }}"
     - "{{ playbook_dir }}/../{{ install.component.name }}"
+  when: tmp_dir_shell is defined
+  skip: true
