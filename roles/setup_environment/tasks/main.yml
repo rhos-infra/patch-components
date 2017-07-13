@@ -37,3 +37,5 @@
     - "{{ inventory_dir }}/../{{ install.component.name }}"
     - "{{ inventory_dir }}/../../../{{ install.component.name }}"
     - "{{ playbook_dir }}/../{{ install.component.name }}"
+  when: tmp_dir_shell is defined
+
