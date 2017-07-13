@@ -6,6 +6,13 @@ subparsers:
         help: Patch the components source code
         include_groups: ['Ansible options', 'Inventory', 'Common options', 'Answers file']
         groups:
+            - title: Build OVS from source
+              options:
+                  ovs-source:
+                      type: Bool
+                      help: 'Build OVS from source and inject it to deployment'
+                      required: False
+                      default: False
             - title: Patch the component source code
               options:
                   component-name:
