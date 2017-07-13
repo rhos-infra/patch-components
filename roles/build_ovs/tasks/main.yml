@@ -1,0 +1,49 @@
+---
+# Required for building OVS
+- name: Install packages for OVS building
+  become: yes
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+      - "dh-autoreconf"
+      - "groff"
+      - "libcap-ng-devel"
+      - "graphviz"
+      - "python-sphinx"
+      - "selinux-policy-devel"
+      - "python2-zope-interface"
+      - "python2-twisted"
+
+- name: Clone OVS
+  git:
+    repo: "git clone https://github.com/openvswitch/ovs"
+    dest: "{{ ansible_env.HOME }}/ovs"
+    accept_hostkey: true
+  retries: 3
+  delay: 60
+
+- name: Build OVS
+  args:
+      chdir: "{{ ansible_env.HOME }}/ovs"
+  shell: "./boot.sh && ./configure && make rpm-fedora"
+
+# Create a directory to hold the RPMs
+- name: Create '/patched_rpms' directory`
+  become: yes
+  file:
+    path=/patched_rpms
+    state=directory
+    mode=0777
+
+- name: Copy new generated RPMs to /patched_rpms
+  shell: "cp {{ ansible_env.HOME }}/ovs/rpm/rpmbuild/RPMS/x86_64/*.rpm /patched_rpms/"
+
+- name: Create repository for patched RPMs
+  shell: "createrepo /patched_rpms;"
+
+- name: Setup repository in /etc/yum.repos.d
+  become: yes
+  template:
+    src='ovs_from_source.j2'
+    dest='/etc/yum.repos.d/patched_rpms.repo'
