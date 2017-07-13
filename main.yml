@@ -12,10 +12,24 @@
        when: (install.host is defined) and (install.host.ip is defined) and (install.host.username is defined) and (install.host.key_file is defined)
 
 
-- name: Patch and repackage components RPM
+- name: Run patch-components
   hosts: undercloud
-  roles:
-    - { role: setup_repos }
-    - { role: setup_environment}
-    - { role: patch_rpm }
+  tasks:
+      - name: Setting up repositories
+        include_role:
+            name: setup_repos
 
+      - name: Setting up the environment
+        include_role:
+            name: setup_environment
+        when: not install.ovs.source|default(false)
+
+      - name: Create a new RPM from a given repository
+        include_role:
+            name: patch_rpm
+        when: not install.ovs.source|default(false)
+
+      - name: Create openvswitch RPMs from ovs source code
+        include_role:
+            name: build_ovs
+        when: install.ovs.source|default(false)
