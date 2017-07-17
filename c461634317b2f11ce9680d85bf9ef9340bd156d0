@@ -16,6 +16,57 @@
       "revId": "c461634317b2f11ce9680d85bf9ef9340bd156d0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4523396b_23caa679",
+        "filename": "roles/build_ovs/tasks/main.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1008329
+      },
+      "writtenOn": "2017-07-17T20:02:06Z",
+      "side": 1,
+      "message": "use package module instead.",
+      "revId": "c461634317b2f11ce9680d85bf9ef9340bd156d0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6696fd19_312f8bdf",
+        "filename": "roles/build_ovs/tasks/main.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1008329
+      },
+      "writtenOn": "2017-07-17T20:02:06Z",
+      "side": 1,
+      "message": "Am I wrong to believe that this will fail ugly on Jenkins because it will checkout code outside the WORKSPACE?",
+      "revId": "c461634317b2f11ce9680d85bf9ef9340bd156d0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "947067d7_85d3aa83",
+        "filename": "roles/build_ovs/tasks/main.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1008329
+      },
+      "writtenOn": "2017-07-17T20:02:06Z",
+      "side": 1,
+      "message": "Use https://docs.ansible.com/ansible/yum_repository_module.html instead which is idempotent.",
+      "revId": "c461634317b2f11ce9680d85bf9ef9340bd156d0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
