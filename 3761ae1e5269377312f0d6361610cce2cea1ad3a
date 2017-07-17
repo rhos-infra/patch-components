@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2e1b6052_eba504e0",
+        "filename": "plugin.spec",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1010634
+      },
+      "writtenOn": "2017-07-17T13:20:35Z",
+      "side": 1,
+      "message": "nit: \u0027to\u0027 -\u003e \u0027into the\u0027 ?",
+      "revId": "3761ae1e5269377312f0d6361610cce2cea1ad3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fd6e8624_0e3cf1d2",
+        "filename": "roles/build_ovs/tasks/main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1010634
+      },
+      "writtenOn": "2017-07-17T13:20:35Z",
+      "side": 1,
+      "message": "can we reference the upstream ovs (or from cloned ovs repo(down below)) \u0027requirements\u0027 file somehow instead?",
+      "range": {
+        "startLine": 8,
+        "startChar": 2,
+        "endLine": 8,
+        "endChar": 12
+      },
+      "revId": "3761ae1e5269377312f0d6361610cce2cea1ad3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf1f2d0a_bfe8033d",
+        "filename": "roles/build_ovs/tasks/main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1010634
+      },
+      "writtenOn": "2017-07-17T13:20:35Z",
+      "side": 1,
+      "message": "whatever",
+      "range": {
+        "startLine": 31,
+        "startChar": 17,
+        "endLine": 31,
+        "endChar": 18
+      },
+      "revId": "3761ae1e5269377312f0d6361610cce2cea1ad3a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
