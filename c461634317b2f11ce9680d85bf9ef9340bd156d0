@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd99ca0c_815c395b",
+        "filename": "main.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1008329
+      },
+      "writtenOn": "2017-07-17T19:58:26Z",
+      "side": 1,
+      "message": "1) reformat params on multiple lines.\n2) update code so it would not fail if install variable is undefined, or i ovs is  not an attribute of it, or build is not an attribute.",
+      "revId": "c461634317b2f11ce9680d85bf9ef9340bd156d0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
