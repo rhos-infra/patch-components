@@ -3,7 +3,8 @@
   hosts: localhost
   gather_facts: no
   tasks:
-     - add_host:
+     - name: add each host
+       add_host:
           name: "controller-0"
           groups: "undercloud"
           ansible_ssh_user: "{{ install.host.username }}"
@@ -18,4 +19,3 @@
     - { role: setup_repos }
     - { role: setup_environment}
     - { role: patch_rpm }
-

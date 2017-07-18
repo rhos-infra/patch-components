@@ -7,12 +7,12 @@ install:
 #    name: localhost
 #    ip:  localhost
 #    username: dsariel
-#    key_file: 
+#    key_file:
 
-install:
-  host:
-    name: undercloud
-    ip: 10.8.181.173
-    username: cloud-user
-    key_file: /home/rhos-ci/.ssh/rhos-jenkins/id_rsa
-
+# install:
+#   host:
+#     name: undercloud
+#     ip: 10.8.181.173
+#     username: cloud-user
+#     key_file: /home/rhos-ci/.ssh/rhos-jenkins/id_rsa
+#

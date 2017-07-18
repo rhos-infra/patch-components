@@ -1,2 +1,3 @@
+---
 rhos_release_bin: '/usr/bin/rhos-release'
 ls_bin: '/bin/ls'
