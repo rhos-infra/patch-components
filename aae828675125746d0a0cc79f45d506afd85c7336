@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e95e7ddb_72662a4e",
+        "filename": ".yamllint",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1001398
+      },
+      "writtenOn": "2017-07-18T15:42:29Z",
+      "side": 1,
+      "message": "General question about this file: are all the options listed here are specific for this deployment, or they are explicitly overriding default options even when the value is the same as the default?",
+      "revId": "aae828675125746d0a0cc79f45d506afd85c7336",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
