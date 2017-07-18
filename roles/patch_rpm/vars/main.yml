@@ -31,5 +31,3 @@ map_component_to_distgit:
     dist_git: 'openstack-sahara'
   swift:
     dist_git: 'openstack-swift'
-
-
