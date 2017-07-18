@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b27789f1_892d5f42",
+        "filename": "main.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1004788
+      },
+      "writtenOn": "2017-07-18T09:59:40Z",
+      "side": 1,
+      "message": "this is how Ansible docs are using it",
+      "parentUuid": "bd99ca0c_815c395b",
+      "revId": "c461634317b2f11ce9680d85bf9ef9340bd156d0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4523396b_23caa679",
         "filename": "roles/build_ovs/tasks/main.yml",
         "patchSetId": 2
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "053c1bfa_d697345d",
+        "filename": "roles/build_ovs/tasks/main.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1004788
+      },
+      "writtenOn": "2017-07-18T09:59:40Z",
+      "side": 1,
+      "message": "why? I\u0027m not supporting ubuntu",
+      "parentUuid": "4523396b_23caa679",
+      "revId": "c461634317b2f11ce9680d85bf9ef9340bd156d0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6696fd19_312f8bdf",
         "filename": "roles/build_ovs/tasks/main.yml",
         "patchSetId": 2
@@ -47,6 +83,24 @@
       "writtenOn": "2017-07-17T20:02:06Z",
       "side": 1,
       "message": "Am I wrong to believe that this will fail ugly on Jenkins because it will checkout code outside the WORKSPACE?",
+      "revId": "c461634317b2f11ce9680d85bf9ef9340bd156d0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f3abac4d_a643cf7a",
+        "filename": "roles/build_ovs/tasks/main.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1004788
+      },
+      "writtenOn": "2017-07-18T09:59:40Z",
+      "side": 1,
+      "message": "yes",
+      "parentUuid": "6696fd19_312f8bdf",
       "revId": "c461634317b2f11ce9680d85bf9ef9340bd156d0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
