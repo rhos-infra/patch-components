@@ -3,6 +3,9 @@
 - name: Clean previous and create tmp_dir for all the building
   register: tmp_dir_shell
   shell: "rm -rf tmp.patch_rpm*; mktemp -d --tmpdir tmp.patch_rpm.XXXXXXXX"
+  args:
+    warn: no
+  tags: skip_ansible_lint
 
 - name: Set tmp_dir for all the building
   set_fact: tmp_dir="{{ ansible_env.HOME }}"
@@ -24,7 +27,7 @@
 
 #synchronize:copy
 - name: Copy component to remote host
-  synchronize: 
+  synchronize:
     src="{{ item }}"
     dest="{{ tmp_dir }}"
     use_ssh_args="yes"
@@ -34,5 +37,3 @@
     - "{{ inventory_dir }}/../{{ install.component.name }}"
     - "{{ inventory_dir }}/../../../{{ install.component.name }}"
     - "{{ playbook_dir }}/../{{ install.component.name }}"
-
-
