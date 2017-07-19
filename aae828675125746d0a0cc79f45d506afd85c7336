@@ -16,6 +16,24 @@
       "revId": "aae828675125746d0a0cc79f45d506afd85c7336",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dc4f4ae5_5c3f205d",
+        "filename": ".yamllint",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1008329
+      },
+      "writtenOn": "2017-07-19T08:00:14Z",
+      "side": 1,
+      "message": "Most of them are overriding defaults in order to be make possible to introduce linting to our repo. But later, based time constraints we should make them more strict.\n\nProbably you observed how hard it was to introduce even the first level of rules.\n\nIdeally we should have a reference yamllint file for openstack but as far as I know this does not exist. Let\u0027s introduce it now and improve it later.\n\nNote: I did not change any rule to fit my/our usage, only relaxed some (like indentation one).\n\nBe sure that if one would increase the rules, it will get my votes quickly.",
+      "parentUuid": "e95e7ddb_72662a4e",
+      "revId": "aae828675125746d0a0cc79f45d506afd85c7336",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
