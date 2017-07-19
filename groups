@@ -1,7 +1,5 @@
-# UUID           	Group Name
+# UUID                                  	Group Name
 #
-user:bregman-arie	user/Arie Bregman (bregman-arie)
-user:dsariel     	user/David Sariel (dsariel)
-user:rhos-ci     	user/RHOS CI (rhos-ci)
-user:ssbarnea    	user/Sorin Sbarnea (ssbarnea)
-user:wznoinsk    	user/Waldemar Znoinski (wznoinsk)
+88a9891fd3e54031d81363738e0d4db93b027dd9	@rhos-ci
+user:bregman-arie                       	user/Arie Bregman (bregman-arie)
+user:ssbarnea                           	user/Sorin Sbarnea (ssbarnea)
