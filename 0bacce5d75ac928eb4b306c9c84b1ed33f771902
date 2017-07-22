@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "00786c78_47fb2bb0",
+        "filename": "roles/build_ovs/tasks/main.yml",
+        "patchSetId": 10
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1010634
+      },
+      "writtenOn": "2017-07-22T23:55:29Z",
+      "side": 1,
+      "message": "is that the right format?",
+      "range": {
+        "startLine": 20,
+        "startChar": 11,
+        "endLine": 20,
+        "endChar": 21
+      },
+      "revId": "0bacce5d75ac928eb4b306c9c84b1ed33f771902",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3cc92e1d_99e7e888",
+        "filename": "roles/build_ovs/tasks/main.yml",
+        "patchSetId": 10
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1010634
+      },
+      "writtenOn": "2017-07-22T23:55:29Z",
+      "side": 1,
+      "message": "do you want to check rc of this command?",
+      "range": {
+        "startLine": 29,
+        "startChar": 1,
+        "endLine": 29,
+        "endChar": 5
+      },
+      "revId": "0bacce5d75ac928eb4b306c9c84b1ed33f771902",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "35a988b0_6374df4f",
+        "filename": "roles/build_ovs/tasks/main.yml",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1010634
+      },
+      "writtenOn": "2017-07-22T23:55:29Z",
+      "side": 1,
+      "message": "do you need to specify some privileged user to create dir in / ? why not in tmp_dir (or as on line 21 some WORKSPACE) where all files/dirs of the job run should be?",
+      "range": {
+        "startLine": 32,
+        "startChar": 1,
+        "endLine": 33,
+        "endChar": 13
+      },
+      "revId": "0bacce5d75ac928eb4b306c9c84b1ed33f771902",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
