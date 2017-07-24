@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2ed27923_d640f078",
+        "filename": "roles/build_ovs/tasks/main.yml",
+        "patchSetId": 10
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1004788
+      },
+      "writtenOn": "2017-07-24T10:21:06Z",
+      "side": 1,
+      "message": "no",
+      "parentUuid": "00786c78_47fb2bb0",
+      "range": {
+        "startLine": 20,
+        "startChar": 11,
+        "endLine": 20,
+        "endChar": 21
+      },
+      "revId": "0bacce5d75ac928eb4b306c9c84b1ed33f771902",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3cc92e1d_99e7e888",
         "filename": "roles/build_ovs/tasks/main.yml",
         "patchSetId": 10
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "646dda2e_b26df784",
+        "filename": "roles/build_ovs/tasks/main.yml",
+        "patchSetId": 10
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1004788
+      },
+      "writtenOn": "2017-07-24T10:21:06Z",
+      "side": 1,
+      "message": "nope",
+      "parentUuid": "3cc92e1d_99e7e888",
+      "range": {
+        "startLine": 29,
+        "startChar": 1,
+        "endLine": 29,
+        "endChar": 5
+      },
+      "revId": "0bacce5d75ac928eb4b306c9c84b1ed33f771902",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "35a988b0_6374df4f",
         "filename": "roles/build_ovs/tasks/main.yml",
         "patchSetId": 10
@@ -59,6 +107,30 @@
       "writtenOn": "2017-07-22T23:55:29Z",
       "side": 1,
       "message": "do you need to specify some privileged user to create dir in / ? why not in tmp_dir (or as on line 21 some WORKSPACE) where all files/dirs of the job run should be?",
+      "range": {
+        "startLine": 32,
+        "startChar": 1,
+        "endLine": 33,
+        "endChar": 13
+      },
+      "revId": "0bacce5d75ac928eb4b306c9c84b1ed33f771902",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4fcf62d0_4fbb64f7",
+        "filename": "roles/build_ovs/tasks/main.yml",
+        "patchSetId": 10
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1004788
+      },
+      "writtenOn": "2017-07-24T10:21:06Z",
+      "side": 1,
+      "message": "because this is where IR expects to find patched RPMs",
+      "parentUuid": "35a988b0_6374df4f",
       "range": {
         "startLine": 32,
         "startChar": 1,
