@@ -46,6 +46,30 @@
       "revId": "af887b63cf7f07b8a4411e99ae7df63c4f1d91c0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dab5f718_5d2cf8a9",
+        "filename": "roles/setup_environment/tasks/main.yml",
+        "patchSetId": 13
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1010634
+      },
+      "writtenOn": "2017-07-25T07:51:05Z",
+      "side": 1,
+      "message": "sorry, shouldn\u0027t be doing reviews that late,\nI was wondering why gate failed complaining about line 37",
+      "parentUuid": "c2831902_57d025c5",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 9
+      },
+      "revId": "af887b63cf7f07b8a4411e99ae7df63c4f1d91c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
