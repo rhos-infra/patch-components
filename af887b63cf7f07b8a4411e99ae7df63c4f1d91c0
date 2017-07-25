@@ -70,6 +70,30 @@
       "revId": "af887b63cf7f07b8a4411e99ae7df63c4f1d91c0",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b3f2fa43_464734bd",
+        "filename": "roles/setup_environment/tasks/main.yml",
+        "patchSetId": 13
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1004788
+      },
+      "writtenOn": "2017-07-25T07:52:58Z",
+      "side": 1,
+      "message": "np. this was my last attempt to use patch-components for this task.\n\nmoving to use a new plugin.",
+      "parentUuid": "dab5f718_5d2cf8a9",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 9
+      },
+      "revId": "af887b63cf7f07b8a4411e99ae7df63c4f1d91c0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
