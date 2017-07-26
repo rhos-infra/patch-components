@@ -41,6 +41,7 @@
     state=present
   with_items:
     - 'pyrpkg'
+    - 'ca-certificates'
     - 'createrepo'
     - 'python-pip'
     - 'python-cryptography'
@@ -142,7 +143,9 @@
 
 # Now that the repo is patched, generate RPMs from it
 - name: Build new RPM from patched dist-git repo
-  shell: "rdopkg mockbuild"
+  shell: >
+    export REQUESTS_CA_BUNDLE=/etc/pki/tls/certs/ca-bundle.crt;
+    rdopkg mockbuild;
   args:
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   register: rpm_mockbuild
