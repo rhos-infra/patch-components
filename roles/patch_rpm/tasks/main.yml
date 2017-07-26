@@ -144,6 +144,8 @@
 # Now that the repo is patched, generate RPMs from it
 - name: Build new RPM from patched dist-git repo
   shell: >
+    set -exo pipefail;
+    export PYTHONHTTPSVERIFY=0;
     export REQUESTS_CA_BUNDLE=/etc/pki/tls/certs/ca-bundle.crt;
     rdopkg mockbuild;
   args:
