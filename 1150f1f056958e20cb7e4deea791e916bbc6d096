@@ -1,0 +1,8 @@
+Verified+1: rhosqeauto <yfried+rhosqeauto@redhat.com>
+Code-Review+1: Nir Magnezi <nmagnezi@redhat.com>
+Code-Review+2: Arie Bregman <abregman@redhat.com>
+Submitted-by: Arie Bregman <abregman@redhat.com>
+Submitted-at: Tue, 22 Aug 2017 07:11:05 -0400
+Reviewed-on: https://review.gerrithub.io/375095
+Project: rhos-infra/patch-components
+Branch: refs/heads/master
