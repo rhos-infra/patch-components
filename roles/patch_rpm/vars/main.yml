@@ -9,6 +9,8 @@ map_component_to_distgit:
     dist_git: 'openstack-manila'
   neutron:
     dist_git: 'openstack-neutron'
+  neutron-lbaas:
+    dist_git: 'openstack-neutron-lbaas'
   nova:
     dist_git: 'openstack-nova'
   octavia:
