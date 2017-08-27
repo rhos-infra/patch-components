@@ -1,0 +1,62 @@
+#!/bin/sh -x
+set -e
+
+git config --global user.name `whoami` 
+git config --global user.email `whoami`@redhat.com 
+
+TARGET=$(basename $PWD)
+REAL_TARGET=${TARGET/openstack-/}
+SHA=$(egrep Source0 *spec|egrep -o '[0-9a-f]*\.t'|sed -e 's!\.t$!!')
+
+# checks:
+if [[ -z "$SHA" ]]; then
+        echo "MISSING SHA1 PARAMETER"
+        exit 1;
+fi
+
+if ! grep -q "patches_ignore=DROP-IN-RPM" *spec; then
+        echo "MISSING RDOPKG HINT IN THE SPEC:"
+        perl -pi -e '$_ = "
+# patches_ignore=DROP-IN-RPM
+# patches_base='$SHA'
+\n$_" if /BuildArch:\s*noarch/' *spec
+        cat <<EOF
+EOF
+
+git commit -a -m "Add patches_ignore and patches_base" || echo FAIL && exit 1
+fi
+
+# add remotes:
+# but not for eg: nova/cinder which needs REAL_TARGET there:
+#if [[ $TARGET =~ "nova\|cinder" ]]; then
+if echo $TARGET| egrep "nova|cinder|neutron|swift|glance|sahara|manila" ; then
+        echo "FIXING REPO ('$TARGET' => '$REAL_TARGET'"
+        TARGET=$REAL_TARGET
+fi
+PARENT=openstack
+
+echo ">> Adding remotes:"
+git remote add upstream https://github.com/$PARENT/$REAL_TARGET
+git remote add -f patches {{ tmp_dir}}/{{ install.component.name }}
+
+if ! git fetch --all --tags; then
+        echo "FAIL TO FETCH"
+        exit 1
+fi
+
+# actual work:
+BRANCH=$(git branch |grep '*'|cut -f 2 -d\ )
+PATCH_BRANCH=${BRANCH/rhel?*/patches}
+# OSP_VER = $(echo $BRANCH |egrep -o '[0-9]*\.[0-9]*')
+
+echo ">> Retrieving patches from $PATCH_BRANCH:"
+#eg: git checkout rhos-12.0-patches && git rebase $SHA && git push --force && git checkout rhos-12.0-rhel-7 && rdopkg patch
+#git checkout $PATCH_BRANCH && git rebase $SHA && git push --force && git checkout $BRANCH && rdopkg patch || echo FAIL && exit 1
+git checkout $PATCH_BRANCH || echo FAIL && exit 1 
+git rebase $SHA &> rebase_result
+#if grep -q "Applying: RHOS:  use internal gerrit - DROP-IN-RPM" rebase_result; then 
+git rebase --abort
+git rebase $SHA -s ours  $PATCH_BRANCH || echo FAIL && exit 1
+#fi
+
+git push --set-upstream patches --force && git checkout $BRANCH && (rdopkg patch|| :) || echo FAIL && exit 1
