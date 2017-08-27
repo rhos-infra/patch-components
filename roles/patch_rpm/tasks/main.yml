@@ -24,12 +24,10 @@
   tags:
     - skip_ansible_lint
 
-# Koji 1.11 will cause 'rdopkg patch' to fail
-# See the following bug: https://bugzilla.redhat.com/show_bug.cgi?id=1406383
-- name: Install Koji 1.10
+- name: Install Koji
   become: yes
   yum:
-    name="http://mirror.centos.org/centos/7/extras/x86_64/Packages/koji-1.10.1-1.el7.centos.noarch.rpm"
+    name={pinned_versionss.koji_ver}
     state=present
 
 # Although pyrpkg pulled by rhpkg, we install it directly because at the moment, an older
@@ -53,12 +51,11 @@
     - 'git'
     - 'gcc'
 
-# Using 0.38 specifically due to this bug: https://github.com/openstack-packages/rdopkg/issues/80
 - name: Install rdopkg
   become: yes
   pip:
     name=rdopkg
-    version=0.38
+    version={pinned_versions.rdopkg_ver}
 
 # TODO(abregman): Switch to yum_repository when Ansible 2.2 is released
 # EPEL is removed, since it is used only for installing rdopkg
@@ -116,29 +113,25 @@
     - skip_ansible_lint
   ignore_errors: yes
 
+- name: copy patch.sh file to the dist-git repo folder
+  copy:
+      src: patch.sh
+      dest: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/patch.sh"
+      force: yes
+      mode: "u+rwx"
 
-- name: Prepare dist-git repo for patching
-  shell: >
-    git remote add -f patches {{ tmp_dir}}/{{ install.component.name }} &&
-    git fetch patches &&
-    git fetch patches --tags &&
-    git branch rhos-{{ install.component.version }}.0-patches patches/gerrit-patch;
+- name: Prepare dist-git repo for patching and performs actual patching
+  vars:
+    pre_rel_switch: "{{ 'true' if install.component.version == pre_rel_version else 'false' }}"
+  shell: ./patch.sh TARGET="{{ install.component.name }}" TARGET_DIR="{{ tmp_dir}}" PRE_RELEASE="{{pre_rel_switch}}"
   args:
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
+  register: patch
   tags:
     - skip_ansible_lint
 
-# The actual patching part
-- name: Apply patch(es) on dist-git repo and bump release
-  shell: >
-    git config --global user.name `whoami` &&
-    git config --global user.email `whoami`@redhat.com &&
-    rdopkg patch;
-  args:
-    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
-  changed_when: true
-  tags:
-    - skip_ansible_lint
+- debug: msg="Patching stdout\n{{ patch.stdout }}"
+
 
 # Now that the repo is patched, generate RPMs from it
 - name: Build new RPM from patched dist-git repo
