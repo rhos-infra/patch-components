@@ -1,4 +1,4 @@
-## Patch-components
+## patch-components
 
 Allows to repackage RPMs with source code directly from Gerrit or local repo.
 
@@ -20,6 +20,10 @@ Run:
 
     ansible-playbook -i hosts main.yml --extra-vars @params.yml -vvvv
 
+
+### Pre rlease version patching
+Craation of rpm is allowed with pre-released version as well. Make sure to increment the pre_rel_version
+varable located in roles/patch_rpm/vars/main.yml when version is released to avoid failure in patching.
 
 ### Result
 
