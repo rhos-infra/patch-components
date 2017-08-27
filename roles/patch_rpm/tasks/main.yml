@@ -58,7 +58,7 @@
   become: yes
   pip:
     name=rdopkg
-    version=0.38
+#    version=0.38
 
 # TODO(abregman): Switch to yum_repository when Ansible 2.2 is released
 # EPEL is removed, since it is used only for installing rdopkg
@@ -116,29 +116,26 @@
     - skip_ansible_lint
   ignore_errors: yes
 
+- name: copy patch.sh file to the dist-git repo folder
+  template:
+      src: patch.sh.j2
+      dest: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/patch.sh"
+      force: yes
+      mode: "u+rwx"
 
-- name: Prepare dist-git repo for patching
-  shell: >
-    git remote add -f patches {{ tmp_dir}}/{{ install.component.name }} &&
-    git fetch patches &&
-    git fetch patches --tags &&
-    git branch rhos-{{ install.component.version }}.0-patches patches/gerrit-patch;
+- name: Prepare dist-git repo for patching and performs actual patching
+  vars:
+    pre_rel_switch: "{{ 'true' if install.component.version == pre_rel_version else 'false' }}"
+  shell: ./patch.sh TARGET="{{ install.component.name }}" TARGET_DIR="{{ tmp_dir}}" PRE_RELEASE="{{pre_rel_switch}}"
   args:
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
+  register: patch
   tags:
     - skip_ansible_lint
 
-# The actual patching part
-- name: Apply patch(es) on dist-git repo and bump release
-  shell: >
-    git config --global user.name `whoami` &&
-    git config --global user.email `whoami`@redhat.com &&
-    rdopkg patch;
-  args:
-    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
-  changed_when: true
-  tags:
-    - skip_ansible_lint
+- debug: msg="Patching stdout\n{{ patch.stdout }}"
+- debug: msg="Patching stderr\n{{ patch.stderr }}"
+
 
 # Now that the repo is patched, generate RPMs from it
 - name: Build new RPM from patched dist-git repo
