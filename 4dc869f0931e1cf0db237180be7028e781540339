@@ -1,0 +1,182 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8d528214_8bb2cc4b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2017-08-30T15:16:37Z",
+      "side": 1,
+      "message": "what is NPV?",
+      "range": {
+        "startLine": 7,
+        "startChar": 31,
+        "endLine": 7,
+        "endChar": 34
+      },
+      "revId": "4dc869f0931e1cf0db237180be7028e781540339",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f75de6d2_7d3e96d6",
+        "filename": "roles/patch_rpm/templates/patch.sh.j2",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2017-08-30T15:16:37Z",
+      "side": 1,
+      "message": "very hacky\n\nthere are many patterns currently for dist-git/upstream naming\n\noslo.foo \u003d\u003d\u003e python-oslo-foo | oslo.foo | oslo-foo | oslo_foo\n\nother openstack\nopenstack-bar \u003d\u003d\u003e bar | openstack-bar | bar-blaz\n\nthere is no good one size fits all mapping here rdoinfo project has some of the bits",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 2
+      },
+      "revId": "4dc869f0931e1cf0db237180be7028e781540339",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e18703fa_d391ac22",
+        "filename": "roles/patch_rpm/templates/patch.sh.j2",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2017-08-30T15:16:37Z",
+      "side": 1,
+      "message": "this looks odd, and may need to be double checked more",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 2
+      },
+      "revId": "4dc869f0931e1cf0db237180be7028e781540339",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9fe8d9d1_5bf63963",
+        "filename": "roles/patch_rpm/templates/patch.sh.j2",
+        "patchSetId": 4
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2017-08-30T15:16:37Z",
+      "side": 1,
+      "message": "this has a very distinct limit on how many projects by what PARENT is ... unless I\u0027m reading it wrong",
+      "revId": "4dc869f0931e1cf0db237180be7028e781540339",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "70e51962_db3be197",
+        "filename": "roles/patch_rpm/templates/patch.sh.j2",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2017-08-30T15:16:37Z",
+      "side": 1,
+      "message": "comments for other use cases and notes ... not relevent and should be dropped from this patch.",
+      "range": {
+        "startLine": 56,
+        "startChar": 0,
+        "endLine": 57,
+        "endChar": 129
+      },
+      "revId": "4dc869f0931e1cf0db237180be7028e781540339",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0c714a16_c56ed92c",
+        "filename": "roles/patch_rpm/templates/patch.sh.j2",
+        "patchSetId": 4
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2017-08-30T15:16:37Z",
+      "side": 1,
+      "message": "drop as not relevant to this patch or use case",
+      "range": {
+        "startLine": 59,
+        "startChar": 0,
+        "endLine": 59,
+        "endChar": 61
+      },
+      "revId": "4dc869f0931e1cf0db237180be7028e781540339",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d2721145_42e6a2f6",
+        "filename": "roles/patch_rpm/templates/patch.sh.j2",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2017-08-30T15:16:37Z",
+      "side": 1,
+      "message": "should be refined into what you want to do for this patch, this is carry-over and not targeted correctly",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 58
+      },
+      "revId": "4dc869f0931e1cf0db237180be7028e781540339",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3954b30f_589a5cbb",
+        "filename": "roles/patch_rpm/templates/patch.sh.j2",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2017-08-30T15:16:37Z",
+      "side": 1,
+      "message": "not relevent to this patch",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 83
+      },
+      "revId": "4dc869f0931e1cf0db237180be7028e781540339",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
