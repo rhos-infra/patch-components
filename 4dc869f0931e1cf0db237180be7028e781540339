@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "40a1a5e6_deddbc41",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006664
+      },
+      "writtenOn": "2017-08-31T11:45:30Z",
+      "side": 1,
+      "message": "name patch version. I will change the commit message to:\n\nPre-release creation of patched rpms\n\nCurrent procedure of patched rpm creation fails on a pre-released OSP version. This change facilitates creation\nof patched rpms for the pre-released OSP version.",
+      "parentUuid": "8d528214_8bb2cc4b",
+      "range": {
+        "startLine": 7,
+        "startChar": 31,
+        "endLine": 7,
+        "endChar": 34
+      },
+      "revId": "4dc869f0931e1cf0db237180be7028e781540339",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f75de6d2_7d3e96d6",
         "filename": "roles/patch_rpm/templates/patch.sh.j2",
         "patchSetId": 4

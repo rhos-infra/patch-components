@@ -22,6 +22,30 @@
       "revId": "1150f1f056958e20cb7e4deea791e916bbc6d096",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b76efb88_863645e3",
+        "filename": "roles/patch_rpm/tasks/main.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1006664
+      },
+      "writtenOn": "2017-08-31T11:45:30Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "d1e7f83e_f7cfc9fa",
+      "range": {
+        "startLine": 128,
+        "startChar": 0,
+        "endLine": 129,
+        "endChar": 23
+      },
+      "revId": "1150f1f056958e20cb7e4deea791e916bbc6d096",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
