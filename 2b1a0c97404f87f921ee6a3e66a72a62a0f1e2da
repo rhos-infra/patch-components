@@ -16,6 +16,24 @@
       "revId": "2b1a0c97404f87f921ee6a3e66a72a62a0f1e2da",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dcc96e24_958dabc0",
+        "filename": "roles/patch_rpm/tasks/main.yml",
+        "patchSetId": 19
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1006664
+      },
+      "writtenOn": "2017-09-06T09:01:28Z",
+      "side": 1,
+      "message": "Actually, my hand was shaking while removing pinning :-)\nUpgraded to 0.45",
+      "parentUuid": "3581dd1b_8c692355",
+      "revId": "2b1a0c97404f87f921ee6a3e66a72a62a0f1e2da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
