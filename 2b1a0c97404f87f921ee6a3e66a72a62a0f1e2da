@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3581dd1b_8c692355",
+        "filename": "roles/patch_rpm/tasks/main.yml",
+        "patchSetId": 19
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1007069
+      },
+      "writtenOn": "2017-09-06T07:57:49Z",
+      "side": 1,
+      "message": "I am in favor of pinning this to 0.45 rather then having newest and greatest.",
+      "revId": "2b1a0c97404f87f921ee6a3e66a72a62a0f1e2da",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
