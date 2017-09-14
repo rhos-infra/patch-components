@@ -77,7 +77,9 @@ else
     git branch $PATCH_BRANCH patches/gerrit-patch;
 fi
 
-
+# workaround for koji 1.11 problem
+# https://bugzilla.redhat.com/show_bug.cgi?id=1406383
+export REQUESTS_CA_BUNDLE=/etc/pki/tls/certs/ca-bundle.crt 
 rdopkg patch &> rdopkg_log
 if [  $? -ne 0 ]; then
    grep -q "No patches changed" rdopkg_log
