@@ -67,6 +67,9 @@ if [ "$PRE_RELEASE" == 'true' ]; then
              echo "try to resolve rebase conflict"
              git rebase --abort || { echo "failed git rebase abort"; exit 1;}
              git rebase $SHA -s ours  $PATCH_BRANCH || { echo "failed git rebase"; exit 1;}
+       else
+             # display the error
+             cat rebase_log
        fi
     else
         echo "rebase sucess"
