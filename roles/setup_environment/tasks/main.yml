@@ -1,39 +1,45 @@
 ---
+- name: Set tmp_dir for all the building
+  set_fact: tmp_dir="{{ ansible_env.HOME }}"
 
 - name: Clean previous and create tmp_dir for all the building
-  register: tmp_dir_shell
-  shell: "rm -rf tmp.patch_rpm*; mktemp -d --tmpdir tmp.patch_rpm.XXXXXXXX"
+  shell: "rm -rf {{ tmp_dir }}/*"
   args:
     warn: no
   tags: skip_ansible_lint
 
-- name: Set tmp_dir for all the building
-  set_fact: tmp_dir="{{ ansible_env.HOME }}"
+- name: in testmode fetch component and create patch
+  block:
+     - git:
+         repo="{{ install.component.name }}"
+         version="rhos-{{ install.component.version }}.0-patches"
+         dest="{{ tmp_dir }}"
+         accept_hostkey=true
+       retries: 3
+       delay: 120
+     - shell: "{{ item }}"
+       with_items:
+         - "date > foo"
+         - "git add foo"
+         - "git commit -a -m \"[test] - {{ install.component.name }} - {{ install.component.version }}\""    
+  when: install.testmode.enabled
 
-#"{{tmp_dir_shell.stdout}}"
+# rsync is required to copy the component to remote host
+- name: if testmode is not enabled component repo is already there
+  block: 
+      - yum:
+         name='rsync'
+         state=present
 
-- name: Remove and create logs dir
-  file: path={{ tmp_dir }}/logs/ state={{ item }}
-  with_items:
-    - absent
-    - directory
-
-# To copy the component to remote host
-- name: Install rsync
+      - synchronize:
+          src="{{ item }}"
+          dest="{{ tmp_dir }}"
+          use_ssh_args="yes"
+        with_first_found:
+          - "{{ install.component.path | default(omit) }}"
+          - "{{ inventory_dir }}/{{ install.component.name }}"
+          - "{{ inventory_dir }}/../{{ install.component.name }}"
+          - "{{ inventory_dir }}/../../../{{ install.component.name }}"
+          - "{{ playbook_dir }}/../{{ install.component.name }}"
   become: yes
-  yum:
-    name='rsync'
-    state=present
-
-#synchronize:copy
-- name: Copy component to remote host
-  synchronize:
-    src="{{ item }}"
-    dest="{{ tmp_dir }}"
-    use_ssh_args="yes"
-  with_first_found:
-    - "{{ install.component.path | default(omit) }}"
-    - "{{ inventory_dir }}/{{ install.component.name }}"
-    - "{{ inventory_dir }}/../{{ install.component.name }}"
-    - "{{ inventory_dir }}/../../../{{ install.component.name }}"
-    - "{{ playbook_dir }}/../{{ install.component.name }}"
+  when: ! install.testmode.enabled

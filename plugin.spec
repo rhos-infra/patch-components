@@ -28,3 +28,16 @@ subparsers:
                       type: Value
                       help: 'SSH key for the user <username>'
                       required: False
+                  testmode-enabled:
+                      type: Value
+                      help: 'patch component if testmode is enabled'
+                      default: False
+                      required: False
+                  testmode-gerrit-url:
+                      type: Value
+                      help: 'in testmode this plugin requires gerrit url to fetch component from'
+                      required: False
+                  testmode-gerrit-group:
+                      type: Value
+                      help: 'in testmode this plugin requires gerrit group to fetch component from'
+                      required: False
