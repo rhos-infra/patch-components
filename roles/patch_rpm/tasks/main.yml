@@ -19,7 +19,7 @@
     - 'rdopkg'
 
 # TODO(abregman): Switch to yum_repository when Ansible 2.2 is released
-- name: Install epel repoistory
+- name: Install epel repository
   become: yes
   shell: yum localinstall -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
   tags:
@@ -76,7 +76,6 @@
     name="{{ ansible_user }}"
     groups=mock
 
-
 - name: Clean dist-git path
   file:
     state: absent
@@ -92,124 +91,36 @@
   retries: 3
   delay: 120
 
-- name: Create or reset branch for patching by creating gerrit-patch branch
-  shell: "git checkout -B gerrit-patch"
-  args:
-    chdir: "{{ tmp_dir }}/{{ install.component.name }}"
-  tags:
-    - skip_ansible_lint
-
-
-- name: Checkout rhos-XY.0-patches branch
-  shell: "git branch rhos-{{ install.component.version }}.0-patches"
-  args:
-    chdir: "{{ tmp_dir }}/{{ install.component.name }}"
-  tags:
-    - skip_ansible_lint
-  ignore_errors: yes
-
-- name: Prepare dist-git repo for patching
-  shell: >
-    git remote add -f patches {{ tmp_dir}}/{{ install.component.name }} &&
-    git fetch patches &&
-    git fetch patches --tags &&
-    git branch rhos-{{ install.component.version }}.0-patches patches/gerrit-patch;
-  args:
-    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
-  tags:
-    - skip_ansible_lint
-  when: install.component.version < component_pre_rel_version
-
-# The actual patching part
-- name: Apply patch(es) on dist-git repo and bump release
-  shell: >
-    git config --global user.name `whoami` &&
-    git config --global user.email `whoami`@redhat.com &&
-    rdopkg patch;
-  args:
-    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
-  changed_when: true
-  tags:
-    - skip_ansible_lint
-  when: install.component.version < component_pre_rel_version
-
-- name: copy patch.sh file to the dist-git repo folder
-  copy:
-      src: patch.sh
-      dest: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/patch.sh"
-      force: yes
-      mode: "u+rwx"
-  when: install.component.version == component_pre_rel_version
-
-- name: Prepare dist-git repo for patching and performs actual patching
-  vars:
-    pre_rel_switch: "{{ 'true' if install.component.version == component_pre_rel_version else 'false' }}"
-  shell: ./patch.sh TARGET="{{ install.component.name }}" TARGET_DIR="{{ tmp_dir}}" PRE_RELEASE="{{pre_rel_switch}}"
-  args:
-    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
-  register: patch
-  tags:
-    - skip_ansible_lint
-  when: install.component.version == component_pre_rel_version
-
-# Now that the repo is patched, generate RPMs from it
-- name: Build new RPM from patched dist-git repo
-  shell: |
-    set -exo pipefail;
-    rdopkg mockbuild;
-  args:
-    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
-  register: rpm_mockbuild
-  changed_when: true
-  tags:
-    - skip_ansible_lint
-
-# Some build errors are legitimate and should not fail the run
-# Like '.gitreview: does not exist in index'
-- name: Check for legitimate build errors
-  shell: grep -R -i -E "can't find file to patch|does not exist in index" results*
-  ignore_errors: true
-  args:
-    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
-  register: common_build_errors
-  changed_when: false
-
-- name: Fail run if mockbuild failed
-  fail: msg="The mockbuild has failed for some reason. Check tags exist and you have sudo on remote host"
-  when: rpm_mockbuild.rc != 0 and common_build_errors.rc != 0
-
-# Create directorty to hold the RPMs
-- name: Create '/patched_rpms' directory`
-  become: yes
-  file:
-    path=/patched_rpms
-    state=directory
-    mode=0777
-  when: rpm_mockbuild.rc == 0
-
-- name: Copy new generated RPMs to /patched_rpms
-  shell: "cp {{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/results*/*/*/*.rpm /patched_rpms/"
-  when: rpm_mockbuild.rc == 0
+- name: set logdir fact
+  set_fact:
+      logdir: /var/log/extra/patching_logs
 
 - name: Create patching logs directory
   become: yes
   file:
-    path=/var/log/patching_logs
+    path="{{ logdir }}"
     state=directory
     mode=0777
+  tags: logs
 
-- name: Save patching logs
-  become: yes
-  shell: "cp {{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/results*/*/*/*.log /var/log/patching_logs"
-  changed_when: true
+- name: set patchedrpmdir fact
+  set_fact:
+      patchedrpmdir: /patched_rpms
+
+- name: Patch Component
+  include: patch_component.yaml
+  when: not (install.component.name | match("odl-.*"))
+
+- name: Patch and build OpenDaylight
+  include: patch_opendaylight.yml
+  become: true
+  when: install.component.name | match("odl-.*")
 
 - name: Create repository for patched RPMs
   shell: "createrepo /patched_rpms;"
-  when: rpm_mockbuild.rc == 0
 
 - name: Setup repository in /etc/yum.repos.d
   become: yes
   template:
     src='patched_rpms.j2'
     dest='/etc/yum.repos.d/patched_rpms.repo'
-  when: rpm_mockbuild.rc == 0

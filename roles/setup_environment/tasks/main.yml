@@ -8,6 +8,10 @@
 
 - name: Set tmp_dir for all the building
   set_fact: tmp_dir="{{ ansible_env.HOME }}"
+  tags:
+      - odl_package_rpm
+      - rpm
+      - logs
 
 - name: Remove and create logs dir
   file:
@@ -41,3 +45,11 @@
     - "{{ inventory_dir }}/../{{ install.component.name }}"
     - "{{ inventory_dir }}/../../../{{ install.component.name }}"
     - "{{ playbook_dir }}/../{{ install.component.name }}"
+
+- name: save the commit ID of tested patchset
+  shell: ${filename%.*}
+      git log -1 --pretty=format:%H
+  args:
+      chdir: "{{ tmp_dir }}/{{ install.component.name }}"
+  register: component_patch_commitid
+  tags: odl_package_rpm
