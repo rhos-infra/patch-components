@@ -1,0 +1,140 @@
+- name: recreate /tmp/patched required by maven-chain-builder
+  file:
+      path: '/tmp/patched'
+      state: "{{ item }}"
+  with_items:
+    - absent
+    - directory
+
+- name: copy component to /tmp/patched
+  shell: "cp -pr {{ tmp_dir }}/{{ install.component.name }} /tmp/patched/"
+
+- name: Clone "integration-packaging" required to package OpenDaylight karaf distro into RPM
+  git:
+      repo: 'https://github.com/wznoinsk/integration-packaging'
+      dest: "{{ tmp_dir }}/integration-packaging"
+      version: master
+      accept_hostkey: yes
+  tags:
+      - integration-packaging
+      - odl_package_rpm
+
+- name: create logs directory for OpenDaylight patching and RPM building
+  file:
+      path: "{{ tmp_dir }}/integration-packaging/logs"
+      state: "{{ item }}"
+  with_items:
+      - absent
+      - directory
+
+- name: Add dummy entries to /etc/hosts file to prevent communication with upstream
+  lineinfile:
+      dest="/etc/hosts"
+      insertafter=EOF
+      line="{{ item }}"
+  with_items:
+      - '127.1.0.1   nexus.opendaylight.org'
+      - '127.1.0.2   repo.maven.apache.org'
+      - '127.1.0.3   oss.sonatype.org'
+      - '127.1.0.4   registry.npmjs.org'
+
+- name: enable rhelosp-rhel..rhscl repo to install maven from
+  shell: "yum-config-manager --enable rhelosp-rhel-$(. /etc/os-release; echo $VERSION_ID)-rhscl"
+
+- name: Install maven and deps RPMs required for the build
+  yum: name="{{ item }}" state=present
+  with_items:
+      - mock
+      - rh-maven33-maven
+
+- name: Remove old mvn binaries
+  shell: "rm -f /usr/bin/mvn*"
+
+- name: Make maven (mvn) available in $PATH
+  shell: "ln -s /opt/rh/rh-maven33/root/usr/bin/* /usr/bin/"
+  ignore_errors: no
+
+- name: Install Maven PME
+  shell: |
+      export MAVEN_HOME=$(mvn --version | awk '$0 ~ /Maven home:/ {print $3}')
+      wget http://repo1.maven.org/maven2/org/commonjava/maven/ext/pom-manipulation-ext/1.15/pom-manipulation-ext-1.15.jar -P $MAVEN_HOME/lib/ext
+
+- name: Install m2 settings
+  command: "cp {{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/scripts/config/settings.xml.mead /opt/rh/rh-maven33/root/usr/share/maven/conf/settings.xml"
+
+- name: disable 'snapshots' profile in m2 settings - https://bugs.eclipse.org/bugs/show_bug.cgi?id=507612
+  replace:
+      path: '/opt/rh/rh-maven33/root/usr/share/maven/conf/settings.xml'
+      regexp: '(<activeProfile>opendaylight-snapshots</activeProfile>$)'
+      replace: '<!-- \1 -->'
+      backup: yes
+
+- name: use a load balancer address of download.eng.* to pickup the closest location automagically
+  replace:
+      path: '/opt/rh/rh-maven33/root/usr/share/maven/conf/settings.xml'
+      regexp: 'download.eng.*.redhat.com'
+      replace: 'download.engineering.redhat.com'
+
+- name: remove maven-chain-builder directory
+  file:
+      path: '{{ tmp_dir }}/maven-chain-builder'
+      state: absent
+
+- name: Clone maven-chain-builder
+  git: repo=https://github.com/wznoinsk/maven-chain-builder.git
+       dest='{{ tmp_dir }}/maven-chain-builder'
+       accept_hostkey=true
+
+- name: Prepare chain file
+  args:
+      chdir: "{{ tmp_dir}}/dist-git/opendaylight"
+  shell: |
+      git config --system http.sslverify false
+      # sed -i "s/\$TAG_TO_BUILD/rhos-{{ install.component.version}}.0-patches/g" {{ tmp_dir}}/dist-git/opendaylight/make-vars
+      # {{ tmp_dir}}/dist-git/opendaylight/make-vars
+      make respin
+      cp opendaylight-chain/opendaylight-chain.ini {{ tmp_dir}}/maven-chain-builder/
+      git checkout -- make-vars && git checkout -- opendaylight-chain/opendaylight-chain.ini
+
+# mvn build may fail because of MEAD server not responding on time, we'll retry a couple of times
+- name: Run maven-chain-builder to build the opendaylight karaf distribution (logs in /var/log/maven/)
+  args:
+      chdir: "{{ tmp_dir }}/maven-chain-builder"
+  shell: "python maven-chain-builder.py opendaylight-chain.ini {{ install.component.name }}"
+  register: patch_opendaylight
+  until: patch_opendaylight.rc == 0
+  retries: 5
+  delay: 10
+
+- name: set karaf distribution tar.gz fact
+  register: odl_karaf_package
+  shell: find /tmp/org/opendaylight/ -name "*vpnservice-karaf*.tar.gz" | head -1
+  tags: odl_package_rpm
+
+- name: Package OpenDaylight into RPM - preparation
+  shell: |
+      rm -rf {{ tmp_dir }}/integration-packaging/packages/cache/*
+      rm {{ tmp_dir }}/integration-packaging/packages/Dockerfile
+      cd {{ tmp_dir }}/integration-packaging/packages/rpm
+      ln -s rpm/Dockerfile ../Dockerfile && cd ..
+      docker build -t "odl_rpm" . > {{ tmp_dir }}/integration-packaging/logs/docker_build_odl_rpm.log 2>&1
+      sudo setenforce 0
+      sudo systemctl restart docker
+  tags: odl_package_rpm
+
+- name: Package OpenDaylight into RPM - the actual packaging
+  shell: |
+      cd {{ tmp_dir }}/integration-packaging/packages
+      docker run -v $(pwd):/build -v /tmp/org/opendaylight:/tmp/org/opendaylight odl_rpm --rpm direct --distro_name_prefix vpnservice-karaf --download_url {{ odl_karaf_package.stdout }} > {{ tmp_dir }}/integration-packaging/logs/docker_run_odl_rpm.log 2>&1
+  tags: odl_package_rpm
+
+- name: Remove dummy entries from /etc/hosts preventing communication with upstream
+  lineinfile:
+      dest="/etc/hosts"
+      state=absent
+      line="{{ item }}"
+  with_items:
+      - '127.1.0.1   nexus.opendaylight.org'
+      - '127.1.0.2   repo.maven.apache.org'
+      - '127.1.0.3   oss.sonatype.org'
+      - '127.1.0.4   registry.npmjs.org'
