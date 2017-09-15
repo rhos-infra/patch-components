@@ -8,6 +8,11 @@
 
 - name: Set tmp_dir for all the building
   set_fact: tmp_dir="{{ ansible_env.HOME }}"
+  tags:
+      - odl_package_rpm
+      - rpm
+      - logs
+      - patched_rpms_repo
 
 - name: Remove and create logs dir
   file:
