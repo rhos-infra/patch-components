@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8701a323_93a82603",
+        "filename": "roles/setup_environment/tasks/main.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1004788
+      },
+      "writtenOn": "2017-09-18T06:06:18Z",
+      "side": 1,
+      "message": "what is the value for setting a fact here? why not use directly \"{{ ansible_env.HOME }}\"\nIt\u0027s also much more readable than wondering what is \"tmp_dir\"",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 44
+      },
+      "revId": "e1e9c1eb998cc3449f3d28b34c18c0b4f74927fb",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
