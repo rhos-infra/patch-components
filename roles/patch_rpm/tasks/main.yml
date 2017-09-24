@@ -107,7 +107,7 @@
     - skip_ansible_lint
   ignore_errors: yes
 
-
+# TODO (dsariel): remove this task when patch.sh will be verified by the gate
 - name: Prepare dist-git repo for patching
   shell: >
     git remote add -f patches {{ tmp_dir}}/{{ install.component.name }} &&
@@ -118,7 +118,9 @@
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   tags:
     - skip_ansible_lint
+  when: install.component.version != pre_rel_version
 
+# TODO (dsariel): remove this task when patch.sh will be verified by the gate
 # The actual patching part
 - name: Apply patch(es) on dist-git repo and bump release
   shell: >
@@ -130,6 +132,28 @@
   changed_when: true
   tags:
     - skip_ansible_lint
+  when: install.component.version != pre_rel_version
+
+# TODO (dsariel): remove the conditional when patch.sh will be verified by the gate
+- name: copy patch.sh file to the dist-git repo folder
+  copy:
+      src: patch.sh
+      dest: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/patch.sh"
+      force: yes
+      mode: "u+rwx"
+  when: install.component.version == pre_rel_version
+
+# TODO (dsariel): remove the conditional when patch.sh will be verified by the gate
+- name: Prepare dist-git repo for patching and performs actual patching
+  vars:
+    pre_rel_switch: "{{ 'true' if install.component.version == pre_rel_version else 'false' }}"
+  shell: ./patch.sh TARGET="{{ install.component.name }}" TARGET_DIR="{{ tmp_dir}}" PRE_RELEASE="{{pre_rel_switch}}"
+  args:
+    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
+  register: patch
+  tags:
+    - skip_ansible_lint
+  when: install.component.version == pre_rel_version
 
 # Now that the repo is patched, generate RPMs from it
 - name: Build new RPM from patched dist-git repo

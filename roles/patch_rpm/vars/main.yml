@@ -1,3 +1,6 @@
+# Make sure to increment the value when version is released
+pre_rel_version: '12'
+
 map_component_to_distgit:
   cinder:
     dist_git: 'openstack-cinder'
