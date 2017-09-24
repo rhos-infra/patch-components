@@ -1,6 +1,7 @@
 - name: Setting component_dist_git_name
   set_fact:
       component_dist_git_name: "{{ map_component_to_distgit[install.component.name].dist_git | default('openstack-' + install.component.name) }}"
+      component_pre_rel_version: "{{ map_component_to_pre_rel_version[install.component.name].pre_rel_version | default('13') }}"
 
 - name: Setting component_dist_git_url
   set_fact:
@@ -91,8 +92,8 @@
   retries: 3
   delay: 120
 
-- name: Prepare branch for patching by creating gerrit-patch branch
-  shell: "git checkout -b gerrit-patch"
+- name: Create or reset branch for patching by creating gerrit-patch branch
+  shell: "git checkout -B gerrit-patch"
   args:
     chdir: "{{ tmp_dir }}/{{ install.component.name }}"
   tags:
@@ -107,7 +108,6 @@
     - skip_ansible_lint
   ignore_errors: yes
 
-
 - name: Prepare dist-git repo for patching
   shell: >
     git remote add -f patches {{ tmp_dir}}/{{ install.component.name }} &&
@@ -118,6 +118,7 @@
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   tags:
     - skip_ansible_lint
+  when: install.component.version < component_pre_rel_version
 
 # The actual patching part
 - name: Apply patch(es) on dist-git repo and bump release
@@ -130,6 +131,26 @@
   changed_when: true
   tags:
     - skip_ansible_lint
+  when: install.component.version < component_pre_rel_version
+
+- name: copy patch.sh file to the dist-git repo folder
+  copy:
+      src: patch.sh
+      dest: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/patch.sh"
+      force: yes
+      mode: "u+rwx"
+  when: install.component.version == component_pre_rel_version
+
+- name: Prepare dist-git repo for patching and performs actual patching
+  vars:
+    pre_rel_switch: "{{ 'true' if install.component.version == component_pre_rel_version else 'false' }}"
+  shell: ./patch.sh TARGET="{{ install.component.name }}" TARGET_DIR="{{ tmp_dir}}" PRE_RELEASE="{{pre_rel_switch}}"
+  args:
+    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
+  register: patch
+  tags:
+    - skip_ansible_lint
+  when: install.component.version == component_pre_rel_version
 
 # Now that the repo is patched, generate RPMs from it
 - name: Build new RPM from patched dist-git repo
