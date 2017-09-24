@@ -21,6 +21,12 @@ Run:
     ansible-playbook -i hosts main.yml --extra-vars @params.yml -vvvv
 
 
+### Pre-release version patching
+
+Creation of rpm is allowed with per-released version as well. Make sure to increment the pre_rel_version
+variable located in roles/patch_rpm/vars/main.yml when version is released to avoid failure in patching.
+
+
 ### Result
 
 The project will generate one or more RPMs in the following path: dist-git/<component_name>
