@@ -14,7 +14,7 @@
 
 
 - name: Patch and repackage components RPM
-  hosts: undercloud
+  hosts: [tester,undercloud]
   roles:
     - { role: setup_repos }
     - { role: setup_environment}
