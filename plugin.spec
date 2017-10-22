@@ -16,10 +16,14 @@ subparsers:
                       type: Value
                       help: 'branch of the component (5,6,7,8,9,10,11)'
                       required: True
+                  component-path:
+                      type: Value
+                      help: 'Full path where the componet (cinder, nova, etc) is located'
+                      required: False
                   host-ip:
                       type: Value
                       help: 'ip of the machine that rpm will be built on'
-                      required: False 
+                      required: False
                   host-username:
                       type: Value
                       help: 'username on the machine that rpm will be built on'
