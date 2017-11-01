@@ -1,5 +1,4 @@
 ---
-
 - name: Clean previous and create tmp_dir for all the building
   register: tmp_dir_shell
   shell: "rm -rf tmp.patch_rpm*; mktemp -d --tmpdir tmp.patch_rpm.XXXXXXXX"
@@ -10,13 +9,18 @@
 - name: Set tmp_dir for all the building
   set_fact: tmp_dir="{{ ansible_env.HOME }}"
 
-#"{{tmp_dir_shell.stdout}}"
-
 - name: Remove and create logs dir
-  file: path={{ tmp_dir }}/logs/ state={{ item }}
+  file:
+      path: "{{ tmp_dir }}/logs/"
+      state: "{{ item }}"
   with_items:
     - absent
     - directory
+
+- name: Remove dist-git folder
+  file:
+      path: "{{ tmp_dir}}/dist-git"
+      state: absent
 
 # To copy the component to remote host
 - name: Install rsync
