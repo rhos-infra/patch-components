@@ -18,6 +18,12 @@
     - absent
     - directory
 
+- name: Remove old component and dist-git folders
+  file: path={{ tmp_dir}}/{{ item }} state=absent
+  with_items:
+    - "{{ install.component.name }}
+    - "dist-git"
+
 # To copy the component to remote host
 - name: Install rsync
   become: yes
