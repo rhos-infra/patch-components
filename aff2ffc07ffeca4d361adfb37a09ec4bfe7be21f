@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cdfa51d6_5f193b6c",
+        "filename": "roles/setup_environment/tasks/main.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1008329
+      },
+      "writtenOn": "2017-11-01T16:10:35Z",
+      "side": 1,
+      "message": "I see no reason to do this considering that we do rsync two tasks later. Doing this would only slowdown execution if run multiple times without any added benefits.",
+      "revId": "aff2ffc07ffeca4d361adfb37a09ec4bfe7be21f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
