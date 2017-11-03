@@ -16,6 +16,24 @@
       "revId": "aff2ffc07ffeca4d361adfb37a09ec4bfe7be21f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "af9595fe_c11e47d2",
+        "filename": "roles/setup_environment/tasks/main.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006664
+      },
+      "writtenOn": "2017-11-03T08:31:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cdfa51d6_5f193b6c",
+      "revId": "aff2ffc07ffeca4d361adfb37a09ec4bfe7be21f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
