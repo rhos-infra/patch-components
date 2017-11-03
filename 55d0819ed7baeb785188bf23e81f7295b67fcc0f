@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4c4170ef_0192a2b1",
+        "filename": "roles/setup_environment/tasks/main.yml",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1004788
+      },
+      "writtenOn": "2017-11-03T08:53:03Z",
+      "side": 1,
+      "message": "you are only removing dist git here, no?",
+      "range": {
+        "startLine": 20,
+        "startChar": 7,
+        "endLine": 20,
+        "endChar": 49
+      },
+      "revId": "55d0819ed7baeb785188bf23e81f7295b67fcc0f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
