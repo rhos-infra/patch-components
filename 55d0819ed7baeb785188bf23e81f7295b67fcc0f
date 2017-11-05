@@ -46,6 +46,30 @@
       "revId": "55d0819ed7baeb785188bf23e81f7295b67fcc0f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fa4f15aa_ebd4f9b6",
+        "filename": "roles/setup_environment/tasks/main.yml",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1004788
+      },
+      "writtenOn": "2017-11-05T15:51:37Z",
+      "side": 1,
+      "message": "so are you going to change the name of the task?",
+      "parentUuid": "54374ae1_a79d9af6",
+      "range": {
+        "startLine": 20,
+        "startChar": 7,
+        "endLine": 20,
+        "endChar": 49
+      },
+      "revId": "55d0819ed7baeb785188bf23e81f7295b67fcc0f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
