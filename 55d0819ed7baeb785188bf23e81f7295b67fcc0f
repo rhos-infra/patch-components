@@ -70,6 +70,30 @@
       "revId": "55d0819ed7baeb785188bf23e81f7295b67fcc0f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "28fa5ef8_75a4748b",
+        "filename": "roles/setup_environment/tasks/main.yml",
+        "patchSetId": 7
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1006664
+      },
+      "writtenOn": "2017-11-05T20:21:26Z",
+      "side": 1,
+      "message": "Done. Missed that point. Thanks.",
+      "parentUuid": "fa4f15aa_ebd4f9b6",
+      "range": {
+        "startLine": 20,
+        "startChar": 7,
+        "endLine": 20,
+        "endChar": 49
+      },
+      "revId": "55d0819ed7baeb785188bf23e81f7295b67fcc0f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
