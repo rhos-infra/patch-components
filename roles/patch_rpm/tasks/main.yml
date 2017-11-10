@@ -1,7 +1,13 @@
 - name: Setting component_dist_git_name
   set_fact:
       component_dist_git_name: "{{ map_component_to_distgit[install.component.name].dist_git | default('openstack-' + install.component.name) }}"
-      component_pre_rel_version: "{{ map_component_to_pre_rel_version[install.component.name].pre_rel_version }}"
+      component_pre_rel_version: "{% if install.component.name not in map_component_to_pre_rel_version
+        or pre_rel_version not in map_component_to_pre_rel_version[install.component.name] -%}
+        {{ pre_rel_version_default }}
+        {%- else -%}
+        {{ map_component_to_pre_rel_version[install.component.name].pre_rel_version }}
+        {%- endif %}"
+      # see https://github.com/ansible/ansible/issues/30944
 
 - name: Setting component_dist_git_url
   set_fact:
