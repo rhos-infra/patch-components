@@ -1,15 +1,3 @@
-# Make sure to increment pre_rel_version when version is released
-
-pre_rel_version_default: '13'
-
-map_component_to_pre_rel_version:
-   cinder:
-     pre_rel_version: '13'
-   neutron:
-     pre_rel_version: '13'
-   nova:
-     pre_rel_version: '12'
-
 map_component_to_distgit:
   cinder:
     dist_git: 'openstack-cinder'
