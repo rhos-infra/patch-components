@@ -17,7 +17,7 @@ subparsers:
                       help: 'branch of the component (5,6,7,8,9,10,11)'
                       required: True
                   component-path:
-                      type: VarDir
+                      type: Value
                       help: 'Full path where the componet (cinder, nova, etc) is located'
                       required: False
                   host-ip:
@@ -29,6 +29,6 @@ subparsers:
                       help: 'username on the machine that rpm will be built on'
                       required: False
                   host-key_file:
-                      type: VarFile
+                      type: Value
                       help: 'SSH key for the user <username>'
                       required: False
