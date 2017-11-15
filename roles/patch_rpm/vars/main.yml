@@ -16,7 +16,7 @@ map_component_to_pre_rel_version:
   neutron-lbaas:
     pre_rel_version: '13'
   nova:
-    pre_rel_version: '12'
+    pre_rel_version: '13'
   octavia:
     pre_rel_version: '13'
   odl-aaa:
