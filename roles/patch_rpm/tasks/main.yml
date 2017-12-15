@@ -118,7 +118,7 @@
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   tags:
     - skip_ansible_lint
-  when: install.component.version < component_pre_rel_version
+  when: install.component.version|int < component_pre_rel_version|int
 
 # The actual patching part
 - name: Apply patch(es) on dist-git repo and bump release
@@ -131,7 +131,7 @@
   changed_when: true
   tags:
     - skip_ansible_lint
-  when: install.component.version < component_pre_rel_version
+  when: install.component.version|int < component_pre_rel_version|int
 
 - name: copy patch.sh file to the dist-git repo folder
   copy:
@@ -139,7 +139,7 @@
       dest: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/patch.sh"
       force: yes
       mode: "u+rwx"
-  when: install.component.version == component_pre_rel_version
+  when: install.component.version|int == component_pre_rel_version|int
 
 - name: Prepare dist-git repo for patching and performs actual patching
   vars:
@@ -150,7 +150,7 @@
   register: patch
   tags:
     - skip_ansible_lint
-  when: install.component.version == component_pre_rel_version
+  when: install.component.version|int == component_pre_rel_version|int
 
 # Now that the repo is patched, generate RPMs from it
 - name: Build new RPM from patched dist-git repo
