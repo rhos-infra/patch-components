@@ -3,6 +3,8 @@
 pre_rel_version_default: '13'
 
 map_component_to_pre_rel_version:
+  networking-ovn:
+    pre_rel_version: '13'
   cinder:
     pre_rel_version: '13'
   glance_store:
@@ -74,6 +76,8 @@ map_component_to_pre_rel_version:
 
 
 map_component_to_distgit:
+  networking-ovn:
+    dist_git: 'python-networking-ovn'
   cinder:
     dist_git: 'openstack-cinder'
   glance_store:
