@@ -38,9 +38,10 @@
 #synchronize:copy
 - name: Copy component to remote host
   synchronize:
-    src="{{ item }}"
-    dest="{{ tmp_dir }}"
-    use_ssh_args="yes"
+    src: "{{ item }}"
+    dest: "{{ tmp_dir }}"
+    use_ssh_args: "yes"
+    rsync_opts: --quiet
   with_first_found:
     - "{{ install.component.path | default(omit) }}"
     - "{{ inventory_dir }}/{{ install.component.name }}"

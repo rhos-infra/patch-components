@@ -23,6 +23,8 @@
 - name: Install epel repository
   become: yes
   shell: yum localinstall -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+  args:
+    warn: no
   tags:
     - skip_ansible_lint
 
@@ -34,19 +36,19 @@
     name="{{ item }}"
     state=present
   with_items:
-    - 'pyrpkg'
     - 'ca-certificates'
     - 'createrepo'
-    - 'python-pip'
-    - 'python-cryptography'
-    - 'python-devel'
+    - 'gcc'
+    - 'git'
     - 'libffi-devel'
     - 'mock'
-    - 'rpm-build'
     - 'openssl-devel'
+    - 'pyrpkg'
+    - 'python-cryptography'
+    - 'python-devel'
+    - 'python-pip'
     - 'rhpkg'
-    - 'git'
-    - 'gcc'
+    - 'rpm-build'
 
 - name: Install rdopkg
   become: yes
@@ -104,7 +106,7 @@
 
 - name: set logdir fact
   set_fact:
-      logdir: /var/log/extra/patching_logs
+    logdir: /var/log/extra/patching_logs
   tags: build-opendaylight
 
 - name: Create patching logs directory
@@ -117,7 +119,7 @@
 
 - name: set patchedrpmdir fact
   set_fact:
-      patchedrpmdir: /patched_rpms
+    patchedrpmdir: /patched_rpms
   tags:
       - patched-rpms-repo
       - build-opendaylight
