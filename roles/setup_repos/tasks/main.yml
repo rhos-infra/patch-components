@@ -24,4 +24,6 @@
 - name: Execute rhos-release to install rhos repos
   become: yes
   shell: "{{ rhos_release_bin }} -x; {{ rhos_release_bin }} {{ install.component.version }}"
+  register: result
   changed_when: true
+  # failed_when: "result.rc != 0 and 'FAIL' in result.stdout_lines"
