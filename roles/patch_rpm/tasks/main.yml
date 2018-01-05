@@ -22,6 +22,8 @@
 - name: Install epel repository
   become: yes
   shell: yum localinstall -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+  args:
+    warn: no
   tags:
     - skip_ansible_lint
 
@@ -36,7 +38,6 @@
     - 'pyrpkg'
     - 'ca-certificates'
     - 'createrepo'
-    - 'python-pip'
     - 'python-cryptography'
     - 'python-devel'
     - 'libffi-devel'
@@ -102,7 +103,7 @@
 
 - name: set logdir fact
   set_fact:
-      logdir: /var/log/extra/patching_logs
+    logdir: /var/log/extra/patching_logs
 
 - name: Create patching logs directory
   become: yes
@@ -114,7 +115,7 @@
 
 - name: set patchedrpmdir fact
   set_fact:
-      patchedrpmdir: /patched_rpms
+    patchedrpmdir: /patched_rpms
   tags: patched_rpms_repo
 
 - name: Patch Component
