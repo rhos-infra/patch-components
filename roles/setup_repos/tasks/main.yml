@@ -25,3 +25,10 @@
   become: yes
   shell: "{{ rhos_release_bin }} -x; {{ rhos_release_bin }} {{ install.component.version }}"
   changed_when: true
+
+- name: enable test repo in order to get access to pip
+  become: yes
+  shell: |
+    yum-config-manager --enable rhelosp-{{ install.component.version }}.0-test-deps
+  args:
+    warn: no
