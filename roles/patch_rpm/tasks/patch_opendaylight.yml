@@ -22,7 +22,8 @@
       - '127.1.0.4   registry.npmjs.org'
 
 - name: enable rhelosp-rhel..rhscl repo to install maven from
-  shell: "yum-config-manager --enable rhelosp-rhel-$(. /etc/os-release; echo $VERSION_ID)-rhscl"
+  shell: |
+      yum-config-manager --enable rhelosp-rhel-$(. /etc/os-release; echo $VERSION_ID)-rhscl >/var/log/yum.log
   tags: skip_ansible_lint
 
 - name: Install maven and deps RPMs required for the build

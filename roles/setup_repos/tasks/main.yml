@@ -1,8 +1,10 @@
 ---
 # This task will register all repos on the system to disable each one of them
 # with the second task.
-- name: Register all the repsitories
-  shell: "{{ ls_bin }} /etc/yum.repos.d/*.repo"
+- name: Register all the repositories
+  shell: find /etc/yum.repos.d -name *.repo
+  args:
+    warn: no
   register: yum_repos
   changed_when: False
 
@@ -25,3 +27,13 @@
   become: yes
   shell: "{{ rhos_release_bin }} -x; {{ rhos_release_bin }} {{ install.component.version }}"
   changed_when: true
+
+- name: enable test repo in order to get access to pip
+  become: yes
+  shell: |
+    yum-config-manager \
+      --setopt 'rhelosp-{{ install.component.version }}.0-test-deps.includepkgs=python-pip,python2-pip' \
+      --enable rhelosp-{{ install.component.version }}.0-test-deps >/var/log/yum.log
+  args:
+    warn: no
+  tags: skip_ansible_lint
