@@ -6,7 +6,7 @@
     - skip_ansible_lint
 
 - name: Checkout rhos-XY.0-patches branch
-  shell: "git branch rhos-{{ install.component.version }}.0-patches"
+  shell: "git branch -f rhos-{{ install.component.version }}.0-patches"
   args:
     chdir: "{{ tmp_dir }}/{{ install.component.name }}"
   tags:
@@ -57,38 +57,59 @@
     - skip_ansible_lint
   when: install.component.version|int == component_pre_rel_version|int
 
-# Now that the repo is patched, generate RPMs from it
-- name: Build new RPM from patched dist-git repo
-  shell: |
-    set -exo pipefail;
-    rdopkg mockbuild;
-  args:
-    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
-  register: rpm_mockbuild
-  changed_when: true
-  tags:
-    - skip_ansible_lint
+- block:
 
-# Some build errors are legitimate and should not fail the run
-# Like '.gitreview: does not exist in index'
-- name: Check for legitimate build errors
-  shell: grep -R -i -E "can't find file to patch|does not exist in index" results*
-  ignore_errors: true
-  args:
-    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
-  register: common_build_errors
-  changed_when: false
+    # Now that the repo is patched, generate RPMs from it
+    - name: Build new RPM from patched dist-git repo
+      shell: |
+        set -exo pipefail
+        on_error() {
+          (
+            find results* -name 'build.log' -o -name 'root.log' -exec echo -e 'DEBUG: tail {}:\n' \; -exec tail -n50 {} \;
+            echo "ERROR: The mockbuild has failed for some reason. Check tags exist and you have sudo on remote host"
+          ) >&2
+        }
+        trap on_error EXIT
 
-- name: Save patching logs
-  become: yes
-  shell: "cp {{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/results*/*/*/*.log {{ logdir }}"
-  changed_when: true
-  when: rpm_mockbuild is defined
-  tags: logs
+        rdopkg mockbuild
+      args:
+        chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
+      register: rpm_mockbuild
+      changed_when: true
+      tags:
+        - skip_ansible_lint
 
-- name: Fail run if mockbuild failed
-  fail: msg="The mockbuild has failed for some reason. Check tags exist and you have sudo on remote host"
-  when: rpm_mockbuild.rc != 0 and common_build_errors.rc != 0
+    # Some build errors are legitimate and should not fail the run
+    # Like '.gitreview: does not exist in index'
+    - name: Check for legitimate build errors
+      shell: ! grep -R -i -E "can't find file to patch|does not exist in index" results*
+      args:
+        chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
+      register: common_build_errors
+      changed_when: false
+      failed_when: false
+
+  rescue:
+    # TODO: add here more tasks that display the root cause of the failure
+
+    - name: Fail run if mockbuild failed
+      fail: msg="The mockbuild has failed for some reason. Check tags exist and you have sudo on remote host"
+
+  always:
+
+    - name: Save patching logs
+      become: yes
+      shell: "cp {{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/results*/*/*/*.log {{ logdir }}"
+      changed_when: true
+      tags: logs
+
+    - name: Collecting logs
+      become: yes
+      synchronize:
+        src: "{{ logdir }}"
+        dest: logs
+        mode: pull
+      tags: logs
 
 # Create directory to hold the RPMs only if patching successful
 - name: "Create '{{ patchedrpmdir }}' directory"
