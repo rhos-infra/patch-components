@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7156e5a7_bdf5dc55",
+        "filename": "roles/setup_repos/tasks/main.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2018-01-08T03:23:47Z",
+      "side": 1,
+      "message": "might you want to install pip with this one repo enabled only? instead of enabling for all",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 25
+      },
+      "revId": "9f13bfff17be2bffb59c07c15dfe2750258a9f11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
