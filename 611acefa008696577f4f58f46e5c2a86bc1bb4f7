@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fe0dc80_12cb85f8",
+        "filename": "roles/patch_rpm/tasks/patch_component.yml",
+        "patchSetId": 5
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1006664
+      },
+      "writtenOn": "2018-01-08T13:05:17Z",
+      "side": 1,
+      "message": "Adding other reviewers as well since I don\u0027t like too much this change and as I said in the previous comment artefact files are better to be saved by the job.",
+      "range": {
+        "startLine": 83,
+        "startChar": 0,
+        "endLine": 90,
+        "endChar": 35
+      },
+      "revId": "611acefa008696577f4f58f46e5c2a86bc1bb4f7",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
