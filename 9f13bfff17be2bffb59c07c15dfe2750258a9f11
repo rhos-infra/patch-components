@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "1aff93ec_5f799b5b",
+        "filename": "roles/patch_rpm/tasks/patch_component.yml",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1006664
+      },
+      "writtenOn": "2018-01-08T10:08:13Z",
+      "side": 1,
+      "message": "why not to use ansible means? (notify)",
+      "revId": "9f13bfff17be2bffb59c07c15dfe2750258a9f11",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7156e5a7_bdf5dc55",
         "filename": "roles/setup_repos/tasks/main.yml",
         "patchSetId": 4
