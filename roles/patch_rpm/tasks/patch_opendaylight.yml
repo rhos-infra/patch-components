@@ -154,7 +154,7 @@
       -v {{ tmp_dir }}:{{ tmp_dir }} \
       odl_rpm \
       --rpm direct \
-      --pkg_version {{ component_patch_commitid.stdout }}.commit \
+      --pkg_version 99.commit.{{ component_patch_commitid.stdout }} \
       --pkg_distro el7ost \
       --download_url /build/{{ odl_karaf_package_basename }} \
       --spec_template_path /home/cloud-user/dist-git/opendaylight/opendaylight.spec.tmpl \
