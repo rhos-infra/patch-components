@@ -97,10 +97,10 @@
       path="{{ patchedrpmdir }}"
       state=directory
       mode=0777
-  tags: patched_rpms_repo
+  tags: patched-rpms-repo
   when: rpm_mockbuild.rc == 0
 
 - name: Copy new generated RPMs to /patched_rpms
   shell: "cp {{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/results*/*/*/*.rpm /patched_rpms/"
-  tags: patched_rpms_repo
+  tags: patched-rpms-repo
   when: rpm_mockbuild.rc == 0

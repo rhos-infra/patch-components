@@ -2,6 +2,7 @@
   set_fact:
       component_dist_git_name: "{{ map_component_to_distgit[install.component.name].dist_git | default('openstack-' + install.component.name) }}"
       component_pre_rel_version: "{{ map_component_to_pre_rel_version[install.component.name].pre_rel_version }}"
+  tags: build-opendaylight
 
 - name: Setting component_dist_git_url
   set_fact:
@@ -68,8 +69,9 @@
       chdir: "{{ tmp_dir }}/{{ install.component.name }}"
   register: component_patch_commitid
   tags:
-    - odl_package_rpm
+    - odl-package-rpm
     - skip_ansible_lint
+    - build-opendaylight
 
 # mock group is needed for for the mockbuild
 # without creating mock group, rdopkg will try to use root and ask for password
@@ -103,6 +105,7 @@
 - name: set logdir fact
   set_fact:
       logdir: /var/log/extra/patching_logs
+  tags: build-opendaylight
 
 - name: Create patching logs directory
   become: yes
@@ -115,7 +118,9 @@
 - name: set patchedrpmdir fact
   set_fact:
       patchedrpmdir: /patched_rpms
-  tags: patched_rpms_repo
+  tags:
+      - patched-rpms-repo
+      - build-opendaylight
 
 - name: Patch Component
   include_tasks: roles/patch_rpm/tasks/patch_component.yml
@@ -125,11 +130,12 @@
   include_tasks: roles/patch_rpm/tasks/patch_opendaylight.yml
   become: true
   when: install.component.name | match("odl-.*")
+  tags: build-opendaylight
 
 - name: Create repository for patched RPMs
   command: "createrepo /patched_rpms"
   tags:
-      - patched_rpms_repo
+      - patched-rpms-repo
       - skip_ansible_lint
 
 - name: Setup repository in /etc/yum.repos.d
@@ -137,4 +143,4 @@
   template:
     src='patched_rpms.j2'
     dest='/etc/yum.repos.d/patched_rpms.repo'
-  tags: patched_rpms_repo
+  tags: patched-rpms-repo

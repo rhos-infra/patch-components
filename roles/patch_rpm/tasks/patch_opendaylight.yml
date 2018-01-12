@@ -100,20 +100,20 @@
   # we don't want to fail here to be able to collect logs
   ignore_errors: true
   tags:
-      - maven_chain_build
+      - build-opendaylight
       - skip_ansible_lint
 
 - name: set karaf distribution tar.gz fact - the original package name
   register: odl_karaf_package_fullpath
   shell: find /tmp/org/opendaylight/ -name "*vpnservice-karaf*.tar.gz" | head -1
   tags:
-      - odl_package_rpm
+      - odl-package-rpm
       - skip_ansible_lint
 
 - name: set parent dir fact of the original karaf distribution
   set_fact:
       odl_karaf_package_basename: "{{ odl_karaf_package_fullpath.stdout | basename }}"
-  tags: odl_package_rpm
+  tags: odl-package-rpm
 
 - name: Clone "integration-packaging" required to package OpenDaylight karaf distro into RPM
   git:
@@ -123,7 +123,7 @@
       accept_hostkey: yes
   tags:
       - integration-packaging
-      - odl_package_rpm
+      - odl-package-rpm
 
 - name: create logs directory for OpenDaylight patching and RPM building
   file:
@@ -132,7 +132,7 @@
   with_items:
       - absent
       - directory
-  tags: odl_package_rpm
+  tags: odl-package-rpm
 
 - name: Package OpenDaylight into RPM
   shell: |
@@ -147,17 +147,17 @@
       docker build -t "odl_rpm" . | tee {{ tmp_dir }}/integration-packaging/logs/integration-packaging_docker-build-odl_rpm.log 2>&1
 
       cp {{ odl_karaf_package_fullpath.stdout }} .
-      cp /home/cloud-user/dist-git/opendaylight/opendaylight.service .
+      cp {{ tmp_dir }}/dist-git/opendaylight/opendaylight.service .
 
       docker run \
       -v $(pwd):/build \
       -v {{ tmp_dir }}:{{ tmp_dir }} \
       odl_rpm \
       --rpm direct \
-      --pkg_version {{ component_patch_commitid.stdout }}.commit \
+      --pkg_version 99.commit.{{ component_patch_commitid.stdout }} \
       --pkg_distro el7ost \
       --download_url /build/{{ odl_karaf_package_basename }} \
-      --spec_template_path /home/cloud-user/dist-git/opendaylight/opendaylight.spec.tmpl \
+      --spec_template_path {{ tmp_dir }}/dist-git/opendaylight/opendaylight.spec.tmpl \
       --spec_template_type cheetah \
       --distro_name_prefix vpnservice-karaf \
       --keep_distro_name True \
@@ -165,12 +165,11 @@
       --keep_service_file_name True \
       | tee {{ tmp_dir }}/integration-packaging/logs/integration-packaging_docker-run-odl_rpm.log 2>&1
   register: patch_opendaylight
-  tags:
-      - odl_package_rpm
-      - skip_ansible_lint
-
   # we don't want to fail here to be able to collect logs
   ignore_errors: true
+  tags:
+      - odl-package-rpm
+      - skip_ansible_lint
 
 - name: Save patching logs - OpenDaylight
   become: yes
@@ -207,10 +206,10 @@
   with_items:
       - absent
       - directory
-  tags: patched_rpms_repo
+  tags: patched-rpms-repo
 
 - name: Copy new generated RPMs to /patched_rpms - OpenDaylight
   shell: "cp {{ tmp_dir }}/integration-packaging/packages/cache/*.noarch.rpm /patched_rpms/"
   tags:
-      - patched_rpms_repo
+      - patched-rpms-repo
       - skip_ansible_lint

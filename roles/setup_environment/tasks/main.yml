@@ -9,11 +9,11 @@
 - name: Set tmp_dir for all the building
   set_fact: tmp_dir="{{ ansible_env.HOME }}"
   tags:
-      - odl_package_rpm
+      - odl-package-rpm
       - rpm
       - logs
-      - patched_rpms_repo
-      - maven_chain_build
+      - patched-rpms-repo
+      - build-opendaylight
 
 - name: Remove and create logs dir
   file:
