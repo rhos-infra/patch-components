@@ -32,6 +32,7 @@ if [ "$PRE_RELEASE" == 'true' ]; then
     SHA=$(egrep Source0 *spec|egrep -o '[0-9a-f]*\.t'|sed -e 's!\.t$!!')
     if [[ -z "$SHA" ]]; then
         echo "MISSING SHA1 PARAMETER"
+        echo "CHECK IF pre_rel_version requires bump"
         exit 1;
     fi
 fi
