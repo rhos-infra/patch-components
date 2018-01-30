@@ -26,11 +26,12 @@
   tags: skip_ansible_lint
 
 - name: Install maven and deps RPMs required for the build
-  yum: name="{{ item }}" state=present
-  with_items:
+  yum:
+    name:
+      - docker
       - mock
       - rh-maven33-maven
-      - docker
+    state: present
 
 - name: Remove old mvn binaries
   shell: "rm -f /usr/bin/mvn*"

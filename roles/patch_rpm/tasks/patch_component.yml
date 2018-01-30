@@ -6,7 +6,7 @@
     - skip_ansible_lint
 
 - name: Checkout rhos-XY.0-patches branch
-  shell: "git branch rhos-{{ install.component.version }}.0-patches"
+  shell: "git branch -f rhos-{{ install.component.version }}.0-patches"
   args:
     chdir: "{{ tmp_dir }}/{{ install.component.name }}"
   tags:
