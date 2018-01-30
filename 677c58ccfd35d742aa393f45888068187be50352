@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "34b13204_22931e90",
+        "filename": "roles/patch_rpm/tasks/patch_component.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006664
+      },
+      "writtenOn": "2018-01-30T17:33:41Z",
+      "side": 1,
+      "message": "Exactly because of a and b, maybe it\u0027s a good idea not to force and get an error instead?",
+      "parentUuid": "c589d330_18afb5a6",
+      "revId": "677c58ccfd35d742aa393f45888068187be50352",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff1e98c6_968561b3",
         "filename": "roles/setup_repos/tasks/main.yml",
         "patchSetId": 1
