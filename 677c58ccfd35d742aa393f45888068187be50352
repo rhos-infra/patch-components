@@ -34,6 +34,23 @@
       "revId": "677c58ccfd35d742aa393f45888068187be50352",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff1e98c6_968561b3",
+        "filename": "roles/setup_repos/tasks/main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006664
+      },
+      "writtenOn": "2018-01-30T17:30:24Z",
+      "side": 1,
+      "message": "shouldn\u0027t \" warn: no \" to be removed?",
+      "revId": "677c58ccfd35d742aa393f45888068187be50352",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
