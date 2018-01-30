@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1303a80a_31a854c3",
+        "filename": "roles/patch_rpm/tasks/main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2018-01-30T18:22:42Z",
+      "side": 1,
+      "message": "we have ansible 2.4.2 in OSP 13 and others as well as ansible 2.4.2 in rhel 7.4 extras",
+      "range": {
+        "startLine": 22,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 23
+      },
+      "revId": "677c58ccfd35d742aa393f45888068187be50352",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "57e84134_7072c054",
         "filename": "roles/patch_rpm/tasks/patch_component.yml",
         "patchSetId": 1
@@ -55,6 +78,52 @@
     },
     {
       "key": {
+        "uuid": "3d327a45_520ae46e",
+        "filename": "roles/patch_rpm/tasks/patch_opendaylight.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2018-01-30T18:22:42Z",
+      "side": 1,
+      "message": "+1 good to see",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 34,
+        "endChar": 18
+      },
+      "revId": "677c58ccfd35d742aa393f45888068187be50352",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bb40d4d4_c67304d7",
+        "filename": "roles/setup_environment/tasks/main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2018-01-30T18:22:42Z",
+      "side": 1,
+      "message": "Nice, have been looking for how to make this quieter",
+      "range": {
+        "startLine": 44,
+        "startChar": 3,
+        "endLine": 44,
+        "endChar": 23
+      },
+      "revId": "677c58ccfd35d742aa393f45888068187be50352",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff1e98c6_968561b3",
         "filename": "roles/setup_repos/tasks/main.yml",
         "patchSetId": 1
@@ -84,6 +153,24 @@
       "side": 1,
       "message": "nope, because ansible will give a warning recommending used yum_repository module which is.... broken, at least for our use case. I don\u0027t expect a fix too soon as these are quite advanced features.",
       "parentUuid": "ff1e98c6_968561b3",
+      "revId": "677c58ccfd35d742aa393f45888068187be50352",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "72d291be_4853c713",
+        "filename": "roles/setup_repos/tasks/main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2018-01-30T18:22:42Z",
+      "side": 1,
+      "message": "a comment as to why then might be in order here to keep track of this info for the future.",
+      "parentUuid": "fbfbcb96_d013467e",
       "revId": "677c58ccfd35d742aa393f45888068187be50352",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
