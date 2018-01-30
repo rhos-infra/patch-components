@@ -69,6 +69,24 @@
       "revId": "677c58ccfd35d742aa393f45888068187be50352",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fbfbcb96_d013467e",
+        "filename": "roles/setup_repos/tasks/main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1008329
+      },
+      "writtenOn": "2018-01-30T17:35:47Z",
+      "side": 1,
+      "message": "nope, because ansible will give a warning recommending used yum_repository module which is.... broken, at least for our use case. I don\u0027t expect a fix too soon as these are quite advanced features.",
+      "parentUuid": "ff1e98c6_968561b3",
+      "revId": "677c58ccfd35d742aa393f45888068187be50352",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
