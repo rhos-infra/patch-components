@@ -16,6 +16,24 @@
       "revId": "677c58ccfd35d742aa393f45888068187be50352",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c589d330_18afb5a6",
+        "filename": "roles/patch_rpm/tasks/patch_component.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1008329
+      },
+      "writtenOn": "2018-01-30T17:29:45Z",
+      "side": 1,
+      "message": "Because we want to assure the idempotency of the playbook and avoid\na failure if:\nA) playbook was already executed\nB) a partial previous execution ended up with this branch already created",
+      "parentUuid": "57e84134_7072c054",
+      "revId": "677c58ccfd35d742aa393f45888068187be50352",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
