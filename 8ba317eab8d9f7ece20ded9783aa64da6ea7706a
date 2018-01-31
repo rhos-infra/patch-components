@@ -22,6 +22,30 @@
       "revId": "8ba317eab8d9f7ece20ded9783aa64da6ea7706a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dfa4c3d6_07a72655",
+        "filename": "roles/patch_rpm/tasks/patch_component.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006664
+      },
+      "writtenOn": "2018-01-31T13:28:44Z",
+      "side": 1,
+      "message": "Jon, rdopkg is inconsistent in behaviour. \nfor one spec file it fails when DROP-IN-RPM is specified while for other spec file it returns \u0027ok\u0027\n\nSo, imho, we need to avoid creating workarounds, but rather to fix the root cause. \n\nYou can see more details here:\n https://github.com/softwarefactory-project/rdopkg/issues/150)\n\nor in the e-mail from me.",
+      "parentUuid": "643bb0c0_02b03bed",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 75
+      },
+      "revId": "8ba317eab8d9f7ece20ded9783aa64da6ea7706a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
