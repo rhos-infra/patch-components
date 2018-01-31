@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "643bb0c0_02b03bed",
+        "filename": "roles/patch_rpm/tasks/patch_component.yml",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1005170
+      },
+      "writtenOn": "2018-01-31T13:19:24Z",
+      "side": 1,
+      "message": "There are several cases that will likely show this.  One is a DROP-IN-RPM patch, another is running job against dist-git which is different from current puddle but you want to test the changes in the CI using the patching functionality.  If this is not the focus of this role then I would like to know more details.  This detail is from behavior of rdopkg patch.",
+      "range": {
+        "startLine": 37,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 75
+      },
+      "revId": "8ba317eab8d9f7ece20ded9783aa64da6ea7706a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
