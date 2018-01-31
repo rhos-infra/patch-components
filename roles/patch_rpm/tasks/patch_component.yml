@@ -34,6 +34,8 @@
   args:
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   changed_when: true
+  register: result
+  failed_when: result.rc != 0 and 'No patches changed' not in result.stdout
   tags:
     - skip_ansible_lint
   when: install.component.version|int < component_pre_rel_version|int
