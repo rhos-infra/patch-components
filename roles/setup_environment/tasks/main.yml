@@ -1,4 +1,18 @@
 ---
+- name: set branch names for component and dist-git to be checked out and patched
+  vars:
+      _branch: "{%- if install.branch is defined -%} {{ install.branch + '-' }} {%- endif -%}"
+  set_fact:
+      component_branch_to_patch: "{{ _branch }}rhos-{{ install.component.version }}.0-patches"
+      dit_git_branch_to_patch: "{{ _branch }}rhos-{{ install.component.version }}.0-rhel-{{ ansible_distribution_version|int }}"
+  #      dist_git_branch_to_patch: "{{ install.branch is defined || rhos-{{ install.component.version }}.0-rhel-{{ ansible_distribution_version|int }} "
+  tags: set-branches
+
+- name: print branches that will be patched and built
+  debug:
+      msg: "component_branch_to_patch: {{ component_branch_to_patch }}, dit_git_branch_to_patch: {{ dit_git_branch_to_patch }}"
+  tags: set-branches
+
 - name: Clean previous and create tmp_dir for all the building
   register: tmp_dir_shell
   shell: "rm -rf tmp.patch_rpm*; mktemp -d --tmpdir tmp.patch_rpm.XXXXXXXX"
