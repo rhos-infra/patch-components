@@ -77,16 +77,18 @@
       accept_hostkey: true
       version: master
 
+# TODO(wznoinsk): if we're picking up a custom component branch for only one component (i.e.: odl-genius) how do we populate git commit hashes for all the other odl-* components (i.e.: defaulting to ones from rhos-XY-patches branch)
 - name: Prepare chain file
   args:
       chdir: "{{ tmp_dir}}/dist-git/opendaylight"
   shell: |
       git config --system http.sslverify false
-      # sed -i "s/\$TAG_TO_BUILD/rhos-{{ install.component.version}}.0-patches/g" {{ tmp_dir}}/dist-git/opendaylight/make-vars
-      # {{ tmp_dir}}/dist-git/opendaylight/make-vars
+      sed -i "s/\TAG_TO_BUILD=.*/TAG_TO_BUILD={{ component_branch_to_patch }}/g" {{ tmp_dir}}/dist-git/opendaylight/make-vars
       make respin
       cp opendaylight-chain/opendaylight-chain.ini {{ tmp_dir}}/maven-chain-builder/
-      git checkout -- make-vars && git checkout -- opendaylight-chain/opendaylight-chain.ini
+
+      # cleanup
+      # git checkout -- make-vars && git checkout -- opendaylight-chain/opendaylight-chain.ini
   tags: skip_ansible_lint
 
 - name: Run maven-chain-builder to build the opendaylight karaf distribution (logs in /var/log/maven/)
@@ -104,17 +106,23 @@
       - build-opendaylight
       - skip_ansible_lint
 
+- fail:
+      msg: building OpenDaylight failed
+  when: build_opendaylight.rc != 0
+
 - name: set karaf distribution tar.gz fact - the original package name
   register: odl_karaf_package_fullpath
   shell: find /tmp/org/opendaylight/ -name "*vpnservice-karaf*.tar.gz" | head -1
   tags:
       - odl-package-rpm
       - skip_ansible_lint
+  when: build_opendaylight.rc == 0
 
 - name: set parent dir fact of the original karaf distribution
   set_fact:
       odl_karaf_package_basename: "{{ odl_karaf_package_fullpath.stdout | basename }}"
   tags: odl-package-rpm
+  when: build_opendaylight.rc == 0
 
 - name: Clone "integration-packaging" required to package OpenDaylight karaf distro into RPM
   git:
@@ -125,6 +133,7 @@
   tags:
       - integration-packaging
       - odl-package-rpm
+  when: build_opendaylight.rc == 0
 
 - name: create logs directory for OpenDaylight patching and RPM building
   file:
@@ -165,12 +174,13 @@
       --service_file_url /build/opendaylight.service \
       --keep_service_file_name True \
       | tee {{ tmp_dir }}/integration-packaging/logs/integration-packaging_docker-run-odl_rpm.log 2>&1
-  register: patch_opendaylight
+  register: package_opendaylight
   # we don't want to fail here to be able to collect logs
   ignore_errors: true
   tags:
       - odl-package-rpm
       - skip_ansible_lint
+  when: build_opendaylight.rc == 0
 
 - name: Save patching logs - OpenDaylight
   become: yes
@@ -195,7 +205,7 @@
 - name: fail if patching was not successful
   fail:
       msg: "OpenDaylight patching not successful, check {{ logdir }}"
-  when: patch_opendaylight is not defined or patch_opendaylight.rc != 0
+  when: package_opendaylight is not defined or package_opendaylight.rc != 0
 
 # Create directory to hold the RPMs only if patching successful
 - name: "Create '{{ patchedrpmdir }}' directory"

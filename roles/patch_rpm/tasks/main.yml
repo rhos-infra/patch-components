@@ -97,7 +97,7 @@
 - name: Clone the component dist-git repo
   git:
     repo="{{ component_dist_git_url }}"
-    version="rhos-{{ install.component.version }}.0-rhel-{{ ansible_distribution_version|int }}"
+    version="{{ dit_git_branch_to_patch }}"
     dest="{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
     accept_hostkey=true
   retries: 3
