@@ -96,7 +96,7 @@
   register: build_opendaylight
   until: build_opendaylight.rc == 0
   # it may fail because of MEAD server not responding on time, we'll retry a couple of times
-  retries: 5
+  retries: 10
   delay: 10
   # we don't want to fail here to be able to collect logs
   ignore_errors: true
