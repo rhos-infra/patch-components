@@ -49,6 +49,13 @@
       - 'rpm-build'
     state: present
 
+# python-pip 1.5.6 and a few other versions causing occasional problems
+- name: Install pip
+  become: yes
+  easy_install:
+      name: pip
+      state: latest
+
 - name: Install rdopkg
   become: yes
   pip:
