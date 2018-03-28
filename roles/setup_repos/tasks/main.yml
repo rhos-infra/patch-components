@@ -28,10 +28,12 @@
       . /etc/os-release
       echo $VERSION_ID
   register: rhel_version
+  tags: build-opendaylight
 
 - name: discover RHEL major version - convert to ansible fact
   set_fact:
       rhel_version_major: "{{ rhel_version.stdout.split('.')[0] }}"
+  tags: build-opendaylight
 
 - name: Execute rhos-release to install rhos repos
   become: yes
