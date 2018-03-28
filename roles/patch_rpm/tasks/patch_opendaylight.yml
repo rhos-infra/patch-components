@@ -22,46 +22,118 @@
       - '127.1.0.4   registry.npmjs.org'
 
 - name: enable rhelosp-rhel..rhscl repo to install maven from
-  shell: "yum-config-manager --enable rhelosp-rhel-$(. /etc/os-release; echo $VERSION_ID)-rhscl"
+  shell: "yum-config-manager --enable rhelosp-rhel-{{ rhel_version_major }}-rhscl"
   tags: skip_ansible_lint
+  when: install.component.version == 12
 
-- name: Install maven and deps RPMs required for the build
+- name: enable rhos-odl-rhel-build repo to install maven from
+  template:
+      src: "rhos-odl-rhel-build.repo.j2"
+      dest: "/etc/yum.repos.d/rhos-{{ install.component.version }}.0-odl-rhel-{{ rhel_version_major }}-build.repo"
+  tags: skip_ansible_lint
+  when: install.component.version >= 13
+
+- name: Install deps RPMs required for the build
   yum:
     name:
       - docker
       - mock
+    state: present
+
+- name: UnInstall any maven currently installed to avoid packages conflicts
+  yum:
+    name:
+      - maven
+    state: absent
+  when: install.component.version >= 13
+
+- name: Install maven
+  yum:
+    name:
       - rh-maven33-maven
     state: present
+  when: install.component.version == 12
+
+- name: Install maven
+  yum:
+    name:
+      - maven3
+    state: present
+  when: install.component.version >= 13
 
 - name: Remove old mvn binaries
   shell: "rm -f /usr/bin/mvn*"
+  when: install.component.version == 12
   tags: skip_ansible_lint
 
+- name: discover maven_home
+  shell: "mvn --version | awk '$0 ~ /Maven home:/ {print $3}'"
+  register: _maven_home
+
+- name: set maven_home fact
+  set_fact:
+      maven_home: "{{ _maven_home.stdout }}"
+
 - name: Make maven (mvn) available in $PATH
-  shell: "ln -s /opt/rh/rh-maven33/root/usr/bin/* /usr/bin/"
+  shell: "ln -s {{ maven_home }}/usr/bin/* /usr/bin/"
   ignore_errors: no
+  when: install.component.version == 12
   tags: skip_ansible_lint
 
 - name: Install Maven PME
   shell: |
-      export MAVEN_HOME=$(mvn --version | awk '$0 ~ /Maven home:/ {print $3}')
-      wget http://repo1.maven.org/maven2/org/commonjava/maven/ext/pom-manipulation-ext/1.15/pom-manipulation-ext-1.15.jar -P $MAVEN_HOME/lib/ext
+      wget http://repo1.maven.org/maven2/org/commonjava/maven/ext/pom-manipulation-ext/1.15/pom-manipulation-ext-1.15.jar -P {{ maven_home }}/lib/ext
   tags: skip_ansible_lint
+  when: install.component.version == 12
 
-- name: Install m2 settings
-  command: "cp {{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/scripts/config/settings.xml.mead /opt/rh/rh-maven33/root/usr/share/maven/conf/settings.xml"
+- name: Install Maven PME
+  shell: |
+      wget http://repo1.maven.org/maven2/org/commonjava/maven/ext/pom-manipulation-ext/2.9/pom-manipulation-ext-2.9.jar -P {{ maven_home }}/lib/ext
   tags: skip_ansible_lint
+  when: install.component.version >= 13
+
+- name: set maven m2_settings fact
+  set_fact:
+      m2_settings_file: "{{ maven_home }}/usr/share/maven/conf/settings.xml"
+  when: install.component.version == 12
+
+- name: set maven m2_settings fact
+  set_fact:
+      m2_settings_file: "{{ maven_home }}/conf/settings.xml"
+  when: install.component.version >= 13
+
+- name: Install m2 settings (OSP12)
+  command: "cp {{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/scripts/config/settings.xml.mead {{ m2_settings_file }}"
+  tags: skip_ansible_lint
+  when: install.component.version == 12
+
+- name: Install m2 settings (OSP13+)
+  get_url:
+      dest: "{{ m2_settings_file }}"
+      url: "http://git.app.eng.bos.redhat.com/git/odl-odlparent.git/plain/settings.xml?h=rhos-{{ install.component.version }}.0-patches"
+      force: yes
+      validate_certs: no
+      timeout: 30
+  tags: skip_ansible_lint
+  when: install.component.version >= 13
+
+- name: replace references to upstream nexus with url of downstream mead in m2 settings file
+  replace:
+      path: "{{ m2_settings_file }}"
+      regexp: '<url.*nexus.opendaylight.*'
+      replace:  "<url>http://download.devel.redhat.com/brewroot/repos/rhos-{{ install.component.version }}.0-odl-rhel-{{ rhel_version_major }}-build/latest/maven/</url>"
+      backup: yes
 
 - name: disable 'snapshots' profile in m2 settings - https://bugs.eclipse.org/bugs/show_bug.cgi?id=507612
   replace:
-      path: '/opt/rh/rh-maven33/root/usr/share/maven/conf/settings.xml'
+      path: "{{ m2_settings_file }}"
       regexp: '(<activeProfile>opendaylight-snapshots</activeProfile>$)'
       replace: '<!-- \1 -->'
       backup: yes
 
 - name: use a load balancer address of download.eng.* to pickup the closest location automagically
   replace:
-      path: '/opt/rh/rh-maven33/root/usr/share/maven/conf/settings.xml'
+      path: "{{ m2_settings_file }}"
       regexp: 'download.eng.*.redhat.com'
       replace: 'download.engineering.redhat.com'
 
