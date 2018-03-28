@@ -23,7 +23,7 @@
   yum:
     name="http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"
 
-- name: discover RHEL major version - convert to ansible fact
+- name: discover RHEL major version
   set_fact:
       rhel_version_major: "{{ facter_os.release.major }}"
   tags: build-opendaylight
