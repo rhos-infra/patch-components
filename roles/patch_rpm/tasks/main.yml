@@ -2,11 +2,14 @@
   set_fact:
       component_dist_git_name: "{{ map_component_to_distgit[install.component.name].dist_git | default('openstack-' + install.component.name) }}"
       component_pre_rel_version: "{{ map_component_to_pre_rel_version[install.component.name].pre_rel_version }}"
-  tags: build-opendaylight
+  tags:
+      - build-opendaylight
+      - dist-git
 
 - name: Setting component_dist_git_url
   set_fact:
       component_dist_git_url: "git://pkgs.devel.redhat.com/rpms/{{ component_dist_git_name }}"
+  tags: dist-git
 
 # rhpkg is used by rdopkg
 - name: Install rhpkg and rdopkg repos
@@ -92,6 +95,7 @@
   file:
     state: absent
     path: "{{ tmp_dir }}/dist-git/"
+  tags: dist-git
 
 # Clone component dist-git repo
 - name: Clone the component dist-git repo
@@ -102,6 +106,7 @@
     accept_hostkey=true
   retries: 3
   delay: 120
+  tags: dist-git
 
 - name: set logdir fact
   set_fact:
@@ -128,7 +133,7 @@
   when: not (install.component.name | match("odl-.*"))
 
 - name: Patch and build OpenDaylight
-  include_tasks: roles/patch_rpm/tasks/patch_opendaylight.yml
+  import_tasks: roles/patch_rpm/tasks/patch_opendaylight.yml
   become: true
   when: install.component.name | match("odl-.*")
   tags: build-opendaylight

@@ -1,0 +1,22 @@
+12:
+  distro_name_prefix: 'vpnservice-karaf'
+  yum_deps:
+      - docker
+      - mock
+      - rh-maven33-maven
+  pme_url: http://repo1.maven.org/maven2/org/commonjava/maven/ext/pom-manipulation-ext/1.15/pom-manipulation-ext-1.15.jar
+  m2_settings_file_path: '/usr/share/maven/conf/settings.xml'
+  karaf_tgz_regex: '*vpnservice-karaf*.tar.gz'
+
+13:
+  distro_name_prefix: 'karaf'
+  yum_deps:
+      - docker
+      - mock
+      - java
+      # java-devel contains tools.jar
+      - java-devel
+      - maven3
+  pme_url: http://repo1.maven.org/maven2/org/commonjava/maven/ext/pom-manipulation-ext/2.9/pom-manipulation-ext-2.9.jar
+  m2_settings_file_path: '/conf/settings.xml'
+  karaf_tgz_regex: 'karaf*redhat*.tar.gz'

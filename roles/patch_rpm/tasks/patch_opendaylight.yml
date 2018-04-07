@@ -1,3 +1,14 @@
+- name: load opendaylight variables
+  include_vars:
+      file: "vars/opendaylight.yml"
+      name: opendaylight_vars_all
+  tags: odl-package-rpm
+
+- name: "set opendaylight OSP{{ install.component.version }} specific facts"
+  set_fact:
+      opendaylight_vars: "{{ opendaylight_vars_all[install.component.version | int] }}"
+  tags: odl-package-rpm
+
 - name: recreate /tmp/patched required by maven-chain-builder
   file:
       path: '/tmp/patched'
@@ -22,46 +33,98 @@
       - '127.1.0.4   registry.npmjs.org'
 
 - name: enable rhelosp-rhel..rhscl repo to install maven from
-  shell: "yum-config-manager --enable rhelosp-rhel-$(. /etc/os-release; echo $VERSION_ID)-rhscl"
+  shell: "yum-config-manager --enable rhelosp-rhel-{{ ansible_distribution_major_version }}-rhscl"
   tags: skip_ansible_lint
+  when: install.component.version == 12
 
-- name: Install maven and deps RPMs required for the build
+- name: enable rhos-odl-rhel-build repo to install maven from
+  template:
+      src: "rhos-odl-rhel-build.repo.j2"
+      dest: "/etc/yum.repos.d/rhos-{{ install.component.version }}.0-odl-rhel-{{ ansible_distribution_major_version }}-build.repo"
+  tags: skip_ansible_lint
+  when: install.component.version >= 13
+
+- name: Install deps RPMs required for the build
   yum:
-    name:
-      - docker
-      - mock
-      - rh-maven33-maven
-    state: present
+      name: "{{ item }}"
+      state: present
+  with_items: "{{ opendaylight_vars.yum_deps }}"
+
+- name: UnInstall any maven currently installed to avoid packages conflicts
+  yum:
+      name: maven
+      state: absent
+  when: install.component.version >= 13
 
 - name: Remove old mvn binaries
   shell: "rm -f /usr/bin/mvn*"
+  when: install.component.version == 12
   tags: skip_ansible_lint
 
+- name: symlink java to latest jre
+  file:
+      path: /usr/lib/jvm/java
+      src: /usr/lib/jvm/jre
+      state: link
+  become: true
+  when: install.component.version >= 13
+
+- name: discover maven_home
+  shell: "mvn --version | awk '$0 ~ /Maven home:/ {print $3}'"
+  register: _maven_home
+
+- name: set maven_home fact
+  set_fact:
+      maven_home: "{{ _maven_home.stdout }}"
+
 - name: Make maven (mvn) available in $PATH
-  shell: "ln -s /opt/rh/rh-maven33/root/usr/bin/* /usr/bin/"
+  shell: "ln -s {{ maven_home }}/usr/bin/* /usr/bin/"
   ignore_errors: no
+  when: install.component.version == 12
   tags: skip_ansible_lint
 
 - name: Install Maven PME
   shell: |
-      export MAVEN_HOME=$(mvn --version | awk '$0 ~ /Maven home:/ {print $3}')
-      wget http://repo1.maven.org/maven2/org/commonjava/maven/ext/pom-manipulation-ext/1.15/pom-manipulation-ext-1.15.jar -P $MAVEN_HOME/lib/ext
+      wget {{ opendaylight_vars.pme_url }} -P {{ maven_home }}/lib/ext/
   tags: skip_ansible_lint
+  when: install.component.version == 12
 
-- name: Install m2 settings
-  command: "cp {{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/scripts/config/settings.xml.mead /opt/rh/rh-maven33/root/usr/share/maven/conf/settings.xml"
+- name: set maven m2_settings fact
+  set_fact:
+      m2_settings_file: "{{ maven_home }}{{ opendaylight_vars.m2_settings_file_path }}"
+
+- name: Install m2 settings (OSP12)
+  command: "cp {{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/scripts/config/settings.xml.mead {{ m2_settings_file }}"
   tags: skip_ansible_lint
+  when: install.component.version == 12
+
+- name: Install m2 settings (OSP13+)
+  get_url:
+      dest: "{{ m2_settings_file }}"
+      url: "http://git.app.eng.bos.redhat.com/git/odl-odlparent.git/plain/settings.xml?h=rhos-{{ install.component.version }}.0-patches"
+      force: yes
+      validate_certs: no
+      timeout: 30
+  tags: skip_ansible_lint
+  when: install.component.version >= 13
+
+- name: replace references to upstream nexus with url of downstream mead in m2 settings file
+  replace:
+      path: "{{ m2_settings_file }}"
+      regexp: '<url.*nexus.opendaylight.*'
+      replace:  "<url>http://download.devel.redhat.com/brewroot/repos/rhos-{{ install.component.version }}.0-odl-rhel-{{ ansible_distribution_major_version }}-build/latest/maven/</url>"
+      backup: yes
 
 - name: disable 'snapshots' profile in m2 settings - https://bugs.eclipse.org/bugs/show_bug.cgi?id=507612
   replace:
-      path: '/opt/rh/rh-maven33/root/usr/share/maven/conf/settings.xml'
+      path: "{{ m2_settings_file }}"
       regexp: '(<activeProfile>opendaylight-snapshots</activeProfile>$)'
       replace: '<!-- \1 -->'
       backup: yes
 
 - name: use a load balancer address of download.eng.* to pickup the closest location automagically
   replace:
-      path: '/opt/rh/rh-maven33/root/usr/share/maven/conf/settings.xml'
+      path: "{{ m2_settings_file }}"
       regexp: 'download.eng.*.redhat.com'
       replace: 'download.engineering.redhat.com'
 
@@ -106,7 +169,7 @@
 
 - name: set karaf distribution tar.gz fact - the original package name
   register: odl_karaf_package_fullpath
-  shell: find /tmp/org/opendaylight/ -name "*vpnservice-karaf*.tar.gz" | head -1
+  shell: find /tmp/org/opendaylight/netvirt -name "{{ opendaylight_vars.karaf_tgz_regex }}" | head -1
   tags:
       - odl-package-rpm
       - skip_ansible_lint
@@ -151,6 +214,9 @@
       cp {{ tmp_dir }}/dist-git/opendaylight/opendaylight.service .
 
       docker run \
+      {% if install.component.version >= 13 -%}
+      -v {{ tmp_dir }}/dist-git/opendaylight:/dist-git \
+      {%- endif %}
       -v $(pwd):/build \
       -v {{ tmp_dir }}:{{ tmp_dir }} \
       odl_rpm \
@@ -160,10 +226,13 @@
       --download_url /build/{{ odl_karaf_package_basename }} \
       --spec_template_path {{ tmp_dir }}/dist-git/opendaylight/opendaylight.spec.tmpl \
       --spec_template_type cheetah \
-      --distro_name_prefix vpnservice-karaf \
+      --distro_name_prefix {{ opendaylight_vars.distro_name_prefix }} \
       --keep_distro_name True \
       --service_file_url /build/opendaylight.service \
       --keep_service_file_name True \
+      {% if install.component.version >= 13 %}
+      --extra_src_files /dist-git/monitor.py \
+      {%- endif %}
       | tee {{ tmp_dir }}/integration-packaging/logs/integration-packaging_docker-run-odl_rpm.log 2>&1
   register: patch_opendaylight
   # we don't want to fail here to be able to collect logs
