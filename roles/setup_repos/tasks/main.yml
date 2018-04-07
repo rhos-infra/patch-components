@@ -25,7 +25,7 @@
 
 - name: Execute rhos-release to install rhos repos
   become: yes
-  shell: "{{ rhos_release_bin }} -x; {{ rhos_release_bin }} {{ install.component.version }}"
+  shell: "{{ rhos_release_bin }} -x; {{ rhos_release_bin }} -P -r {{ ansible_lsb.release }} {{ install.component.version }}"
   changed_when: true
 
 - name: enable test repo in order to get access to pip
