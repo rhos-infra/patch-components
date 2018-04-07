@@ -33,14 +33,14 @@
       - '127.1.0.4   registry.npmjs.org'
 
 - name: enable rhelosp-rhel..rhscl repo to install maven from
-  shell: "yum-config-manager --enable rhelosp-rhel-{{ rhel_version_major }}-rhscl"
+  shell: "yum-config-manager --enable rhelosp-rhel-{{ ansible_lsb.major_release | int }}-rhscl"
   tags: skip_ansible_lint
   when: install.component.version == 12
 
 - name: enable rhos-odl-rhel-build repo to install maven from
   template:
       src: "rhos-odl-rhel-build.repo.j2"
-      dest: "/etc/yum.repos.d/rhos-{{ install.component.version }}.0-odl-rhel-{{ rhel_version_major }}-build.repo"
+      dest: "/etc/yum.repos.d/rhos-{{ install.component.version }}.0-odl-rhel-{{ ansible_lsb.major_release | int }}-build.repo"
   tags: skip_ansible_lint
   when: install.component.version >= 13
 
@@ -112,7 +112,7 @@
   replace:
       path: "{{ m2_settings_file }}"
       regexp: '<url.*nexus.opendaylight.*'
-      replace:  "<url>http://download.devel.redhat.com/brewroot/repos/rhos-{{ install.component.version }}.0-odl-rhel-{{ rhel_version_major }}-build/latest/maven/</url>"
+      replace:  "<url>http://download.devel.redhat.com/brewroot/repos/rhos-{{ install.component.version }}.0-odl-rhel-{{ ansible_lsb.major_release | int }}-build/latest/maven/</url>"
       backup: yes
 
 - name: disable 'snapshots' profile in m2 settings - https://bugs.eclipse.org/bugs/show_bug.cgi?id=507612
