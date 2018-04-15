@@ -31,6 +31,10 @@
   tags:
     - skip_ansible_lint
 
+- name: Fix python-cryptography conflict with python2-cryptography
+  set_fact:
+      python-cryptography_pkg: "{{ (install.component.version >= '13') | ternary('python2-cryptography', 'python-cryptography') }}"
+
 # Although pyrpkg pulled by rhpkg, we install it directly because at the moment, an older
 # version of pyrpkg is pulled (1.40) while we need a newer version (1.43)
 - name: Install packages required for patching
@@ -45,7 +49,7 @@
       - 'mock'
       - 'openssl-devel'
       - 'pyrpkg'
-      - 'python-cryptography'
+      - {{ python-cryptography_pkg }}
       - 'python-devel'
       - 'python-pip'
       - 'rhpkg'
