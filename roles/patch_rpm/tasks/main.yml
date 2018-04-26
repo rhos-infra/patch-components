@@ -140,7 +140,6 @@
   import_tasks: roles/patch_rpm/tasks/patch_opendaylight.yml
   become: true
   when: install.component.name | match("odl-.*")
-  tags: build-opendaylight
 
 - name: Create repository for patched RPMs
   command: "createrepo /patched_rpms"

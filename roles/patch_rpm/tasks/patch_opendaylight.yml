@@ -4,6 +4,12 @@
       name: opendaylight_vars_all
   tags: odl-package-rpm
 
+- name: ensure /var/log/maven exists
+  file:
+      path: /var/log/maven
+      state: directory
+  tags: build-opendaylight
+
 - name: "set opendaylight OSP{{ install.component.version }} specific facts"
   set_fact:
       opendaylight_vars: "{{ opendaylight_vars_all[install.component.version | int] }}"
@@ -20,6 +26,7 @@
 - name: copy component to /tmp/patched
   command: "cp -pr {{ tmp_dir }}/{{ install.component.name }} /tmp/patched/"
   tags: skip_ansible_lint
+  when: install.component.version <= 12
 
 - name: Add dummy entries to /etc/hosts file to prevent communication with upstream
   lineinfile:
@@ -35,7 +42,7 @@
 - name: enable rhelosp-rhel..rhscl repo to install maven from
   shell: "yum-config-manager --enable rhelosp-rhel-{{ ansible_distribution_major_version }}-rhscl"
   tags: skip_ansible_lint
-  when: install.component.version == 12
+  when: install.component.version <= 12
 
 - name: enable rhos-odl-rhel-build repo to install maven from
   template:
@@ -58,7 +65,7 @@
 
 - name: Remove old mvn binaries
   shell: "rm -f /usr/bin/mvn*"
-  when: install.component.version == 12
+  when: install.component.version <= 12
   tags: skip_ansible_lint
 
 - name: symlink java to latest jre
@@ -80,23 +87,23 @@
 - name: Make maven (mvn) available in $PATH
   shell: "ln -s {{ maven_home }}/usr/bin/* /usr/bin/"
   ignore_errors: no
-  when: install.component.version == 12
+  when: install.component.version <= 12
   tags: skip_ansible_lint
 
 - name: Install Maven PME
   shell: |
       wget {{ opendaylight_vars.pme_url }} -P {{ maven_home }}/lib/ext/
   tags: skip_ansible_lint
-  when: install.component.version == 12
+  when: install.component.version <= 12
 
 - name: set maven m2_settings fact
   set_fact:
       m2_settings_file: "{{ maven_home }}{{ opendaylight_vars.m2_settings_file_path }}"
 
-- name: Install m2 settings (OSP12)
+- name: Install m2 settings (OSP12 and earlier)
   command: "cp {{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/scripts/config/settings.xml.mead {{ m2_settings_file }}"
   tags: skip_ansible_lint
-  when: install.component.version == 12
+  when: install.component.version <= 12
 
 - name: Install m2 settings (OSP13+)
   get_url:
@@ -132,6 +139,7 @@
   file:
       path: '{{ tmp_dir }}/maven-chain-builder'
       state: absent
+  when: install.component.version <= 12
 
 - name: Clone maven-chain-builder
   git:
@@ -139,6 +147,7 @@
       dest: '{{ tmp_dir }}/maven-chain-builder'
       accept_hostkey: true
       version: master
+  when: install.component.version <= 12
 
 - name: Prepare chain file
   args:
@@ -150,22 +159,108 @@
       make respin
       cp opendaylight-chain/opendaylight-chain.ini {{ tmp_dir}}/maven-chain-builder/
       git checkout -- make-vars && git checkout -- opendaylight-chain/opendaylight-chain.ini
-  tags: skip_ansible_lint
+  when: install.component.version <= 13
+  tags:
+      - build-opendaylight
+      - skip_ansible_lint
+
+          # may be useful:
+#    - name: discover version of opendaylight-aggregator required
+#      shell: |
+#          awk '$0 ~ /opendaylight-aggregator.git/ { \
+#            split($0, a, "#"); split(a[1], b, " "); print b[3]; print a[2] }' \
+#            {{ tmp_dir }}/dist-git/opendaylight/opendaylight-chain/opendaylight-chain.ini
+#      register: opendaylight_aggregator_version
+#      tags:
+#          - build-opendaylight
+#          - skip_ansible_lint
+
+- name: clone opendaylight-aggregator
+  git:
+      # may be useful:
+      # "{{ opendaylight_aggregator_version.stdout_lines[0] | regex_replace('^.*?http', 'http') }}"
+      repo: "https://code.engineering.redhat.com/gerrit/opendaylight-aggregator.git"
+      dest: '{{ tmp_dir }}/opendaylight-aggregator'
+      accept_hostkey: true
+      # may be useful:
+      # "{{ opendaylight_aggregator_version.stdout_lines[1] }}"
+      version: "rhos-{{ install.component.version }}.0-patches"
+      force: yes
+  tags: opendaylight-aggregator
+  when: install.component.version >= 13
+
+- name: workaround - override version of opendaylight-aggregator - remove once https://code.engineering.redhat.com/gerrit/#/c/137000/ merged
+  shell: |
+      git config --system http.sslverify false
+      git config --global user.name `whoami` &&
+      git config --global user.email `whoami`@redhat.com
+      git fetch https://code.engineering.redhat.com/gerrit/opendaylight-aggregator refs/changes/00/137000/1 && git cherry-pick FETCH_HEAD
+  args:
+      chdir: '{{ tmp_dir }}/opendaylight-aggregator'
+  tags: opendaylight-aggregator
+  when: install.component.version >= 13
+
+- name: prepare 'local' directory exists in opendaylight-aggregator
+  file:
+      path: "{{ tmp_dir }}/opendaylight-aggregator/local"
+      state: "{{ item }}"
+  with_items:
+      - absent
+      - directory
+  when: install.component.version >= 13
+  tags: build-opendaylight
+
+- name: copy component to opendaylight-aggregator/local
+  command: "cp -pr {{ tmp_dir }}/{{ install.component.name }} {{ tmp_dir }}/opendaylight-aggregator/local"
+  tags: build-opendaylight
+  when: install.component.version >= 12
 
 - name: Run maven-chain-builder to build the opendaylight karaf distribution (logs in /var/log/maven/)
   args:
       chdir: "{{ tmp_dir }}/maven-chain-builder"
   shell: "python maven-chain-builder.py opendaylight-chain.ini {{ install.component.name }}"
   register: build_opendaylight
-  until: build_opendaylight.rc == 0
+  until: build_opendaylight.rc <= 0
   # it may fail because of MEAD server not responding on time, we'll retry a couple of times
   retries: 10
   delay: 10
   # we don't want to fail here to be able to collect logs
   ignore_errors: true
+  when: install.component.version <= 12
   tags:
       - build-opendaylight
       - skip_ansible_lint
+
+- name: "prepare opendaylight repositories for compiling (/var/log/maven/setup_<DATETIME>.log)"
+  shell: |
+      DATETIME="$(date +%Y%m%d_%H%M%S)"
+      sudo chown -R stack .
+      set -x
+      exec &> /var/log/maven/setup_$DATETIME.log
+      ./setup.sh -v
+  args:
+      chdir: "{{ tmp_dir }}/opendaylight-aggregator"
+  when: install.component.version >= 13
+  tags: build-opendaylight
+
+- name: "build OpenDaylight using opendaylight-aggregator (/var/log/maven/build_DATETIME.log)"
+  shell: |
+      DATETIME="$(date +%Y%m%d_%H%M%S)"
+      find . -name "target" -type d -exec rm -rf {} \;
+      set -x
+      exec &> /var/log/maven/build_$DATETIME.log
+      mvn -am -pl odl-netvirt/karaf -Pq install -Dmaven.repo.local=/tmp
+  register: build_opendaylight
+  # it may fail because of MEAD server not responding on time, we'll retry a couple of times
+  retries: 3
+  delay: 10
+  until: build_opendaylight.rc == 0
+  # we don't want to fail here to be able to collect logs
+  ignore_errors: true
+  args:
+      chdir: "{{ tmp_dir }}/opendaylight-aggregator"
+  when: install.component.version >= 13
+  tags: build-opendaylight
 
 - name: set karaf distribution tar.gz fact - the original package name
   register: odl_karaf_package_fullpath
@@ -198,7 +293,7 @@
       - directory
   tags: odl-package-rpm
 
-- name: Package OpenDaylight into RPM
+- name: "Package OpenDaylight into RPM (logs: {{ tmp_dir }}/integration-packaging/logs/)"
   shell: |
       set -e
       rm -rf {{ tmp_dir }}/integration-packaging/packages/cache/*
@@ -234,7 +329,7 @@
       --extra_src_files /dist-git/monitor.py \
       {%- endif %}
       | tee {{ tmp_dir }}/integration-packaging/logs/integration-packaging_docker-run-odl_rpm.log 2>&1
-  register: patch_opendaylight
+  register: package_opendaylight
   # we don't want to fail here to be able to collect logs
   ignore_errors: true
   tags:
@@ -244,7 +339,7 @@
 - name: Save patching logs - OpenDaylight
   become: yes
   shell: |
-      cp {{ tmp_dir }}/integration-packaging/logs/* {{ logdir }}
+      cp {{ tmp_dir }}/integration-packaging/logs/* {{ logdir }}/
       cp /var/log/maven/* {{ logdir }}
   changed_when: true
   ignore_errors: true
@@ -261,12 +356,10 @@
       - '127.1.0.3   oss.sonatype.org'
       - '127.1.0.4   registry.npmjs.org'
 
-- name: fail if patching was not successful
-  fail:
-      msg: "OpenDaylight patching not successful, check {{ logdir }}"
-  when: patch_opendaylight is not defined or patch_opendaylight.rc != 0
+- fail:
+      msg: "OpenDaylight packaging not successful, check {{ logdir }}"
+  when: package_opendaylight is not defined or package_opendaylight.rc != 0
 
-# Create directory to hold the RPMs only if patching successful
 - name: "Create '{{ patchedrpmdir }}' directory"
   become: yes
   file:
