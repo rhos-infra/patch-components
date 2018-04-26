@@ -20,7 +20,7 @@ map_component_to_pre_rel_version:
   nova:
     pre_rel_version: '13'
   octavia:
-    pre_rel_version: '13'
+    pre_rel_version: '14'
   odl-aaa:
     pre_rel_version: '13'
   odl-autorelease:
