@@ -3,7 +3,7 @@
   register: tmp_dir_shell
   shell: "rm -rf tmp.patch_rpm*; mktemp -d --tmpdir tmp.patch_rpm.XXXXXXXX"
   args:
-    warn: no
+      warn: no
   tags: skip_ansible_lint
 
 - name: Set tmp_dir for all the building
@@ -21,8 +21,8 @@
       path: "{{ tmp_dir }}/logs/"
       state: "{{ item }}"
   with_items:
-    - absent
-    - directory
+      - absent
+      - directory
 
 - name: Remove dist-git folder
   file:
@@ -33,19 +33,19 @@
 - name: Install rsync
   become: yes
   yum:
-    name='rsync'
-    state=present
+      name='rsync'
+      state=present
 
 #synchronize:copy
 - name: Copy component to remote host
   synchronize:
-    src: "{{ item }}"
-    dest: "{{ tmp_dir }}"
-    use_ssh_args: "yes"
-    rsync_opts: --quiet
+      src: "{{ item }}"
+      dest: "{{ tmp_dir }}"
+      use_ssh_args: "yes"
+      rsync_opts: --quiet
   with_first_found:
-    - "{{ install.component.path | default(omit) }}"
-    - "{{ inventory_dir }}/{{ install.component.name }}"
-    - "{{ inventory_dir }}/../{{ install.component.name }}"
-    - "{{ inventory_dir }}/../../../{{ install.component.name }}"
-    - "{{ playbook_dir }}/../{{ install.component.name }}"
+      - "{{ install.component.path | default(omit) }}"
+      - "{{ inventory_dir }}/{{ install.component.name }}"
+      - "{{ inventory_dir }}/../{{ install.component.name }}"
+      - "{{ inventory_dir }}/../../../{{ install.component.name }}"
+      - "{{ playbook_dir }}/../{{ install.component.name }}"
