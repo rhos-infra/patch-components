@@ -10,6 +10,12 @@
       state: directory
   tags: build-opendaylight
 
+- name: ensure /tmp/org/opendaylight doesn't exist
+  file:
+      path: /tmp/org/opendaylight
+      state: absent
+  tags: build-opendaylight
+
 - name: "set opendaylight OSP{{ install.component.version }} specific facts"
   set_fact:
       opendaylight_vars: "{{ opendaylight_vars_all[install.component.version | int] }}"
@@ -211,9 +217,18 @@
   tags: build-opendaylight
 
 - name: copy component to opendaylight-aggregator/local
-  command: "cp -pr {{ tmp_dir }}/{{ install.component.name }} {{ tmp_dir }}/opendaylight-aggregator/local"
-  tags: build-opendaylight
+  command: "cp -pr {{ tmp_dir }}/{{ item }} {{ tmp_dir }}/opendaylight-aggregator/local/"
+  with_items: "{{ install.component.name }}"
   when: install.component.version >= 12
+  tags: build-opendaylight
+
+- name: copy extra components to opendaylight-aggregator/local
+  command: "cp -pr {{ tmp_dir }}/{{ item }} {{ tmp_dir }}/opendaylight-aggregator/local/"
+  with_items: "{{ install.extra.components.split(',') }}"
+  when:
+      - install.component.version >= 12
+      - install.get('extra', {}).get('components', {}) | default('')
+  tags: build-opendaylight
 
 - name: Run maven-chain-builder to build the opendaylight karaf distribution (logs in /var/log/maven/)
   args:
@@ -249,7 +264,7 @@
       find . -name "target" -type d -exec rm -rf {} \;
       set -x
       exec &> /var/log/maven/build_$DATETIME.log
-      mvn -am -pl odl-netvirt/karaf -Pq install -Dmaven.repo.local=/tmp
+      mvn -Pq -am -pl odl-netvirt/karaf install -Dmaven.repo.local=/tmp
   register: build_opendaylight
   # it may fail because of MEAD server not responding on time, we'll retry a couple of times
   retries: 3
