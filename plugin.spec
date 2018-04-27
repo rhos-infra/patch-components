@@ -32,3 +32,16 @@ subparsers:
                       type: Value
                       help: 'SSH key for the user <username>'
                       required: False
+                  extra-components:
+                      type: Value
+                      help: |
+                          Comma,delimited names of additional components. This param may
+                          be used to specify additional components required to build
+                          the main component's distribution and/or RPM.
+                          Use case example: OpenDaylight consists of multiple components
+                          and sometimes a feature from component A is required for the
+                          feature from component B to work. In this case all prerequisite
+                          components has to be listed in extra-components param.
+                          NOTE: This feature is currently supporting only OpenDaylight
+                          components.
+                      required: False
