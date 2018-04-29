@@ -217,9 +217,18 @@
   tags: build-opendaylight
 
 - name: copy component to opendaylight-aggregator/local
-  command: "cp -pr {{ tmp_dir }}/{{ install.component.name }} {{ tmp_dir }}/opendaylight-aggregator/local"
-  tags: build-opendaylight
+  command: "cp -pr {{ tmp_dir }}/{{ item }} {{ tmp_dir }}/opendaylight-aggregator/local/"
+  with_items: "{{ install.component.name }}"
   when: install.component.version >= 12
+  tags: build-opendaylight
+
+- name: copy extra components to opendaylight-aggregator/local
+  command: "cp -pr {{ tmp_dir }}/{{ item }} {{ tmp_dir }}/opendaylight-aggregator/local/"
+  with_items: "{{ install.extra.components.split(',') }}"
+  when:
+      - install.component.version >= 12
+      - install.get('extra', {}).get('components', {}) | default('')
+  tags: build-opendaylight
 
 - name: Run maven-chain-builder to build the opendaylight karaf distribution (logs in /var/log/maven/)
   args:
