@@ -4,9 +4,9 @@
       name: opendaylight_vars_all
   tags: odl-package-rpm
 
-- name: ensure /var/log/maven exists
+- name: "ensure {{ maven_log_dir }} exists"
   file:
-      path: /var/log/maven
+      path: "{{ maven_log_dir }}"
       state: directory
   tags: build-opendaylight
 
@@ -125,7 +125,7 @@
   replace:
       path: "{{ m2_settings_file }}"
       regexp: '<url.*nexus.opendaylight.*'
-      replace:  "<url>http://download.devel.redhat.com/brewroot/repos/rhos-{{ install.component.version }}.0-odl-rhel-{{ ansible_distribution_major_version }}-build/latest/maven/</url>"
+      replace:  "<url>http://download.eng.tlv.redhat.com/brewroot/repos/rhos-{{ install.component.version }}.0-odl-rhel-{{ ansible_distribution_major_version }}-build/latest/maven/</url>"
       backup: yes
 
 - name: disable 'snapshots' profile in m2 settings - https://bugs.eclipse.org/bugs/show_bug.cgi?id=507612
@@ -135,11 +135,11 @@
       replace: '<!-- \1 -->'
       backup: yes
 
-- name: use a load balancer address of download.eng.* to pickup the closest location automagically
+- name: automatic pickup of closest download mirror not always work as expected so hardcode 'tlv'
   replace:
       path: "{{ m2_settings_file }}"
       regexp: 'download.eng.*.redhat.com'
-      replace: 'download.engineering.redhat.com'
+      replace: 'download.eng.tlv.redhat.com'
 
 - name: remove maven-chain-builder directory
   file:
@@ -230,7 +230,7 @@
       - install.get('extra', {}).get('components', {}) | default('')
   tags: build-opendaylight
 
-- name: Run maven-chain-builder to build the opendaylight karaf distribution (logs in /var/log/maven/)
+- name: "Run maven-chain-builder to build the opendaylight karaf distribution (logs in {{ maven_log_dir }})"
   args:
       chdir: "{{ tmp_dir }}/maven-chain-builder"
   shell: "python maven-chain-builder.py opendaylight-chain.ini {{ install.component.name }}"
@@ -246,24 +246,24 @@
       - build-opendaylight
       - skip_ansible_lint
 
-- name: "prepare opendaylight repositories for compiling (/var/log/maven/setup_<DATETIME>.log)"
+- name: "prepare opendaylight repositories for compiling (logs: {{ maven_log_dir }}/setup_<DATETIME>.log)"
   shell: |
       DATETIME="$(date +%Y%m%d_%H%M%S)"
       sudo chown -R stack .
       set -x
-      exec &> /var/log/maven/setup_$DATETIME.log
+      exec &> {{ maven_log_dir }}/setup_$DATETIME.log
       ./setup.sh -v
   args:
       chdir: "{{ tmp_dir }}/opendaylight-aggregator"
   when: install.component.version >= 13
   tags: build-opendaylight
 
-- name: "build OpenDaylight using opendaylight-aggregator (/var/log/maven/build_DATETIME.log)"
+- name: "build OpenDaylight using opendaylight-aggregator (logs: {{ maven_log_dir }}/build_<DATETIME>.log)"
   shell: |
       DATETIME="$(date +%Y%m%d_%H%M%S)"
       find . -name "target" -type d -exec rm -rf {} \;
       set -x
-      exec &> /var/log/maven/build_$DATETIME.log
+      exec &> {{ maven_log_dir }}/build_$DATETIME.log
       mvn -Pq -am -pl odl-netvirt/karaf install -Dmaven.repo.local=/tmp
   register: build_opendaylight
   # it may fail because of MEAD server not responding on time, we'll retry a couple of times
@@ -355,7 +355,7 @@
   become: yes
   shell: |
       cp {{ tmp_dir }}/integration-packaging/logs/* {{ logdir }}/
-      cp /var/log/maven/* {{ logdir }}
+      cp {{ maven_log_dir }}/* {{ logdir }}
   changed_when: true
   ignore_errors: true
   tags: logs
