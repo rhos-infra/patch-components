@@ -4,9 +4,14 @@
       name: opendaylight_vars_all
   tags: odl-package-rpm
 
-- name: "ensure {{ maven_log_dir }} exists"
+- name: "set opendaylight OSP{{ install.component.version }} specific facts"
+  set_fact:
+      opendaylight_vars: "{{ opendaylight_vars_all[install.component.version | int] }}"
+  tags: odl-package-rpm
+
+- name: "ensure {{ opendaylight_vars.maven_log_dir }} exists"
   file:
-      path: "{{ maven_log_dir }}"
+      path: "{{ opendaylight_vars.maven_log_dir }}"
       state: directory
   tags: build-opendaylight
 
@@ -15,11 +20,6 @@
       path: /tmp/org/opendaylight
       state: absent
   tags: build-opendaylight
-
-- name: "set opendaylight OSP{{ install.component.version }} specific facts"
-  set_fact:
-      opendaylight_vars: "{{ opendaylight_vars_all[install.component.version | int] }}"
-  tags: odl-package-rpm
 
 - name: recreate /tmp/patched required by maven-chain-builder
   file:
@@ -230,7 +230,7 @@
       - install.get('extra', {}).get('components', {}) | default('')
   tags: build-opendaylight
 
-- name: "Run maven-chain-builder to build the opendaylight karaf distribution (logs in {{ maven_log_dir }})"
+- name: "Run maven-chain-builder to build the opendaylight karaf distribution (logs in {{ opendaylight_vars.maven_log_dir }})"
   args:
       chdir: "{{ tmp_dir }}/maven-chain-builder"
   shell: "python maven-chain-builder.py opendaylight-chain.ini {{ install.component.name }}"
@@ -246,24 +246,24 @@
       - build-opendaylight
       - skip_ansible_lint
 
-- name: "prepare opendaylight repositories for compiling (logs: {{ maven_log_dir }}/setup_<DATETIME>.log)"
+- name: "prepare opendaylight repositories for compiling (logs: {{ opendaylight_vars.maven_log_dir }}/setup_<DATETIME>.log)"
   shell: |
       DATETIME="$(date +%Y%m%d_%H%M%S)"
       sudo chown -R stack .
       set -x
-      exec &> {{ maven_log_dir }}/setup_$DATETIME.log
+      exec &> {{ opendaylight_vars.maven_log_dir }}/setup_$DATETIME.log
       ./setup.sh -v
   args:
       chdir: "{{ tmp_dir }}/opendaylight-aggregator"
   when: install.component.version >= 13
   tags: build-opendaylight
 
-- name: "build OpenDaylight using opendaylight-aggregator (logs: {{ maven_log_dir }}/build_<DATETIME>.log)"
+- name: "build OpenDaylight using opendaylight-aggregator (logs: {{ opendaylight_vars.maven_log_dir }}/build_<DATETIME>.log)"
   shell: |
       DATETIME="$(date +%Y%m%d_%H%M%S)"
       find . -name "target" -type d -exec rm -rf {} \;
       set -x
-      exec &> {{ maven_log_dir }}/build_$DATETIME.log
+      exec &> {{ opendaylight_vars.maven_log_dir }}/build_$DATETIME.log
       mvn -B -Pq -am -pl odl-netvirt/karaf install -Dmaven.repo.local=/tmp
   register: build_opendaylight
   # it may fail because of MEAD server not responding on time, we'll retry a couple of times
@@ -355,7 +355,7 @@
   become: yes
   shell: |
       cp {{ tmp_dir }}/integration-packaging/logs/* {{ logdir }}/
-      cp {{ maven_log_dir }}/* {{ logdir }}
+      cp {{ opendaylight_vars.maven_log_dir }}/* {{ logdir }}
   changed_when: true
   ignore_errors: true
   tags: logs
