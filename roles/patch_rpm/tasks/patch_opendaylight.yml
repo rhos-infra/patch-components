@@ -2,12 +2,12 @@
   include_vars:
       file: "vars/opendaylight.yml"
       name: opendaylight_vars_all
-  tags: odl-package-rpm
+  tags: always
 
 - name: "set opendaylight OSP{{ install.component.version }} specific facts"
   set_fact:
       opendaylight_vars: "{{ opendaylight_vars_all[install.component.version | int] }}"
-  tags: odl-package-rpm
+  tags: always
 
 - name: "ensure {{ opendaylight_vars.maven_log_dir }} exists"
   file:
