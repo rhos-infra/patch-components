@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a7eb58a_ebe691f3",
+        "filename": "roles/patch_rpm/tasks/patch_component.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1006664
+      },
+      "writtenOn": "2018-06-18T08:40:33Z",
+      "side": 1,
+      "message": "nice! But I guess you want to add some log handling here, isn\u0027t it?",
+      "range": {
+        "startLine": 74,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 40
+      },
+      "revId": "a5c34fc9c019a13949136cb15e97da9f00e7fc34",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
