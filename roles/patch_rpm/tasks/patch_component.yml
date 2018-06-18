@@ -58,16 +58,21 @@
   when: install.component.version|int == component_pre_rel_version|int
 
 # Now that the repo is patched, generate RPMs from it
-- name: Build new RPM from patched dist-git repo
-  shell: |
-    set -exo pipefail;
-    rdopkg mockbuild;
-  args:
-    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
-  register: rpm_mockbuild
-  changed_when: true
-  tags:
-    - skip_ansible_lint
+- block:
+    - name: Build new RPM from patched dist-git repo
+      shell: |
+        set -exo pipefail;
+        rdopkg mockbuild;
+      args:
+        chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
+      register: rpm_mockbuild
+      changed_when: true
+      tags:
+        - skip_ansible_lint
+- rescue:
+    - name: Read build logs
+      shell: |
+         find {{ tmp_dir }} -iname *.log -exec cat {} \;
 
 # Some build errors are legitimate and should not fail the run
 # Like '.gitreview: does not exist in index'
