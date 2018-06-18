@@ -8,13 +8,7 @@
 
 - name: Set tmp_dir for all the building
   set_fact: tmp_dir="{{ ansible_env.HOME }}"
-  tags:
-      - odl-package-rpm
-      - rpm
-      - logs
-      - patched-rpms-repo
-      - build-opendaylight
-      - dist-git
+  tags: always
 
 - name: Remove and create logs dir
   file:
@@ -35,15 +29,12 @@
   yum:
       name='rsync'
       state=present
+  tags: copy-extra-components
 
 - name: setting component_locations fact
   set_fact:
       component_locations:
-          - "{{ install.component.path | default(omit) }}"
-          - "{{ inventory_dir }}/{{ install.component.name }}"
-          - "{{ inventory_dir }}/../{{ install.component.name }}"
-          - "{{ inventory_dir }}/../../../{{ install.component.name }}"
-          - "{{ playbook_dir }}/../{{ install.component.name }}"
+
 
 #synchronize:copy
 - name: Copy component to remote host
@@ -52,13 +43,27 @@
       dest: "{{ tmp_dir }}"
       use_ssh_args: "yes"
       rsync_opts: --quiet
-  with_first_found: "{{ component_locations }}"
+  with_first_found:
+      - "{{ install.component.path | default(omit) }}"
+      - "{{ inventory_dir }}/{{ install.component.name }}"
+      - "{{ inventory_dir }}/../{{ install.component.name }}"
+      - "{{ inventory_dir }}/../../../{{ install.component.name }}"
+      - "{{ playbook_dir }}/../{{ install.component.name }}"
+  tags: copy-component
 
 - name: Copy extra components to remote host
+  vars:
+      extra_component_locations:
+          - "{{ item | default(omit) }}"
+          - "{{ inventory_dir }}/{{ item }}"
+          - "{{ inventory_dir }}/../{{ item }}"
+          - "{{ inventory_dir }}/../../../{{ item }}"
+          - "{{ playbook_dir }}/../{{ item }}"
   synchronize:
-      src: "{{ lookup('first_found', component_locations) }}"
+      src: "{{ lookup('first_found', extra_component_locations) }}"
       dest: "{{ tmp_dir }}"
       use_ssh_args: "yes"
       rsync_opts: --quiet
   with_items: "{{ install.extra.components.split(',') }}"
   when: install.get('extra', {}).get('components', {}) | default('')
+  tags: copy-extra-components
