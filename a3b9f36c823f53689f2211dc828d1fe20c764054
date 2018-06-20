@@ -1,0 +1,8 @@
+Verified+1: rhosqeauto <obaranov+rhosqeauto@redhat.com>
+Verified+1: Waldemar Znoinski <wznoinsk@redhat.com>
+Code-Review+2: Arie Bregman <abregman@redhat.com>
+Submitted-by: Arie Bregman <abregman@redhat.com>
+Submitted-at: Wed, 20 Jun 2018 07:51:02 +0000
+Reviewed-on: https://review.gerrithub.io/415723
+Project: rhos-infra/patch-components
+Branch: refs/heads/master
