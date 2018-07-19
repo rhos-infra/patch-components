@@ -195,41 +195,6 @@
   tags: opendaylight-aggregator
   when: install.component.version >= 13
 
-- name: workaround - override version of opendaylight-aggregator - remove once https://code.engineering.redhat.com/gerrit/#/c/137000/ merged
-  shell: |
-      git config --system http.sslverify false
-      git config --global user.name `whoami` &&
-      git config --global user.email `whoami`@redhat.com
-      git fetch https://code.engineering.redhat.com/gerrit/opendaylight-aggregator refs/changes/00/137000/1 && git cherry-pick FETCH_HEAD
-  args:
-      chdir: '{{ tmp_dir }}/opendaylight-aggregator'
-  tags: opendaylight-aggregator
-  when: install.component.version >= 13
-
-- name: prepare 'local' directory exists in opendaylight-aggregator
-  file:
-      path: "{{ tmp_dir }}/opendaylight-aggregator/local"
-      state: "{{ item }}"
-  with_items:
-      - absent
-      - directory
-  when: install.component.version >= 13
-  tags: build-opendaylight
-
-- name: copy component to opendaylight-aggregator/local
-  command: "cp -pr {{ tmp_dir }}/{{ item }} {{ tmp_dir }}/opendaylight-aggregator/local/"
-  with_items: "{{ install.component.name }}"
-  when: install.component.version >= 12
-  tags: build-opendaylight
-
-- name: copy extra components to opendaylight-aggregator/local
-  command: "cp -pr {{ tmp_dir }}/{{ item }} {{ tmp_dir }}/opendaylight-aggregator/local/"
-  with_items: "{{ install.extra.components.split(',') }}"
-  when:
-      - install.component.version >= 12
-      - install.get('extra', {}).get('components', {}) | default('')
-  tags: build-opendaylight
-
 - name: "Run maven-chain-builder to build the opendaylight karaf distribution (logs in {{ opendaylight_vars.maven_log_dir }})"
   args:
       chdir: "{{ tmp_dir }}/maven-chain-builder"
@@ -246,13 +211,21 @@
       - build-opendaylight
       - skip_ansible_lint
 
+- name: prepare extra components paths
+  set_fact:
+      odl_aggregator_extra_components: >-
+          {{ odl_aggregator_extra_components | default('') }} -d {{ tmp_dir }}/{{ item }}
+  with_items: "{{ install.get('extra', {}).get('components', '').split(',') }}"
+  when: item != ''
+  tags: build-opendaylight
+
 - name: "prepare opendaylight repositories for compiling (logs: {{ opendaylight_vars.maven_log_dir }}/setup_<DATETIME>.log)"
   shell: |
       DATETIME="$(date +%Y%m%d_%H%M%S)"
       sudo chown -R stack .
       set -x
       exec &> {{ opendaylight_vars.maven_log_dir }}/setup_$DATETIME.log
-      ./setup.sh -v
+      ./setup.sh -v -d {{ tmp_dir }}/{{ install.component.name }} {%- if odl_aggregator_extra_components is defined -%} {{ odl_aggregator_extra_components }} {%- endif -%}
   args:
       chdir: "{{ tmp_dir }}/opendaylight-aggregator"
   when: install.component.version >= 13
