@@ -1,78 +1,78 @@
 # Make sure to increment pre_rel_version when version is released
 
-pre_rel_version_default: '14'
+pre_rel_version_default: '15'
 
 map_component_to_pre_rel_version:
   networking-ovn:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   cinder:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   glance_store:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   glance:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   manila:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   neutron:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   neutron-lbaas:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   nova:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   octavia:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-aaa:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-autorelease:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-controller:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-dlux:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-genius:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-infrautils:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-lispflowmapping:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-mdsal:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-netconf:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-netvirt:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-neutron:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-odlparent:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-openflowjava:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-openflowplugin:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-ovsdb:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-sfc:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   odl-yangtools:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   python-cinderclient:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   python-glanceclient:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   python-manilaclient:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   python-neutronclient:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   python-novaclient:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   python-os-brick:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   python-saharaclient:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   sahara:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
   swift:
-    pre_rel_version: '14'
+    pre_rel_version: '15'
 
 
 map_component_to_distgit:
