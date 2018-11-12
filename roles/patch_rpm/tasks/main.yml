@@ -1,7 +1,7 @@
 - name: Setting component_dist_git_name
   set_fact:
       component_dist_git_name: "{{ map_component_to_distgit[install.component.name].dist_git | default('openstack-' + install.component.name) }}"
-      component_pre_rel_version: "{{ map_component_to_pre_rel_version[install.component.name].pre_rel_version | default(pre_rel_version_default) }}"
+      component_pre_rel_version: "{{ map_component_to_pre_rel_version[install.component.name].pre_rel_version }}"
   tags:
       - build-opendaylight
       - dist-git
