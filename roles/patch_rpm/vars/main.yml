@@ -4,6 +4,9 @@ map_component_to_pre_rel_version:
     pre_rel_version: '15'
   cinder:
     pre_rel_version: '15'
+  sahara:
+    pre_rel_version: '14'
+
 
 map_component_to_distgit:
   networking-ovn:
