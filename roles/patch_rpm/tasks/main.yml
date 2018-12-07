@@ -142,7 +142,7 @@
   when: install.component.name | match("odl-.*")
 
 - name: Create repository for patched RPMs
-  command: "mkdir -p /patched_rpms && createrepo /patched_rpms"
+  command: "(ls -l {{ patchedrpmdir }} || true) &&  createrepo {{ patchedrpmdir }}"
   become: true
   tags:
       - patched-rpms-repo

@@ -100,8 +100,11 @@
   become: yes
   file:
       path="{{ patchedrpmdir }}"
-      state=directory
+      state="{{ item }}"
       mode=0777
+  with_items:
+      - absent
+      - directory
   tags: patched-rpms-repo
   when: rpm_mockbuild.rc == 0
 
