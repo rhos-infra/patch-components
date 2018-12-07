@@ -143,6 +143,7 @@
 
 - name: Create repository for patched RPMs
   command: "mkdir /patched_rpms && createrepo /patched_rpms"
+  become: true
   tags:
       - patched-rpms-repo
       - skip_ansible_lint
