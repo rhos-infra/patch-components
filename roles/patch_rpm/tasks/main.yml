@@ -142,7 +142,7 @@
   when: install.component.name | match("odl-.*")
 
 - name: Create repository for patched RPMs
-  command: "createrepo /patched_rpms"
+  command: "mkdir /patched_rpms && createrepo /patched_rpms"
   tags:
       - patched-rpms-repo
       - skip_ansible_lint
