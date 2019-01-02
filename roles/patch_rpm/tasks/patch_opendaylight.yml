@@ -157,13 +157,13 @@
 
 - name: Prepare chain file
   args:
-      chdir: "{{ tmp_dir}}/dist-git/opendaylight"
+      chdir: "{{ tmp_dir }}/dist-git/opendaylight"
   shell: |
       git config --system http.sslverify false
-      # sed -i "s/\$TAG_TO_BUILD/rhos-{{ install.component.version}}.0-patches/g" {{ tmp_dir}}/dist-git/opendaylight/make-vars
-      # {{ tmp_dir}}/dist-git/opendaylight/make-vars
+      # sed -i "s/\$TAG_TO_BUILD/rhos-{{ install.component.version }}.0-patches/g" {{ tmp_dir }}/dist-git/opendaylight/make-vars
+      # {{ tmp_dir }}/dist-git/opendaylight/make-vars
       make respin
-      cp opendaylight-chain/opendaylight-chain.ini {{ tmp_dir}}/maven-chain-builder/
+      cp opendaylight-chain/opendaylight-chain.ini {{ tmp_dir }}/maven-chain-builder/
       git checkout -- make-vars && git checkout -- opendaylight-chain/opendaylight-chain.ini
   when: install.component.version <= 13
   tags:
@@ -211,12 +211,13 @@
       - build-opendaylight
       - skip_ansible_lint
 
+# https://docs.ansible.com/ansible-lint/rules/default_rules.html - Use when: var
 - name: prepare extra components paths
   set_fact:
       odl_aggregator_extra_components: >-
           {{ odl_aggregator_extra_components | default('') }} -d {{ tmp_dir }}/{{ item }}
   with_items: "{{ install.get('extra', {}).get('components', '').split(',') }}"
-  when: item != ''
+  when: item
   tags: build-opendaylight
 
 - name: "prepare opendaylight repositories for compiling (logs: {{ opendaylight_vars.maven_log_dir }}/setup_<DATETIME>.log)"
