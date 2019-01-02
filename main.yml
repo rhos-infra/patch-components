@@ -5,7 +5,7 @@
   tasks:
      - name: add each host
        add_host:
-          name: "controller-0"
+          name: "tester"
           groups: "undercloud"
           ansible_ssh_user: "{{ install.host.username }}"
           ansible_ssh_host: "{{ install.host.ip }}"
