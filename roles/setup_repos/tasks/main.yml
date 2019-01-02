@@ -22,6 +22,10 @@
   become: yes
   yum:
     name="http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"
+  register: task_result
+  until: task_result is success
+  retries: 3
+  delay: 3
 
 - name: Execute rhos-release to install rhos repos
   become: yes

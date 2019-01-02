@@ -20,7 +20,7 @@
 
 - name: Remove dist-git folder
   file:
-      path: "{{ tmp_dir}}/dist-git"
+      path: "{{ tmp_dir }}/dist-git"
       state: absent
 
 # To copy the component to remote host
@@ -29,6 +29,10 @@
   yum:
       name='rsync'
       state=present
+  register: task_result
+  until: task_result is success
+  retries: 3
+  delay: 3
   tags: copy-extra-components
 
 #synchronize:copy

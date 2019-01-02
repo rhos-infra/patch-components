@@ -55,11 +55,19 @@
       - 'rhpkg'
       - 'rpm-build'
     state: present
+  register: task_result
+  until: task_result is success
+  retries: 3
+  delay: 3
 
 - name: Install rdopkg
   become: yes
   pip:
     name=rdopkg
+  register: task_result
+  until: task_result is success
+  retries: 3
+  delay: 3
 
 # TODO(abregman): Switch to yum_repository when Ansible 2.2 is released
 # EPEL is removed, since it is used only for installing rdopkg
