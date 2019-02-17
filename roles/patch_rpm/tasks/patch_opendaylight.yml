@@ -83,7 +83,7 @@
   when: install.component.version >= 13
 
 - name: discover maven_home
-  shell: "mvn --version | awk '$0 ~ /Maven home:/ {print $3}'"
+  shell: "executable=/bin/bash set -o pipefail && mvn --version | awk '$0 ~ /Maven home:/ {print $3}'"
   register: _maven_home
 
 - name: set maven_home fact
@@ -345,7 +345,8 @@
       - '127.1.0.3   oss.sonatype.org'
       - '127.1.0.4   registry.npmjs.org'
 
-- fail:
+- name: Fail if OpenDaylight packaging is not successful 
+  fail:
       msg: "OpenDaylight packaging not successful, check {{ logdir }}"
   when: package_opendaylight is not defined or package_opendaylight.rc != 0
 
