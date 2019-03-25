@@ -60,6 +60,17 @@
   retries: 3
   delay: 3
 
+- name: Workaround - remove rhpkg v1.36 until the fix of https://bugzilla.redhat.com/show_bug.cgi?id=1692433
+  become: yes
+  yum:
+    name:
+      - 'rhpkg'
+    state: absent
+ 
+- name: Workaround - pin in rhpkg v1.35
+  become: yes
+  shell: yum install -y https://url.corp.redhat.com/rhpkg.1.35
+
 - name: Install rdopkg
   become: yes
   pip:
