@@ -171,3 +171,18 @@
     src='patched_rpms.j2'
     dest='/etc/yum.repos.d/patched_rpms.repo'
   tags: patched-rpms-repo
+
+- name: Remove patching requirements
+  become: yes
+  yum:
+    name:
+      - 'mock'
+      - 'openssl-devel'
+      - 'rpm-build'
+      - 'python2-qpid-proton'
+    when: install.component.version == '13'
+    state: absent
+  register: task_result
+  when
+  until: task_result is success
+  retries: 3
