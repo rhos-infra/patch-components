@@ -22,6 +22,15 @@
     - 'rhpkg'
     - 'rdopkg'
 
+  # Install python2-qpid-proton before epel installation
+  # because openssl-devel pulls python2-qpid-proton from EPEL
+  # which causing undercloud to fail due to its own package
+- name: Workaround OSP 13 - Install python2-qpid-proton
+  become: yes
+  yum:
+      name: 'python2-qpid-proton'
+  when: install.component.version >= '13'
+
 # TODO(abregman): Switch to yum_repository when Ansible 2.2 is released
 - name: Install epel repository
   become: yes
