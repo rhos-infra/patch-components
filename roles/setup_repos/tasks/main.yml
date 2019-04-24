@@ -37,7 +37,8 @@
   shell: |
     yum-config-manager \
       --setopt 'rhelosp-{{ install.component.version }}.0-test-deps.includepkgs=python-pip,python2-pip' \
-      --enable rhelosp-{{ install.component.version }}.0-test-deps >/var/log/yum.log
+      --enable rhelosp-{{ install.component.version }}.0-test-deps >/var/log/yum.log \
+      --enable rhelosp-{{ install.component.version }}.0-unittest
   args:
     warn: no
   tags: skip_ansible_lint
