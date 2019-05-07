@@ -79,3 +79,5 @@ map_component_to_distgit:
     dist_git: 'openstack-sahara'
   swift:
     dist_git: 'openstack-swift'
+  openstack-tripleo-heat-templates:
+    dist_git: 'openstack-tripleo-heat-templates'
