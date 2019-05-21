@@ -81,3 +81,33 @@ map_component_to_distgit:
     dist_git: 'openstack-swift'
   openstack-tripleo-heat-templates:
     dist_git: 'openstack-tripleo-heat-templates'
+
+reqs_rhel8:
+    - 'ca-certificates'
+    - 'createrepo'
+    - 'gcc'
+    - 'git'
+    - 'libffi-devel'
+    - 'mock'
+    - "{{ python_cryptography_pkg }}"
+    - 'openssl-devel'
+    - 'pyrpkg'
+    - 'python3-devel'
+    - 'python3-pip'
+    - 'rhpkg'
+    - 'rpm-build'
+
+reqs_rhel7:
+    - 'ca-certificates'
+    - 'createrepo'
+    - 'gcc'
+    - 'git'
+    - 'libffi-devel'
+    - 'mock'
+    - "{{ python_cryptography_pkg }}"
+    - 'openssl-devel'
+    - 'pyrpkg'
+    - 'python-devel'
+    - 'python-pip'
+    - 'rhpkg'
+    - 'rpm-build'
