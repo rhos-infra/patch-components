@@ -32,12 +32,25 @@
   shell: "{{ rhos_release_bin }} -x; {{ rhos_release_bin }} -P -r {{ ansible_distribution_version }} {{ install.component.version }}"
   changed_when: true
 
+- name: Check if yum-config-manager uses --enable instead of --enablerepo option
+  shell: |
+    {{ yum_config_manager }} --enable 2>&1 | grep ambiguous
+  register: yum_option
+  run_once: true
+  args:
+    warn: no
+  tags: skip_ansible_lint
+
+- name: Set correct yum-config-manager option
+  set_fact: yum_config_manager_opt_suffix='repo'
+  when: yum_option.rc == 0
+
 - name: enable test repo in order to get access to pip
   become: yes
   shell: |
-    yum-config-manager \
-      --enable rhelosp-{{ install.component.version }}.0-unittest \
-      --enable rhelosp-{{ install.component.version }}.0-test-deps >/var/log/yum.log
+    {{ yum_config_manager }} \
+      --enable{{ yum_config_manager_opt_suffix | default(omit) }} rhelosp-{{ install.component.version }}.0-unittest \
+      --enable{{ yum_config_manager_opt_suffix | default(omit) }} rhelosp-{{ install.component.version }}.0-test-deps >/var/log/yum.log
   args:
     warn: no
   tags: skip_ansible_lint
