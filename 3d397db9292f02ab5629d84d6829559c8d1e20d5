@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8dae277_e304c794",
+        "filename": "roles/setup_repos/tasks/main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1010634
+      },
+      "writtenOn": "2019-05-29T15:43:38Z",
+      "side": 1,
+      "message": "no need for \u0027|\u0027 for a oneliner",
+      "range": {
+        "startLine": 36,
+        "startChar": 9,
+        "endLine": 36,
+        "endChar": 10
+      },
+      "revId": "3d397db9292f02ab5629d84d6829559c8d1e20d5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "29f23a95_9b857d4e",
+        "filename": "roles/setup_repos/tasks/main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1010634
+      },
+      "writtenOn": "2019-05-29T15:43:38Z",
+      "side": 1,
+      "message": "since the registered vars are playbook-wide to avoid name conflicts in the future / later down the playbook, maybe name the var as \u0027yum_enablerepo_check\u0027 or something?",
+      "range": {
+        "startLine": 38,
+        "startChar": 12,
+        "endLine": 38,
+        "endChar": 22
+      },
+      "revId": "3d397db9292f02ab5629d84d6829559c8d1e20d5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8d34d385_58036b59",
+        "filename": "roles/setup_repos/tasks/main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1010634
+      },
+      "writtenOn": "2019-05-29T15:43:38Z",
+      "side": 1,
+      "message": "what\u0027s the reason to have run_once here?",
+      "range": {
+        "startLine": 39,
+        "startChar": 2,
+        "endLine": 39,
+        "endChar": 16
+      },
+      "revId": "3d397db9292f02ab5629d84d6829559c8d1e20d5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "177ce24b_af83a40f",
+        "filename": "roles/setup_repos/tasks/main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1010634
+      },
+      "writtenOn": "2019-05-29T15:43:38Z",
+      "side": 1,
+      "message": "it\u0027s probably personal thing but why not to set fact called \u0027yum_enablerepo_cmd\u0027 and set it to --enable or --enablerepo accordingly? (may be cleaner if we have to reuse it later in the playbook)",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 45,
+        "endChar": 48
+      },
+      "revId": "3d397db9292f02ab5629d84d6829559c8d1e20d5",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    }
+  ]
+}
