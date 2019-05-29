@@ -32,12 +32,13 @@
   shell: "{{ rhos_release_bin }} -x; {{ rhos_release_bin }} -P -r {{ ansible_distribution_version }} {{ install.component.version }}"
   changed_when: true
 
-- name: enable test repo in order to get access to pip
+- name: Enable unittest and test-deps repositories
   become: yes
-  shell: |
-    yum-config-manager \
-      --enable rhelosp-{{ install.component.version }}.0-unittest \
-      --enable rhelosp-{{ install.component.version }}.0-test-deps >/var/log/yum.log
-  args:
-    warn: no
-  tags: skip_ansible_lint
+  ini_file:
+    dest: /etc/yum.repos.d/rhos-release-{{ install.component.version }}.repo
+    section: "{{ item }}"
+    option: enabled
+    value: 1
+  with_items:
+    - rhelosp-{{ install.component.version }}.0-unittest
+    - rhelosp-{{ install.component.version }}.0-test-deps
