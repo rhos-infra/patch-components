@@ -11,22 +11,6 @@
       component_dist_git_url: "git://pkgs.devel.redhat.com/rpms/{{ component_dist_git_name }}"
   tags: dist-git
 
-# Install dependencies required by rdopkg from disabled EPEL repository
-- name: Install dependencies for rdopkg from EPEL repository
-  become: yes
-  yum:
-    name:
-      - 'python-blessings'
-      - 'git-review'
-      - 'python-bunch'
-      - 'python-future'
-    state: present
-    enablerepo: "epel"
-  register: task_result
-  until: task_result is success
-  retries: 3
-  delay: 3
-
 - name: Install packages required for patching
   become: yes
   yum:
@@ -40,10 +24,22 @@
       - 'openssl-devel'
       - 'python-cryptography'
       - 'python-devel'
-      - 'rdopkg'
-      - 'rhpkg'
       - 'rpm-build'
     state: present
+  register: task_result
+  until: task_result is success
+  retries: 3
+  delay: 3
+
+# Install rdopkg with dependencies from EPEL repository
+- name: Install rhpkg and rdopkg with dependencies from EPEL repository
+  become: yes
+  yum:
+    name:
+      - 'rhpkg'
+      - 'rdopkg'
+    state: present
+    enablerepo: "epel"
   register: task_result
   until: task_result is success
   retries: 3

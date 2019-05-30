@@ -43,21 +43,19 @@
     - rhelosp-{{ install.component.version }}.0-unittest
     - rhelosp-{{ install.component.version }}.0-test-deps
 
-# rhpkg is used by rdopkg
-- name: Install rhpkg and rdopkg repos
+# rhpkg repos
+- name: Install rhpkg repos
   become: yes
-  copy:
-    src="{{ item }}.repo"
-    dest="/etc/yum.repos.d/{{ item }}.repo"
-    mode=0755
-  with_items:
-    - 'rhpkg'
-    - 'rdopkg'
+  yum_repository:
+    name: rhpkg
+    description: rhpkg for Red Hat Enterprise Linux
+    baseurl: "http://download.lab.bos.redhat.com/rel-eng/dist-git/rhel/$releasever/"
+    gpgcheck: no
+    enabled: yes
+  tags:
+    - skip_ansible_lint
 
-# To satisfy rdopkg dependencies.
-#    python-blessings
-#    git-review
-#    python-bunch
+# To satisfy rdopkg and it's dependencies.
 - name: Install EPEL repository
   become: yes
   yum_repository:
@@ -74,5 +72,5 @@
   shell: |
     set -euo pipefail
     {{ dnf_bin }} -y module disable virt:rhel
-    {{ dnf_bin }} -y module enable virt:{{ ansible_distribution_major_version }}.0.0
+    {{ dnf_bin }} -y module enable virt:8.0.0
   when: ansible_os_family == 'RedHat' and ansible_distribution_major_version >= '8' | default(false)
