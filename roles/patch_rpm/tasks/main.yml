@@ -11,10 +11,6 @@
       component_dist_git_url: "git://pkgs.devel.redhat.com/rpms/{{ component_dist_git_name }}"
   tags: dist-git
 
-- name: Fix python-cryptography conflict with python2-cryptography
-  set_fact:
-      python_cryptography_pkg: "{{ (install.component.version >= '13') | ternary('python2-cryptography', 'python-cryptography') }}"
-
 # Install dependencies required by rdopkg from disabled EPEL repository
 - name: Install dependencies for rdopkg from EPEL repository
   become: yes
@@ -41,9 +37,8 @@
       - 'libffi-devel'
       - 'mock'
       - 'openssl-devel'
-      - "{{ python_cryptography_pkg }}"
+      - 'python-cryptography'
       - 'python-devel'
-      - 'python-pip'
       - 'rdopkg'
       - 'rhpkg'
       - 'rpm-build'
