@@ -19,6 +19,7 @@
       - 'python-blessings'
       - 'git-review'
       - 'python-bunch'
+      - 'python-futures'
     state: present
     enablerepo: "epel"
   register: task_result
