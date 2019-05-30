@@ -74,5 +74,5 @@
   shell: |
     set -euo pipefail
     {{ dnf_bin }} -y module disable virt:rhel
-    {{ dnf_bin }} -y module enable virt:8.0.0
+    {{ dnf_bin }} -y module enable virt:{{ ansible_distribution_major_version }}.0.0
   when: ansible_os_family == 'RedHat' and ansible_distribution_major_version >= '8' | default(false)
