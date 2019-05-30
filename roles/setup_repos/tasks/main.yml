@@ -42,3 +42,11 @@
   with_items:
     - rhelosp-{{ install.component.version }}.0-unittest
     - rhelosp-{{ install.component.version }}.0-test-deps
+
+- name: Enable correct Virt modules for RHEL-8
+  become: yes
+  shell: |
+    set -euo pipefail
+    {{ dnf_bin }} -y module disable virt:rhel
+    {{ dnf_bin }} -y module enable virt:8.0.0
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version >= '8' | default(false)
