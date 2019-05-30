@@ -11,32 +11,10 @@
       component_dist_git_url: "git://pkgs.devel.redhat.com/rpms/{{ component_dist_git_name }}"
   tags: dist-git
 
-# rhpkg is used by rdopkg
-- name: Install rhpkg and rdopkg repos
-  become: yes
-  copy:
-    src="{{ item }}.repo"
-    dest="/etc/yum.repos.d/{{ item }}.repo"
-    mode=0755
-  with_items:
-    - 'rhpkg'
-    - 'rdopkg'
-
-# TODO(abregman): Switch to yum_repository when Ansible 2.2 is released
-- name: Install epel repository
-  become: yes
-  shell: yum localinstall -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-  args:
-    warn: no
-  tags:
-    - skip_ansible_lint
-
 - name: Fix python-cryptography conflict with python2-cryptography
   set_fact:
       python_cryptography_pkg: "{{ (install.component.version >= '13') | ternary('python2-cryptography', 'python-cryptography') }}"
 
-# Although pyrpkg pulled by rhpkg, we install it directly because at the moment, an older
-# version of pyrpkg is pulled (1.40) while we need a newer version (1.43)
 - name: Install packages required for patching
   become: yes
   yum:
@@ -48,10 +26,10 @@
       - 'libffi-devel'
       - 'mock'
       - 'openssl-devel'
-      - 'pyrpkg'
       - "{{ python_cryptography_pkg }}"
       - 'python-devel'
       - 'python-pip'
+      - 'rdopkg'
       - 'rhpkg'
       - 'rpm-build'
     state: present
@@ -59,25 +37,6 @@
   until: task_result is success
   retries: 3
   delay: 3
-
-- name: Install rdopkg
-  become: yes
-  pip:
-    name=rdopkg
-  register: task_result
-  until: task_result is success
-  retries: 3
-  delay: 3
-
-# TODO(abregman): Switch to yum_repository when Ansible 2.2 is released
-# EPEL is removed, since it is used only for installing rdopkg
-# https://github.com/ansible/ansible-modules-extras/issues/2384
-- name: Remove epel repository
-  become: yes
-  shell: "yum remove -y epel-*"
-  args:
-    warn: no
-  changed_when: true
 
 - name: save the commit ID of tested patchset
   shell: git log -1 --pretty=format:%H
@@ -88,20 +47,6 @@
     - odl-package-rpm
     - skip_ansible_lint
     - build-opendaylight
-
-# mock group is needed for the mockbuild
-# without creating mock group, rdopkg will try to use root and ask for password
-- name: Create mock group
-  become: yes
-  group:
-    name=mock
-    state=present
-
-- name: Add ansible ssh user to mock group
-  become: yes
-  user:
-    name="{{ ansible_user }}"
-    groups=mock
 
 - name: Clean dist-git path
   file:
