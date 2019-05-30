@@ -1,4 +1,18 @@
 ---
+# mock group is needed for the mockbuild
+# without creating mock group, rdopkg will try to use root and ask for password
+- name: Create mock group
+  become: yes
+  group:
+    name=mock
+    state=present
+
+- name: Add ansible ssh user to mock group
+  become: yes
+  user:
+    name="{{ ansible_user }}"
+    groups=mock
+
 - name: Clean previous and create tmp_dir for all the building
   register: tmp_dir_shell
   shell: "rm -rf tmp.patch_rpm*; mktemp -d --tmpdir tmp.patch_rpm.XXXXXXXX"
