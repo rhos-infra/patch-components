@@ -43,6 +43,32 @@
     - rhelosp-{{ install.component.version }}.0-unittest
     - rhelosp-{{ install.component.version }}.0-test-deps
 
+# rhpkg is used by rdopkg
+- name: Install rhpkg and rdopkg repos
+  become: yes
+  copy:
+    src="{{ item }}.repo"
+    dest="/etc/yum.repos.d/{{ item }}.repo"
+    mode=0755
+  with_items:
+    - 'rhpkg'
+    - 'rdopkg'
+
+# To satisfy rdopkg dependencies.
+#    python-blessings
+#    git-review
+#    python-bunch
+- name: Install EPEL repository
+  become: yes
+  yum_repository:
+    name: epel
+    description: EPEL YUM repo
+    baseurl: "https://download.fedoraproject.org/pub/epel/{{ ansible_distribution_major_version }}/$basearch/"
+    gpgkey: "https://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+    enabled: no
+  tags:
+    - skip_ansible_lint
+
 - name: Enable correct Virt modules for RHEL-8
   become: yes
   shell: |
