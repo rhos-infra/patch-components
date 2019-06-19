@@ -18,4 +18,5 @@
   roles:
     - { role: setup_repos }
     - { role: setup_environment}
+    - { role: copy_component }
     - { role: patch_rpm }
