@@ -93,11 +93,11 @@
       - build-opendaylight
 
 - name: Patch Component
-  include_tasks: roles/patch_rpm/tasks/patch_component.yml
+  include_tasks: patch_component.yml
   when: not (install.component.name | match("odl-.*")) | default(False)
 
 - name: Patch and build OpenDaylight
-  import_tasks: roles/patch_rpm/tasks/patch_opendaylight.yml
+  import_tasks: patch_opendaylight.yml
   become: true
   when: install.component.name | match("odl-.*") | default(False)
 
