@@ -94,12 +94,12 @@
 
 - name: Patch Component
   include_tasks: roles/patch_rpm/tasks/patch_component.yml
-  when: not (install.component.name | match("odl-.*"))
+  when: not (install.component.name | match("odl-.*")) | default(False)
 
 - name: Patch and build OpenDaylight
   import_tasks: roles/patch_rpm/tasks/patch_opendaylight.yml
   become: true
-  when: install.component.name | match("odl-.*")
+  when: install.component.name | match("odl-.*") | default(False)
 
 - name: Create repository for patched RPMs
   command: "createrepo {{ patchedrpmdir }}"
