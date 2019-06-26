@@ -62,7 +62,7 @@
     - name: Build new RPM from patched dist-git repo
       shell: |
         set -exo pipefail;
-        rdopkg mockbuild;
+        rhpkg mockbuild;
       args:
         chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
       register: rpm_mockbuild

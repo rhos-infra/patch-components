@@ -49,9 +49,22 @@
   yum_repository:
     name: rhpkg
     description: rhpkg for Red Hat Enterprise Linux
-    baseurl: "http://download.lab.bos.redhat.com/rel-eng/dist-git/rhel/$releasever/"
+    baseurl: "http://download.devel.redhat.com/rhel-7/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-RHEL-7/compose/Server/x86_64/os/"
     gpgcheck: no
     enabled: yes
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' | default(false)
+  tags:
+    - skip_ansible_lint
+
+- name: Install rhpkg repos - RHEL8
+  become: yes
+  yum_repository:
+    name: rhpkg
+    description: rhpkg for Red Hat Enterprise Linux
+    baseurl: "http://download.devel.redhat.com/rhel-8/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-RHEL-8/compose/BaseOS/x86_64/os/"
+    gpgcheck: no
+    enabled: yes
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
   tags:
     - skip_ansible_lint
 
