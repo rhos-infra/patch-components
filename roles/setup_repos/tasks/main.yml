@@ -43,18 +43,6 @@
     - rhelosp-{{ install.component.version }}.0-unittest
     - rhelosp-{{ install.component.version }}.0-test-deps
 
-# rhpkg repos
-- name: Install rhpkg repos
-  become: yes
-  yum_repository:
-    name: rhpkg
-    description: rhpkg for Red Hat Enterprise Linux
-    baseurl: "http://download.lab.bos.redhat.com/rel-eng/dist-git/rhel/$releasever/"
-    gpgcheck: no
-    enabled: yes
-  tags:
-    - skip_ansible_lint
-
 # To satisfy rdopkg and it's dependencies.
 - name: Install EPEL repository
   become: yes

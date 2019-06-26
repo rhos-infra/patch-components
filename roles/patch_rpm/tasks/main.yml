@@ -32,11 +32,10 @@
   delay: 3
 
 # Install rdopkg with dependencies from EPEL repository
-- name: Install rhpkg and rdopkg with dependencies from EPEL repository
+- name: Install rdopkg with dependencies from EPEL repository
   become: yes
   yum:
     name:
-      - 'rhpkg'
       - 'rdopkg'
     state: present
     enablerepo: "epel"
