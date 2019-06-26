@@ -43,34 +43,47 @@
     - rhelosp-{{ install.component.version }}.0-unittest
     - rhelosp-{{ install.component.version }}.0-test-deps
 
-# rhpkg repos
-- name: Install rhpkg repos
-  become: yes
-  yum_repository:
-    name: rhpkg
-    description: rhpkg for Red Hat Enterprise Linux
-    baseurl: "http://download.lab.bos.redhat.com/rel-eng/dist-git/rhel/$releasever/"
-    gpgcheck: no
-    enabled: yes
+- name: RHEL7 specific repositories
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' | default(false)
   tags:
     - skip_ansible_lint
+  block:
+    - name: Install rhpkg repos for RHEL-7
+      become: yes
+      yum_repository:
+        name: rhpkg
+        description: rhpkg for Red Hat Enterprise Linux
+        baseurl: "http://download.devel.redhat.com/rhel-7/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-RHEL-7/compose/Server/x86_64/os/"
+        gpgcheck: no
+        enabled: yes
 
-# To satisfy rdopkg and it's dependencies.
-- name: Install EPEL repository
-  become: yes
-  yum_repository:
-    name: epel
-    description: EPEL YUM repo
-    baseurl: "https://download.fedoraproject.org/pub/epel/{{ ansible_distribution_major_version }}/$basearch/"
-    gpgkey: "https://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
-    enabled: no
+    # To satisfy rdopkg and it's dependencies.
+    - name: Install EPEL repository for RHEL-7
+      become: yes
+      yum_repository:
+        name: epel
+        description: EPEL YUM repo
+        baseurl: "https://download.fedoraproject.org/pub/epel/{{ ansible_distribution_major_version }}/$basearch/"
+        gpgkey: "https://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
+        enabled: no
+
+- name: RHEL8 specific repositories
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
   tags:
     - skip_ansible_lint
+  block:
+    - name: Install rhpkg repos for RHEL-8
+      become: yes
+      yum_repository:
+        name: rhpkg
+        description: rhpkg for Red Hat Enterprise Linux
+        baseurl: "http://download.devel.redhat.com/rhel-8/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-RHEL-8/compose/BaseOS/x86_64/os/"
+        gpgcheck: no
+        enabled: yes
 
-- name: Enable correct Virt modules for RHEL-8
-  become: yes
-  shell: |
-    set -euo pipefail
-    {{ dnf_bin }} -y module disable virt:rhel
-    {{ dnf_bin }} -y module enable virt:8.0.0
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version >= '8' | default(false)
+    - name: Enable correct Virt modules for RHEL-8
+      become: yes
+      shell: |
+        set -euo pipefail
+        {{ dnf_bin }} -y module disable virt:rhel
+        {{ dnf_bin }} -y module enable virt:8.0.0
