@@ -2,7 +2,6 @@
   distro_name_prefix: 'vpnservice-karaf'
   yum_deps:
       - docker
-      - mock
       - rh-maven33-maven
   pme_url: http://repo1.maven.org/maven2/org/commonjava/maven/ext/pom-manipulation-ext/1.15/pom-manipulation-ext-1.15.jar
   m2_settings_file_path: '/usr/share/maven/conf/settings.xml'
@@ -13,7 +12,6 @@
   distro_name_prefix: 'karaf'
   yum_deps:
       - docker
-      - mock
       - java
       # java-devel contains tools.jar
       - java-devel
