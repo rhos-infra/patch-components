@@ -1,4 +1,16 @@
 ---
+- name: Install python3-libselinux for RHEL8
+  become: yes
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
+  yum:
+    name:
+      - 'python3-libselinux'
+    state: present
+  register: task_result
+  until: task_result is success
+  retries: 3
+  delay: 3
+
 # This task will register all repos on the system to disable each one of them
 # with the second task.
 - name: Register all the repositories
