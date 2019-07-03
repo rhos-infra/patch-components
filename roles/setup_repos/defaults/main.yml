@@ -2,3 +2,4 @@
 rhos_release_bin: '/usr/bin/rhos-release'
 ls_bin: '/bin/ls'
 dnf_bin: '/usr/bin/dnf'
+alternatives_bin: '/sbin/alternatives'
