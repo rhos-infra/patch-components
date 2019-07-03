@@ -7,6 +7,15 @@ map_component_to_pre_rel_version:
   sahara:
     pre_rel_version: '14'
 
+# Dependencies specific for the RHEL8
+reqs_rhel8:
+      - 'python3-cryptography'
+      - 'python3-devel'
+
+# Dependencies specific for the RHEL7
+reqs_rhel7:
+      - 'python-cryptography'
+      - 'python-devel'
 
 map_component_to_distgit:
   networking-ovn:
