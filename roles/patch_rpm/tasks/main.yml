@@ -11,6 +11,32 @@
       component_dist_git_url: "git://pkgs.devel.redhat.com/rpms/{{ component_dist_git_name }}"
   tags: dist-git
 
+- name: Install packages required for patching - RHEL-7
+  become: yes
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' | default(false)
+  yum:
+    name:
+      - 'python-cryptography'
+      - 'python-devel'
+    state: present
+  register: task_result
+  until: task_result is success
+  retries: 3
+  delay: 3
+
+- name: Install packages required for patching - RHEL-8
+  become: yes
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
+  yum:
+    name:
+      - 'python3-cryptography'
+      - 'python3-devel'
+    state: present
+  register: task_result
+  until: task_result is success
+  retries: 3
+  delay: 3
+
 - name: Install packages required for patching
   become: yes
   yum:
@@ -22,8 +48,6 @@
       - 'libffi-devel'
       - 'mock'
       - 'openssl-devel'
-      - 'python-cryptography'
-      - 'python-devel'
       - 'rpm-build'
     state: present
   register: task_result
@@ -38,7 +62,7 @@
     name:
       - 'rhpkg'
       - 'rdopkg'
-    state: present
+    state : present
     enablerepo: "epel"
   register: task_result
   until: task_result is success
