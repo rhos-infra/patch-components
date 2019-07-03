@@ -1,4 +1,31 @@
 ---
+# rhos-release used for installing the rhos repos.
+- name: Install rhos-release
+  become: yes
+  yum:
+    name="http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"
+  register: task_result
+  until: task_result is success
+  retries: 3
+  delay: 3
+
+- name: Execute rhos-release to install rhos repos
+  become: yes
+  shell: "{{ rhos_release_bin }} -x; {{ rhos_release_bin }} -P -r {{ ansible_distribution_version }} {{ install.component.version }}"
+  changed_when: true
+
+- name: Install python3-libselinux for RHEL8
+  become: yes
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
+  yum:
+    name:
+      - 'python3-libselinux'
+    state: present
+  register: task_result
+  until: task_result is success
+  retries: 3	
+  delay: 3
+
 # This task will register all repos on the system to disable each one of them
 # with the second task.
 - name: Register all the repositories
@@ -16,16 +43,6 @@
     regexp: "enabled=1"
     replace: "enabled=0"
   with_items: "{{ yum_repos.stdout_lines }}"
-
-# rhos-release used for installing the rhos repos.
-- name: Install rhos-release
-  become: yes
-  yum:
-    name="http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"
-  register: task_result
-  until: task_result is success
-  retries: 3
-  delay: 3
 
 - name: Execute rhos-release to install rhos repos
   become: yes
