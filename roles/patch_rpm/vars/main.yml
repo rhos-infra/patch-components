@@ -7,7 +7,6 @@ map_component_to_pre_rel_version:
   sahara:
     pre_rel_version: '14'
 
-
 map_component_to_distgit:
   networking-ovn:
     dist_git: 'python-networking-ovn'
