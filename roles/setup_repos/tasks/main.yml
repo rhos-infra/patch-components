@@ -1,4 +1,12 @@
 ---
+- name: Enable correct Virt modules for RHEL-8
+  become: yes
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
+  shell: |
+    set -euo pipefail
+    {{ dnf_bin }} -y module enable libselinux-python
+    {{ dnf_bin }} -y install libselinux-python
+
 # This task will register all repos on the system to disable each one of them
 # with the second task.
 - name: Register all the repositories
