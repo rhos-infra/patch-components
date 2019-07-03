@@ -1,4 +1,30 @@
 ---
+- name: RHEL8 specific preparation
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
+  tags:
+    - skip_ansible_lint
+  block:
+    # Standard yum is failing
+    # Ansible expects dnf from python2, needs to use shell
+    - name: Install rhos-release - RHEL-8
+      become: yes
+      shell: |
+        {{ dnf_bin }} -y install http://download.devel.redhat.com/rcm-guest/puddles/OpenStack/rhos-release/rhos-release-latest.noarch.rpm
+
+    - name: Execute rhos-release for initial install of RHOS repos
+      become: yes
+      shell: "{{ rhos_release_bin }} -u"
+
+    - name: Enable correct python/selinux modules for RHEL-8
+      become: yes
+      shell: |
+        set -euo pipefail
+        {{ dnf_bin }} -y module enable libselinux-python
+        {{ dnf_bin }} -y install libselinux-python
+        {{ dnf_bin }} -y module enable python36
+        {{ dnf_bin }} -y install python36
+        {{ alternatives_bin }} --set python /usr/bin/python3
+
 # This task will register all repos on the system to disable each one of them
 # with the second task.
 - name: Register all the repositories
@@ -17,37 +43,38 @@
     replace: "enabled=0"
   with_items: "{{ yum_repos.stdout_lines }}"
 
-# rhos-release used for installing the rhos repos.
-- name: Install rhos-release
-  become: yes
-  yum:
-    name="http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"
-  register: task_result
-  until: task_result is success
-  retries: 3
-  delay: 3
-
-- name: Execute rhos-release to install rhos repos
-  become: yes
-  shell: "{{ rhos_release_bin }} -x; {{ rhos_release_bin }} -P -r {{ ansible_distribution_version }} {{ install.component.version }}"
-  changed_when: true
-
-- name: Enable unittest and test-deps repositories
-  become: yes
-  ini_file:
-    dest: /etc/yum.repos.d/rhos-release-{{ install.component.version }}.repo
-    section: "{{ item }}"
-    option: enabled
-    value: 1
-  with_items:
-    - rhelosp-{{ install.component.version }}.0-unittest
-    - rhelosp-{{ install.component.version }}.0-test-deps
 
 - name: RHEL7 specific repositories
   when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' | default(false)
   tags:
     - skip_ansible_lint
   block:
+    - name: Enable unittest and test-deps repositories
+      become: yes
+      ini_file:
+        dest: /etc/yum.repos.d/rhos-release-{{ install.component.version }}.repo
+        section: "{{ item }}"
+        option: enabled
+        value: 1
+      with_items:
+        - rhelosp-{{ install.component.version }}.0-unittest
+        - rhelosp-{{ install.component.version }}.0-test-deps
+
+    - name: Install rhos-release - RHEL-7
+      become: yes
+      yum:
+        name: "http://download.devel.redhat.com/rcm-guest/puddles/OpenStack/rhos-release/rhos-release-latest.noarch.rpm"
+        state: latest
+      register: task_result
+      until: task_result is success
+      retries: 3
+      delay: 3
+
+    - name: Execute rhos-release to install rhos repos
+      become: yes
+      shell: "{{ rhos_release_bin }} -x; {{ rhos_release_bin }} -P -r {{ ansible_distribution_version }} {{ install.component.version }}"
+      changed_when: true
+
     - name: Install rhpkg repos for RHEL-7
       become: yes
       yum_repository:
@@ -72,6 +99,11 @@
   tags:
     - skip_ansible_lint
   block:
+    - name: Execute rhos-release to install rhos repos
+      become: yes
+      shell: "{{ rhos_release_bin }} -x; {{ rhos_release_bin }} -P -r {{ ansible_distribution_version }} {{ install.component.version }}"
+      changed_when: true
+
     - name: Install rhpkg repos for RHEL-8
       become: yes
       yum_repository:
@@ -87,3 +119,9 @@
         set -euo pipefail
         {{ dnf_bin }} -y module disable virt:rhel
         {{ dnf_bin }} -y module enable virt:8.0.0
+
+    - name: Install packages required for patching - workaround - RHEL-8
+      become: yes
+      shell: |
+        set -euo pipefail
+        {{ dnf_bin }} install -y http://download.eng.bos.redhat.com/brewroot/vol/rhel-8/packages/python-distro/1.4.0/1.el8eng/noarch/python3-distro-1.4.0-1.el8eng.noarch.rpm
