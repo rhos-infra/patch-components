@@ -1,4 +1,12 @@
 ---
+- name: Enable correct Virt modules for RHEL-8
+  become: yes
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
+  shell: |
+    set -euo pipefail
+    {{ dnf_bin }} -y module enable libselinux-python
+    {{ dnf_bin }} -y install libselinux-python
+
 # This task will register all repos on the system to disable each one of them
 # with the second task.
 - name: Register all the repositories
@@ -8,6 +16,21 @@
   register: yum_repos
   changed_when: False
 
+# rhos-release used for installing the rhos repos.
+# We need to have this task before disabling any repos
+# for rhel-8 otherwise we get error:
+#        "Error: There are no enabled repos."
+- name: Install rhos-release
+  become: yes
+  yum:
+    name: "http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"
+    state: present
+    skip_broken: yes
+  register: task_result
+  until: task_result is success
+  retries: 3
+  delay: 3
+
 - name: Disable any existing repos
   become: yes
   become_method: sudo
@@ -16,16 +39,6 @@
     regexp: "enabled=1"
     replace: "enabled=0"
   with_items: "{{ yum_repos.stdout_lines }}"
-
-# rhos-release used for installing the rhos repos.
-- name: Install rhos-release
-  become: yes
-  yum:
-    name="http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm"
-  register: task_result
-  until: task_result is success
-  retries: 3
-  delay: 3
 
 - name: Execute rhos-release to install rhos repos
   become: yes
