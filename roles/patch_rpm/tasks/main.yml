@@ -14,7 +14,7 @@
 - name: Install packages required for patching
   become: yes
   yum:
-    name:
+    name: {{ vars['reqs_rhel' + ansible_distribution_major_version] }}
       - 'ca-certificates'
       - 'createrepo'
       - 'gcc'
@@ -22,8 +22,6 @@
       - 'libffi-devel'
       - 'mock'
       - 'openssl-devel'
-      - 'python-cryptography'
-      - 'python-devel'
       - 'rpm-build'
     state: present
   register: task_result
