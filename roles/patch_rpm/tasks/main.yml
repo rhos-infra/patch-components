@@ -11,39 +11,75 @@
       component_dist_git_url: "git://pkgs.devel.redhat.com/rpms/{{ component_dist_git_name }}"
   tags: dist-git
 
-- name: Install packages required for patching
-  become: yes
-  yum:
-    name:
-      - 'ca-certificates'
-      - 'createrepo'
-      - 'gcc'
-      - 'git'
-      - 'libffi-devel'
-      - 'mock'
-      - 'openssl-devel'
-      - 'python-cryptography'
-      - 'python-devel'
-      - 'rpm-build'
-    state: present
-  register: task_result
-  until: task_result is success
-  retries: 3
-  delay: 3
 
-# Install rdopkg with dependencies from EPEL repository
-- name: Install rhpkg and rdopkg with dependencies from EPEL repository
-  become: yes
-  yum:
-    name:
-      - 'rhpkg'
-      - 'rdopkg'
-    state: present
-    enablerepo: "epel"
-  register: task_result
-  until: task_result is success
-  retries: 3
-  delay: 3
+- name: RHEL7 specific packages
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' | default(false)
+  tags:
+    - skip_ansible_lint
+  block:
+    - name: Install packages required for patching - RHEL-7
+      become: yes
+      yum:
+        name:
+          - 'python-cryptography'
+          - 'python-devel'
+        state: present
+      register: task_result
+      until: task_result is success
+      retries: 3
+      delay: 3
+
+    - name: Install common packages required for patching - RHEL-7
+      become: yes
+      yum:
+        name:
+          - 'ca-certificates'
+          - 'createrepo'
+          - 'gcc'
+          - 'git'
+          - 'libffi-devel'
+          - 'mock'
+          - 'openssl-devel'
+          - 'rpm-build'
+        state: present
+      register: task_result
+      until: task_result is success
+      retries: 3
+      delay: 3
+
+    # Install rdopkg with dependencies from EPEL repository
+    - name: Install rhpkg and rdopkg with dependencies from EPEL repository
+      become: yes
+      yum:
+        name:
+          - 'rhpkg'
+          - 'rdopkg'
+        state : present
+        enablerepo: "epel"
+      register: task_result
+      until: task_result is success
+      retries: 3
+      delay: 3
+
+- name: RHEL8 specific packages
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
+  tags:
+    - skip_ansible_lint
+  block:
+    - name: Install packages required for patching - RHEL-8
+      become: yes
+      shell: |
+        /usr/bin/dnf install -y python3-cryptography python3-devel rhpkg
+        /usr/bin/dnf install -y ca-certificates createrepo gcc git libffi-devel mock openssl-devel rpm-build
+
+    # Install rdopkg from pip for RHEL8
+    - name: Install rdopkg from pip as it's not yet fully packaged
+      become: yes
+      pip:
+        name:
+          - 'rdopkg'
+        state : present
+        executable: pip-3.6
 
 - name: save the commit ID of tested patchset
   shell: git log -1 --pretty=format:%H
@@ -116,6 +152,7 @@
   tags: patched-rpms-repo
 
 - name: Remove patching requirements
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' | default(false)
   become: yes
   yum:
     name:
