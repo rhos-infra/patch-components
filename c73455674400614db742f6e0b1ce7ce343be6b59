@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a9d6f4e3_5e59956f",
+        "filename": "roles/patch_rpm/tasks/main.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1016110
+      },
+      "writtenOn": "2019-07-05T09:19:02Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it make sense to conditionally include a list of variables which are distribution-specific? It\u0027s the  pattern described here: https://ansible-tips-and-tricks.readthedocs.io/en/latest/os-dependent-tasks/variables/",
+      "revId": "c73455674400614db742f6e0b1ce7ce343be6b59",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
