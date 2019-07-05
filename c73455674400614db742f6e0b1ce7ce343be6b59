@@ -16,6 +16,40 @@
       "revId": "c73455674400614db742f6e0b1ce7ce343be6b59",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54457955_61e1deb7",
+        "filename": "roles/setup_repos/tasks/main.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1016110
+      },
+      "writtenOn": "2019-07-05T09:21:09Z",
+      "side": 1,
+      "message": "Maybe the include pattern that I mentioned earlier could be used here as well",
+      "revId": "c73455674400614db742f6e0b1ce7ce343be6b59",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3f60d63_497db3e1",
+        "filename": "roles/setup_repos/tasks/main.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1016110
+      },
+      "writtenOn": "2019-07-05T09:21:09Z",
+      "side": 1,
+      "message": "I know it\u0027s an existing issue, but shouldn\u0027t we use https://url.corp.redhat.com/rhos-release-latest-rpm ?",
+      "revId": "c73455674400614db742f6e0b1ce7ce343be6b59",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
     }
   ]
 }
