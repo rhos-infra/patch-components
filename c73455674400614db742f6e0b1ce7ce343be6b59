@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "c8f84294_0d09b834",
+        "filename": "roles/patch_rpm/tasks/main.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1016110
+      },
+      "writtenOn": "2019-07-05T09:37:51Z",
+      "side": 1,
+      "message": "I personally think that the readability is not impacted when the separation is about code (whose flow is always the same) vs data (which changes based on the environment). But that\u0027s me.\nAlso: do we care if this works on Fedora? If we do, then the usage of that pattern would be recommended.\n\nWhen keeping the current structure, of course duplicating the variable would be a bit too much, as it\u0027s not used in other places.",
+      "parentUuid": "57144d2e_821797ef",
+      "revId": "c73455674400614db742f6e0b1ce7ce343be6b59",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54457955_61e1deb7",
         "filename": "roles/setup_repos/tasks/main.yml",
         "patchSetId": 14
