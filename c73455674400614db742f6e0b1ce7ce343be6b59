@@ -140,6 +140,24 @@
       "revId": "c73455674400614db742f6e0b1ce7ce343be6b59",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e103ff43_eb7da4c2",
+        "filename": "roles/setup_repos/tasks/main.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1016110
+      },
+      "writtenOn": "2019-07-05T13:03:41Z",
+      "side": 1,
+      "message": "Use the http: version then:  http://url.corp.redhat.com/rhos-release-latest-rpm",
+      "parentUuid": "0871509d_d5b188cc",
+      "revId": "c73455674400614db742f6e0b1ce7ce343be6b59",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
     }
   ]
 }
