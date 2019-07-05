@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "57144d2e_821797ef",
+        "filename": "roles/patch_rpm/tasks/main.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1007069
+      },
+      "writtenOn": "2019-07-05T09:30:56Z",
+      "side": 1,
+      "message": "I thought about it and the tasks here needs to be in specific order so we will be splitting into many per-release files just for one or two lines differences, while here we have everything in one flat file which is better for readability.\n\nAlso I was thinking about setting fact which is rhel-{fact} for the when statement but it would be duplicating of already existing vars provided by ansible.",
+      "parentUuid": "a9d6f4e3_5e59956f",
+      "revId": "c73455674400614db742f6e0b1ce7ce343be6b59",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "54457955_61e1deb7",
         "filename": "roles/setup_repos/tasks/main.yml",
         "patchSetId": 14
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9e8c6b24_ad0904e0",
+        "filename": "roles/setup_repos/tasks/main.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1007069
+      },
+      "writtenOn": "2019-07-05T09:30:56Z",
+      "side": 1,
+      "message": "Explained in previous comment. Let me know if it makes sense or you disagree and I will fix it.",
+      "parentUuid": "54457955_61e1deb7",
+      "revId": "c73455674400614db742f6e0b1ce7ce343be6b59",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "b3f60d63_497db3e1",
         "filename": "roles/setup_repos/tasks/main.yml",
         "patchSetId": 14
@@ -47,6 +83,24 @@
       "writtenOn": "2019-07-05T09:21:09Z",
       "side": 1,
       "message": "I know it\u0027s an existing issue, but shouldn\u0027t we use https://url.corp.redhat.com/rhos-release-latest-rpm ?",
+      "revId": "c73455674400614db742f6e0b1ce7ce343be6b59",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e21fd487_829511ee",
+        "filename": "roles/setup_repos/tasks/main.yml",
+        "patchSetId": 14
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1007069
+      },
+      "writtenOn": "2019-07-05T09:30:56Z",
+      "side": 1,
+      "message": "Nice one, will change.",
+      "parentUuid": "b3f60d63_497db3e1",
       "revId": "c73455674400614db742f6e0b1ce7ce343be6b59",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
