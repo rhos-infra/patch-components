@@ -54,7 +54,7 @@
         name:
           - 'rhpkg'
           - 'rdopkg'
-        state : present
+        state: present
         enablerepo: "epel"
       register: task_result
       until: task_result is success
@@ -78,7 +78,7 @@
       pip:
         name:
           - 'rdopkg'
-        state : present
+        state: present
         executable: pip-3.6
 
 - name: save the commit ID of tested patchset
@@ -152,7 +152,6 @@
   tags: patched-rpms-repo
 
 - name: Remove patching requirements
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' | default(false)
   become: yes
   yum:
     name:
