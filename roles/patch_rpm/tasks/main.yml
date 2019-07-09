@@ -97,16 +97,50 @@
     path: "{{ tmp_dir }}/dist-git/"
   tags: dist-git
 
+- name: Register component branch
+  shell: git rev-parse --abbrev-ref HEAD
+  args:
+    chdir: "{{ tmp_dir }}/{{ install.component.name }}"
+  register: component_branch
+
+- name: Set facts to use non-trunk or trunk branch
+  set_fact:
+      branch_trunk_str: "{{ component_branch.stdout | regex_search('-trunk') }}"
+
+- debug:
+    var: branch_trunk_str
+
+- name: Register component branch
+  shell: git branch -a
+  args:
+    chdir: "{{ tmp_dir }}/{{ install.component.name }}"
+  register: component_branches
+
+- debug:
+    var: component_branch.stdout
+
+- debug:
+    var: component_branches.stdout
+
 # Clone component dist-git repo
 - name: Clone the component dist-git repo
   git:
     repo="{{ component_dist_git_url }}"
-    version="rhos-{{ install.component.version }}.0-rhel-{{ ansible_distribution_version|int }}"
+    version="rhos-{{ install.component.version }}.0-rhel-{{ ansible_distribution_version|int }}{{ branch_trunk_str | default('') }}"
     dest="{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
     accept_hostkey=true
   retries: 3
   delay: 120
   tags: dist-git
+
+- name: Register component branch
+  shell: git branch -a
+  args:
+    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
+  register: distgit_branches
+
+- debug:
+    var: distgit_branches.stdout
 
 - name: set logdir fact
   set_fact:

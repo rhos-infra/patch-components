@@ -6,7 +6,7 @@
     - skip_ansible_lint
 
 - name: Checkout rhos-XY.0-patches branch
-  shell: "git branch -f rhos-{{ install.component.version }}.0-patches"
+  shell: "git branch -f rhos-{{ install.component.version }}.0{{ branch_trunk_str | default('') }}-patches"
   args:
     chdir: "{{ tmp_dir }}/{{ install.component.name }}"
   tags:
@@ -18,7 +18,7 @@
     git remote add -f patches {{ tmp_dir }}/{{ install.component.name }} &&
     git fetch patches &&
     git fetch patches --tags &&
-    git branch rhos-{{ install.component.version }}.0-patches patches/gerrit-patch;
+    git branch rhos-{{ install.component.version }}.0{{ branch_trunk_str | default('') }}-patches patches/gerrit-patch;
   args:
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   tags:
@@ -30,7 +30,7 @@
   shell: >
     git config --global user.name `whoami` &&
     git config --global user.email `whoami`@redhat.com &&
-    rdopkg patch;
+    rdopkg patch -p patches/rhos-{{ install.component.version }}.0{{ branch_trunk_str | default('') }}-patches;
   args:
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
   changed_when: true
