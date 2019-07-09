@@ -20,6 +20,11 @@ subparsers:
                       type: Value
                       help: 'Full path where the componet (cinder, nova, etc) is located'
                       required: False
+                  branch-trunk:
+                      type: Bool
+                      help: 'If the branch should use trunk version (from OSP15)'
+                      required: False
+                      default: False
                   host-ip:
                       type: Value
                       help: 'ip of the machine that rpm will be built on'

@@ -97,11 +97,16 @@
     path: "{{ tmp_dir }}/dist-git/"
   tags: dist-git
 
+- name: Set facts to use non-trunk or trunk branch
+  set_fact:
+      branch_trunk_str: '-trunk'
+  when: install.branch.trunk is defined and install.branch.trunk | bool == true
+
 # Clone component dist-git repo
 - name: Clone the component dist-git repo
   git:
     repo="{{ component_dist_git_url }}"
-    version="rhos-{{ install.component.version }}.0-rhel-{{ ansible_distribution_version|int }}"
+    version="rhos-{{ install.component.version }}.0-rhel-{{ ansible_distribution_version|int }}{{ branch_trunk_str | default('') }}"
     dest="{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
     accept_hostkey=true
   retries: 3
