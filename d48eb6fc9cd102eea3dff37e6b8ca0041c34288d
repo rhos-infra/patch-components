@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58e7a137_a64fb5cc",
+        "filename": "roles/patch_rpm/tasks/main.yml",
+        "patchSetId": 32
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1006664
+      },
+      "writtenOn": "2019-07-09T08:41:39Z",
+      "side": 1,
+      "message": "Migi, this line contradicts the condition from l 165. Removing it as a part of  https://review.gerrithub.io/c/rhos-infra/patch-components/+/460933. Seems like some additional rework will be required.",
+      "revId": "d48eb6fc9cd102eea3dff37e6b8ca0041c34288d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
