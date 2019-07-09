@@ -62,6 +62,9 @@
       name: "{{ item }}"
       state: present
   with_items: "{{ opendaylight_vars.yum_deps }}"
+  until: task_result is success
+  retries: 3
+  delay: 3
 
 - name: UnInstall any maven currently installed to avoid packages conflicts
   yum:
@@ -85,6 +88,8 @@
 - name: discover maven_home
   shell: "mvn --version | awk '$0 ~ /Maven home:/ {print $3}'"
   register: _maven_home
+  tags:
+    - skip_ansible_lint
 
 - name: set maven_home fact
   set_fact:
@@ -230,7 +235,9 @@
   args:
       chdir: "{{ tmp_dir }}/opendaylight-aggregator"
   when: install.component.version >= 13
-  tags: build-opendaylight
+  tags:
+    - skip_ansible_lint
+    - build-opendaylight
 
 - name: "build OpenDaylight using opendaylight-aggregator (logs: {{ opendaylight_vars.maven_log_dir }}/build_<DATETIME>.log)"
   shell: |
@@ -249,7 +256,9 @@
   args:
       chdir: "{{ tmp_dir }}/opendaylight-aggregator"
   when: install.component.version >= 13
-  tags: build-opendaylight
+  tags:
+    - skip_ansible_lint
+    - build-opendaylight
 
 - name: set karaf distribution tar.gz fact - the original package name
   register: odl_karaf_package_fullpath
@@ -345,7 +354,8 @@
       - '127.1.0.3   oss.sonatype.org'
       - '127.1.0.4   registry.npmjs.org'
 
-- fail:
+- name: Fail if package_opendaylight is not defined or package_opendaylight.rc is not 0
+  fail:
       msg: "OpenDaylight packaging not successful, check {{ logdir }}"
   when: package_opendaylight is not defined or package_opendaylight.rc != 0
 
