@@ -80,6 +80,9 @@
           - 'rdopkg'
         state: present
         executable: pip-3.6
+      until: task_result is success
+      retries: 3
+      delay: 3
 
 - name: save the commit ID of tested patchset
   shell: git log -1 --pretty=format:%H
