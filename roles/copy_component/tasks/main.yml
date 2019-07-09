@@ -30,6 +30,16 @@
       - "{{ playbook_dir }}/../{{ install.component.name }}"
   tags: copy-component
 
+- name: Register component branch
+  shell: git rev-parse --abbrev-ref HEAD
+  args:
+    chdir: "{{ tmp_dir }}/{{ install.component.name }}"
+  register: component_branch
+
+- name: Set facts to use non-trunk or trunk branch
+  set_fact:
+      branch_trunk_str: "{{ component_branch.stdout | regex_search('-trunk') }}"
+
 - name: Copy extra components to remote host
   vars:
       extra_component_locations:
