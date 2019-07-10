@@ -14,6 +14,8 @@
     - name: Execute rhos-release for initial install of RHOS repos
       become: yes
       shell: "{{ rhos_release_bin }} -u"
+      tags:
+        - skip_ansible_lint
 
     - name: Enable correct python/selinux modules for RHEL-8
       become: yes
