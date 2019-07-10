@@ -63,14 +63,27 @@
 
 - name: RHEL8 specific packages
   when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
-  tags:
-    - skip_ansible_lint
   block:
     - name: Install packages required for patching - RHEL-8
       become: yes
-      shell: |
-        /usr/bin/dnf install -y python3-cryptography python3-devel rhpkg
-        /usr/bin/dnf install -y ca-certificates createrepo gcc git libffi-devel mock openssl-devel rpm-build
+      dnf:
+        name:
+          - 'python3-cryptography'
+          - 'python3-devel'
+          - 'rhpkg'
+          - 'ca-certificates'
+          - 'createrepo'
+          - 'gcc'
+          - 'git'
+          - 'libffi-devel'
+          - 'mock'
+          - 'openssl-devel'
+          - 'rpm-build'
+        state: present
+      register: task_result
+      until: task_result is success
+      retries: 3
+      delay: 3
 
     # Install rdopkg from pip for RHEL8
     - name: Install rdopkg from pip as it's not yet fully packaged
@@ -105,25 +118,12 @@
   args:
     chdir: "{{ tmp_dir }}/{{ install.component.name }}"
   register: component_branch
+  tags:
+    - skip_ansible_lint
 
 - name: Set facts to use non-trunk or trunk branch
   set_fact:
       branch_trunk_str: "{{ component_branch.stdout | regex_search('-trunk') }}"
-
-- debug:
-    var: branch_trunk_str
-
-- name: Register component branch
-  shell: git branch -a
-  args:
-    chdir: "{{ tmp_dir }}/{{ install.component.name }}"
-  register: component_branches
-
-- debug:
-    var: component_branch.stdout
-
-- debug:
-    var: component_branches.stdout
 
 # Clone component dist-git repo
 - name: Clone the component dist-git repo
@@ -135,15 +135,6 @@
   retries: 3
   delay: 120
   tags: dist-git
-
-- name: Register component branch
-  shell: git branch -a
-  args:
-    chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
-  register: distgit_branches
-
-- debug:
-    var: distgit_branches.stdout
 
 - name: set logdir fact
   set_fact:
