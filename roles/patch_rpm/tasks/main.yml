@@ -66,24 +66,11 @@
   block:
     - name: Install packages required for patching - RHEL-8
       become: yes
-      dnf:
-        name:
-          - 'python3-cryptography'
-          - 'python3-devel'
-          - 'rhpkg'
-          - 'ca-certificates'
-          - 'createrepo'
-          - 'gcc'
-          - 'git'
-          - 'libffi-devel'
-          - 'mock'
-          - 'openssl-devel'
-          - 'rpm-build'
-        state: present
-      register: task_result
-      until: task_result is success
-      retries: 3
-      delay: 3
+      shell: |
+        /usr/bin/dnf install -y python3-cryptography python3-devel rhpkg
+        /usr/bin/dnf install -y ca-certificates createrepo gcc git libffi-devel mock openssl-devel rpm-build
+      tags:
+        - skip_ansible_lint
 
     # Install rdopkg from pip for RHEL8
     - name: Install rdopkg from pip as it's not yet fully packaged
