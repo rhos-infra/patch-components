@@ -20,6 +20,11 @@ subparsers:
                       type: Value
                       help: 'Full path where the componet (cinder, nova, etc) is located'
                       required: False
+                  branch-trunk:
+                      type: Bool
+                      help: 'Should trunk branch be used instead of regular branch'
+                      required: False
+                      default: False
                   host-ip:
                       type: Value
                       help: 'ip of the machine that rpm will be built on'

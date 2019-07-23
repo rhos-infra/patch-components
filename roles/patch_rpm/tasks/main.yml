@@ -121,9 +121,10 @@
   tags:
     - skip_ansible_lint
 
-- name: Set facts to use non-trunk or trunk branch
+- name: Set fact to use non-trunk or trunk branch
   set_fact:
-      branch_trunk_str: "{{ component_branch.stdout | regex_search('-trunk') }}"
+      branch_trunk_str: '-trunk'
+  when: install.branch.trunk is defined and install.branch.trunk | bool == true
 
 # Clone component dist-git repo
 - name: Clone the component dist-git repo
