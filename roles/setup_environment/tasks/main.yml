@@ -36,3 +36,21 @@
   file:
       path: "{{ tmp_dir }}/dist-git"
       state: absent
+
+- name: Install python3 packages on RHEL8
+  become: yes
+  yum:
+    name:
+      - 'python3-devel'
+      - 'python3-tox'
+      - 'python3-testrepository'
+      - 'python3-pip'
+      - 'python3-py'
+      - 'python3-virtualenv'
+      - 'python3-pluggy'
+    state: present
+  when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 8
+  register: task_result
+  until: task_result is success
+  retries: 3
+  delay: 3
