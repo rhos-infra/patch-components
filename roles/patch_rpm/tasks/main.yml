@@ -13,7 +13,7 @@
 
 
 - name: RHEL7 specific packages
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' | default(false)
+  when: (ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7') | default('false') | bool
   tags:
     - skip_ansible_lint
   block:
@@ -62,7 +62,7 @@
       delay: 3
 
 - name: RHEL8 specific packages
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
+  when: (ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8') | default('false') | bool
   block:
     - name: Install packages required for patching - RHEL-8
       become: yes
