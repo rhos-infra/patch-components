@@ -13,6 +13,24 @@
        when: (install.host is defined) and (install.host.ip is defined) and (install.host.username is defined) and (install.host.key_file is defined)
 
 
+- name: Install python3 on RHEL8
+  hosts: undercloud:tester
+  become: yes
+  yum:
+    name:
+      - 'python3-devel'
+      - 'python3-tox'
+      - 'python3-testrepository'
+      - 'python3-pip'
+      - 'python3-py'
+      - 'python3-virtualenv'
+      - 'python3-pluggy'
+    state: present
+  register: task_result
+  when: ansible_os_family == "RedHat" and ansible_lsb.major_release|int == 8 
+  until: task_result is success
+  retries: 3
+
 - name: Patch and repackage components RPM
   hosts: undercloud:tester
   roles:
