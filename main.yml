@@ -12,7 +12,6 @@
           ansible_ssh_private_key_file: "{{ install.host.key_file }}"
        when: (install.host is defined) and (install.host.ip is defined) and (install.host.username is defined) and (install.host.key_file is defined)
 
-
 - name: Patch and repackage components RPM
   hosts: undercloud:tester
   roles:
