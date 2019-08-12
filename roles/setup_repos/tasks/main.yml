@@ -1,6 +1,6 @@
 ---
 - name: RHEL8 specific preparation
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
+  when: (ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8') | default(False)
   tags:
     - skip_ansible_lint
   block:
@@ -47,7 +47,7 @@
 
 
 - name: RHEL7 specific repositories
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' | default(false)
+  when: (ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7') | default(False)
   tags:
     - skip_ansible_lint
   block:
@@ -96,7 +96,7 @@
         enabled: no
 
 - name: RHEL8 specific repositories
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
+  when: (ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8') | default(False)
   tags:
     - skip_ansible_lint
   block:
