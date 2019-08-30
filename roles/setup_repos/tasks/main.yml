@@ -95,6 +95,13 @@
         gpgkey: "https://download.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-{{ ansible_distribution_major_version }}"
         enabled: no
 
+    # (migi) Needed to work-around python-devel dep issue.
+    - name: RHEL7 - Enable rhelosp-rhel-pending repo
+      become: yes
+      shell: |
+        set -euo pipefail
+        yum-config-manager --enable rhelosp-rhel-pending
+
 - name: RHEL8 specific repositories
   when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
   tags:
