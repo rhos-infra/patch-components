@@ -2,10 +2,8 @@
 map_component_to_pre_rel_version:
   default:
     pre_rel_version: '16'
-  cinder:
-    pre_rel_version: '15'
-  sahara:
-    pre_rel_version: '14'
+#  cinder:
+#    pre_rel_version: '16'
 
 
 map_component_to_distgit:
