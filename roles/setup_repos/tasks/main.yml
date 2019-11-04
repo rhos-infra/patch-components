@@ -119,7 +119,7 @@
       shell: |
         set -euo pipefail
         {{ dnf_bin }} -y module disable virt:rhel
-        {{ dnf_bin }} -y module enable virt:8.0.0
+        {{ dnf_bin }} -y module enable virt:8.1.0
 
     - name: Install packages required for patching - workaround - RHEL-8
       become: yes
