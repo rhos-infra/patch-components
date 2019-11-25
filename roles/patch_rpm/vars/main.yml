@@ -1,7 +1,7 @@
 # Make sure to increment pre_rel_version when version is released
 map_component_to_pre_rel_version:
   default:
-    pre_rel_version: '16'
+    pre_rel_version: '17'
 #  cinder:
 #    pre_rel_version: '16'
 
@@ -25,40 +25,6 @@ map_component_to_distgit:
     dist_git: 'openstack-nova'
   octavia:
     dist_git: 'openstack-octavia'
-  odl-aaa:
-    dist_git: 'opendaylight'
-  odl-autorelease:
-    dist_git: 'opendaylight'
-  odl-controller:
-    dist_git: 'opendaylight'
-  odl-dlux:
-    dist_git: 'opendaylight'
-  odl-genius:
-    dist_git: 'opendaylight'
-  odl-infrautils:
-    dist_git: 'opendaylight'
-  odl-lispflowmapping:
-    dist_git: 'opendaylight'
-  odl-mdsal:
-    dist_git: 'opendaylight'
-  odl-netconf:
-    dist_git: 'opendaylight'
-  odl-netvirt:
-    dist_git: 'opendaylight'
-  odl-neutron:
-    dist_git: 'opendaylight'
-  odl-odlparent:
-    dist_git: 'opendaylight'
-  odl-openflowjava:
-    dist_git: 'opendaylight'
-  odl-openflowplugin:
-    dist_git: 'opendaylight'
-  odl-ovsdb:
-    dist_git: 'opendaylight'
-  odl-sfc:
-    dist_git: 'opendaylight'
-  odl-yangtools:
-    dist_git: 'opendaylight'
   python-cinderclient:
     dist_git: 'python-cinderclient'
   python-glanceclient:
