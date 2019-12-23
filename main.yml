@@ -16,20 +16,16 @@
 - name: Patch and repackage components RPM
   hosts: undercloud
   roles:
-    - { role: setup_repos }
-    - { role: setup_environment}
-    - { role: copy_component }
-    - { role: patch_rpm }
-  when:
-    - install.host.ip is not defined
+    - { role: setup_repos, when: install.host.ip is not defined }
+    - { role: setup_environment, when: install.host.ip is not defined }
+    - { role: copy_component, when: install.host.ip is not defined }
+    - { role: patch_rpm, when: install.host.ip is not defined }
 
 - name: Patch and repackage components RPM
   hosts: tester
   roles:
-    - { role: setup_repos }
-    - { role: setup_environment}
-    - { role: copy_component }
-    - { role: patch_rpm }
-  when:
-    - install.host.ip is defined
+    - { role: setup_repos, when: install.host.ip is defined }
+    - { role: setup_environment, when: install.host.ip is defined }
+    - { role: copy_component, when: install.host.ip is defined }
+    - { role: patch_rpm, when: install.host.ip is defined }
 
