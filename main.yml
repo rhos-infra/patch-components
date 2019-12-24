@@ -21,7 +21,7 @@
     - { role: copy_component }
     - { role: patch_rpm }
   when:
-    - install.host.ip is not defined
+    - "{{ install.host.ip }}" is not defined
 
 - name: Patch and repackage components RPM
   hosts: tester
@@ -31,5 +31,5 @@
     - { role: copy_component }
     - { role: patch_rpm }
   when:
-    - install.host.ip is defined
+    - "{{ install.host.ip }}" is defined
 
