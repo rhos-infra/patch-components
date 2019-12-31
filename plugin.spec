@@ -8,11 +8,6 @@ subparsers:
         groups:
             - title: Patch the component source code
               options:
-                  pattern:
-                      type: Value
-                      help: 'A pattern of a node or group as appears in ansible inventory'
-                      requred: True
-                      default: 'tester'
                   component-name:
                       type: Value
                       help: 'name of the component (cinder, neutron, nova, etc)'
@@ -55,3 +50,8 @@ subparsers:
                           NOTE: This feature is currently supporting only OpenDaylight
                           components.
                       required: False
+                  pattern:
+                      type: Value
+                      help: 'A pattern of a node or group as appears in ansible inventory'
+                      required: False
+

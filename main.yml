@@ -14,7 +14,7 @@
 
 
 - name: Patch and repackage components RPM
-  hosts: "{{ install.pattern }}"
+  hosts: "{{ install.pattern | default('tester') }}"
   roles:
     - { role: setup_repos }
     - { role: setup_environment}
