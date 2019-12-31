@@ -1,12 +1,12 @@
 ---
-- name: add hosts to host list
+- name: add hosts to run the code using ansible-playbook
   hosts: localhost
   gather_facts: no
   tasks:
-     - name: add each host
+     - name: add the patcher host to the tester group
        add_host:
           name: "patcher"
-          groups: "patcher"
+          groups: "tester"
           ansible_ssh_user: "{{ install.host.username }}"
           ansible_ssh_host: "{{ install.host.ip }}"
           ansible_ssh_private_key_file: "{{ install.host.key_file }}"
@@ -14,7 +14,7 @@
 
 
 - name: Patch and repackage components RPM
-  hosts: "{{ ((install.host is defined) and (install.host.ip is defined)) | ternary('patcher', 'undercloud') }}"
+  hosts: "{{ install.pattern }}"
   roles:
     - { role: setup_repos }
     - { role: setup_environment}
