@@ -111,3 +111,11 @@
   shell: "cp {{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/results*/*/*/*.rpm /patched_rpms/"
   tags: patched-rpms-repo
   when: rpm_mockbuild.rc == 0
+
+- name: Copy RPMs to the undercloud if created on an another node 
+  synchronize:
+      src: /patched_rpms/
+      dest: /patched_rpms/
+      mode: pull
+  delegate_to: undercloud
+  when: install.pattern is defined
