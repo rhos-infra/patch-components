@@ -23,7 +23,6 @@
 
 - name: Create tmp directory on a local node
   hosts: localhost
-  become: yes
   tasks:
     - name: Create tmp dir
       tempfile:
@@ -58,16 +57,12 @@
         dest: "/patched_rpms"
         mode: pull
 
-
-- name: Cleanup 
+- name: Cleanup
   hosts: localhost
-  become: yes
   tasks:
     - name: remove the temporary dir
       file:
         path: "{{ tempfile_1.path }}"
         state: absent
       when: tempfile_1.path is defined
-
-
 
