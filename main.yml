@@ -40,6 +40,6 @@
         src: "/patched_rpms"
         dest: "/patched_rpms"
         mode: pull
-      delegate_to: "tester"
+      delegate_to: "{{ install.pattern }}" 
       when: install.pattern is defined
 
