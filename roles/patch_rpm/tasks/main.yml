@@ -173,14 +173,6 @@
       - patched-rpms-repo
       - skip_ansible_lint
 
-- name: Setup repository in /etc/yum.repos.d
-  become: yes
-  template:
-    src='patched_rpms.j2'
-    dest='/etc/yum.repos.d/patched_rpms.repo'
-  delegate_to: undercloud
-  tags: patched-rpms-repo
-
 - name: Remove patching requirements
   become: yes
   yum:
