@@ -21,7 +21,25 @@
     - { role: copy_component }
     - { role: patch_rpm }
 
+- name: Create tmp directory on a local node
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: Create tmp dir
+      tempfile:
+        state: directory
+        suffix: "{{ ansible_date_time.iso8601 }}"
+      register: tempdir_1
 
+- name: Copy RPMs from to local node
+  hosts: "{{ install.pattern | default('tester') }}"
+  become: yes
+  tasks:
+    - name: copy RPMs
+      synchronize:
+        src: "/patched_rpms"
+        dest: "{{ tempfile_1.path }}"
+        mode: push
 
 - name: Update undercloud node
   hosts: undercloud
@@ -32,14 +50,24 @@
         src='patched_rpms.j2'
         dest='/etc/yum.repos.d/patched_rpms.repo'
       tags: patched-rpms-repo
-      when: install.pattern is defined
 
     - name: Copy RPMs to the undercloud if created on an another node
       tags: sync-pull
       synchronize:
-        src: "/patched_rpms"
+        src: "{{ tempfile_1.path }}"
         dest: "/patched_rpms"
         mode: pull
-      delegate_to: "{{ install.pattern }}"
-      when: install.pattern is defined
+
+
+- name: Cleanup 
+  hosts: localhost
+  become: yes
+  tasks:
+    - name: remove the temporary dir
+      file:
+        path: "{{ tempfile_1.path }}"
+        state: absent
+      when: tempfile_1.path is defined
+
+
 
