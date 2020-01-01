@@ -37,7 +37,7 @@
     - name: copy RPMs
       synchronize:
         src: "/patched_rpms"
-        dest: "{{ tempdir_1.path }}"
+        dest: "{{ hostvars['localhost']['tempdir_1'].path }}"
         mode: push
 
 - name: Update undercloud node
@@ -53,7 +53,7 @@
     - name: Copy RPMs to the undercloud if created on an another node
       tags: sync-pull
       synchronize:
-        src: "{{ tempdir_1.path }}"
+        src: "{{ hostvars['localhost']['tempdir_1'].path }}"
         dest: "/patched_rpms"
         mode: pull
 
