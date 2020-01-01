@@ -34,10 +34,12 @@
       tags: patched-rpms-repo
       when: install.pattern is defined
 
-#    - name: Copy RPMs to the undercloud if created on an another node
-#      synchronize:
-#          src: /patched_rpms/
-#          dest: /patched_rpms/
-#          mode: pull
-#      when: install.pattern is defined
+    - name: Copy RPMs to the undercloud if created on an another node
+      tags: sync-pull
+      synchronize:
+        src: "/patched_rpms"
+        dest: "/patched_rpms"
+        mode: pull
+      delegate_to: "tester"
+      when: install.pattern is defined
 
