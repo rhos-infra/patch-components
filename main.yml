@@ -37,7 +37,7 @@
     - name: copy RPMs
       synchronize:
         src: "/patched_rpms"
-        dest: "{{ tempfile_1.path }}"
+        dest: "{{ tempdir_1.path }}"
         mode: push
 
 - name: Update undercloud node
@@ -53,7 +53,7 @@
     - name: Copy RPMs to the undercloud if created on an another node
       tags: sync-pull
       synchronize:
-        src: "{{ tempfile_1.path }}"
+        src: "{{ tempdir_1.path }}"
         dest: "/patched_rpms"
         mode: pull
 
@@ -62,7 +62,7 @@
   tasks:
     - name: remove the temporary dir
       file:
-        path: "{{ tempfile_1.path }}"
+        path: "{{ tempdir_1.path }}"
         state: absent
       when: tempfile_1.path is defined
 
