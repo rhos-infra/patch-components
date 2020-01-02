@@ -21,7 +21,7 @@
     - { role: copy_component }
     - { role: patch_rpm }
 
-- name: Create tmp directory on a local node
+- name: Create tmp directory on a local node and copy RPMs
   hosts: localhost
   tasks:
     - name: Create tmp dir
@@ -29,11 +29,6 @@
         state: directory
         suffix: "{{ ansible_date_time.iso8601 }}"
       register: tempdir_1
-
-- name: Copy RPMs from to local node
-  hosts: localhost
-  become: yes
-  tasks:
     - name: copy RPMs
       synchronize:
         src: "/patched_rpms"
