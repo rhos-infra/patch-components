@@ -31,14 +31,15 @@
       register: tempdir_1
 
 - name: Copy RPMs from to local node
-  hosts: "{{ install.pattern | default('tester') }}"
+  hosts: localhost
   become: yes
   tasks:
     - name: copy RPMs
       synchronize:
         src: "/patched_rpms"
-        dest: "{{ hostvars['localhost']['tempdir_1'].path }}"
-        mode: push
+        dest: "{{ tempdir_1.path }}"
+        mode: pull
+      delegate_to: "{{ install.pattern | default('tester') }}"
 
 - name: Update undercloud node
   hosts: undercloud
