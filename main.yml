@@ -29,15 +29,18 @@
         state: directory
         suffix: "{{ ansible_date_time.iso8601 }}"
       register: tempdir_1
-    - name: copy RPMs
+
+- name: Copy RPMs
+  hosts: "{{ install.pattern | default('tester') }}"
+  tasks:
+    - name: Copy RPMs using rsync
       synchronize:
-        src: "/patched_rpms"
-        dest: "{{ tempdir_1.path }}"
+        src: "/patched_rpms/"
+        dest: "{{ hostvars['localhost']['tempdir_1'].path }}/"
         mode: pull
-      delegate_to: "{{ install.pattern | default('tester') }}"
 
 - name: Update undercloud node
-  hosts: undercloud
+  hosts: tester
   become: yes
   tasks:
     - name: Setup repository in /etc/yum.repos.d
@@ -47,11 +50,10 @@
       tags: patched-rpms-repo
 
     - name: Copy RPMs to the undercloud if created on an another node
-      tags: sync-pull
       synchronize:
-        src: "{{ hostvars['localhost']['tempdir_1'].path }}"
+        src: "{{ hostvars['localhost']['tempdir_1'].path }}/"
         dest: "/patched_rpms"
-        mode: pull
+        mode: push
 
 - name: Cleanup
   hosts: localhost
