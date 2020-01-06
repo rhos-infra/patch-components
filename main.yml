@@ -62,5 +62,5 @@
       file:
         path: "{{ tempdir_1.path }}"
         state: absent
-      when: tempfile_1.path is defined
+      when: tempdir_1.path is defined
 
