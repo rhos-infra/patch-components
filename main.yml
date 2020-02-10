@@ -63,4 +63,3 @@
         path: "{{ tempdir_1.path }}"
         state: absent
       when: tempdir_1.path is defined
-

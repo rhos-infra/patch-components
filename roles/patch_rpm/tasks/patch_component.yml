@@ -111,4 +111,3 @@
   shell: "cp {{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/results*/*/*/*.rpm /patched_rpms/"
   tags: patched-rpms-repo
   when: rpm_mockbuild.rc == 0
-
