@@ -73,8 +73,8 @@
         option: enabled
         value: 1
       with_items:
-        - rhelosp-{{ install.component.version }}.0-unittest
-        - rhelosp-{{ install.component.version }}.0-test-deps
+        - rhelosp-{{ install.component.version | regex_replace('(^[0-9]+$)', '\\1.0') }}-unittest
+        - rhelosp-{{ install.component.version | regex_replace('(^[0-9]+$)', '\\1.0') }}-test-deps
 
     - name: Install rhpkg repos for RHEL-7
       become: yes

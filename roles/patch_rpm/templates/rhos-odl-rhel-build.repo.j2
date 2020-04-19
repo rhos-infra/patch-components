@@ -1,6 +1,6 @@
-[rhos-{{ install.component.version }}.0-odl-rhel-{{ ansible_distribution_major_version | int }}-build]
+[{{ branch_prefix }}-odl-rhel-{{ ansible_distribution_major_version | int }}-build]
 name=Tools required to build OpenDaylight
-baseurl="http://download.engineering.redhat.com/brewroot/repos/rhos-{{ install.component.version }}.0-odl-rhel-{{ ansible_distribution_major_version | int }}-build/latest/x86_64/"
+baseurl="http://download.engineering.redhat.com/brewroot/repos/{{ branch_prefix }}-odl-rhel-{{ ansible_distribution_major_version | int }}-build/latest/x86_64/"
 enabled=1
 gpgcheck=0
 priority=1

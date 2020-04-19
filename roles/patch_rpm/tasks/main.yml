@@ -2,6 +2,7 @@
   set_fact:
       component_dist_git_name: "{{ map_component_to_distgit[install.component.name].dist_git | default('openstack-' + install.component.name) }}"
       component_pre_rel_version: "{{ (map_component_to_pre_rel_version[install.component.name] | default (map_component_to_pre_rel_version['default'])).pre_rel_version }}"
+      component_version: "{{ install.component.version | regex_replace('(^[0-9]+$)', '\\1.0') }}"
   tags:
       - build-opendaylight
       - dist-git
@@ -126,11 +127,16 @@
       branch_trunk_str: '-trunk'
   when: install.branch is defined and install.branch.trunk
 
+# Compute the branch prefix, adding .0 if needed
+- name: Compute the branch prefix
+  set_fact:
+     branch_prefix: "rhos-{{ component.version }}{{ (not '.' in component.version)|ternary('.0','') }}"
+
 # Clone component dist-git repo
 - name: Clone the component dist-git repo
   git:
     repo="{{ component_dist_git_url }}"
-    version="rhos-{{ install.component.version }}.0-rhel-{{ ansible_distribution_version|int }}{{ branch_trunk_str | default('') }}"
+    version="{{ branch_prefix }}-rhel-{{ ansible_distribution_version|int }}{{ branch_trunk_str | default('') }}"
     dest="{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
     accept_hostkey=true
   retries: 3
@@ -183,6 +189,6 @@
       - 'python2-qpid-proton'
     state: absent
   register: task_result
-  when: install.component.version >= '13'
+  when: install.component.version|int >= '13'
   until: task_result is success
   retries: 3
