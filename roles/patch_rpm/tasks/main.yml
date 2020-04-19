@@ -130,7 +130,7 @@
 # Compute the branch prefix, adding .0 if needed
 - name: Compute the branch prefix
   set_fact:
-     branch_prefix: "rhos-{{ component.version }}{{ (not '.' in component.version)|ternary('.0','') }}"
+     branch_prefix: "rhos-{{ component_version }}{{ (not '.' in component_version)|ternary('.0','') }}"
 
 # Clone component dist-git repo
 - name: Clone the component dist-git repo
