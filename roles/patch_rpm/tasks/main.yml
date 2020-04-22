@@ -189,6 +189,6 @@
       - 'python2-qpid-proton'
     state: absent
   register: task_result
-  when: install.component.version|int >= '13'
+  when: install.component.version|int >= 13
   until: task_result is success
   retries: 3
