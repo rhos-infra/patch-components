@@ -1,4 +1,17 @@
 ---
+- name: Set tester node
+  hosts: localhost
+  tasks:
+    - name: Add chosen node to tester group
+      add_host:
+          name: "{{ test.tester.node|default(groups.undercloud|first) }}"
+          groups: "tester"
+    - include_role:
+          name: inventory-update
+      vars:
+          inventory_file_name: 'hosts-test'
+
+
 - name: add hosts to run the code using ansible-playbook
   hosts: localhost
   gather_facts: no
