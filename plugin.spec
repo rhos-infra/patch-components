@@ -54,6 +54,6 @@ subparsers:
                       type: Value
                       help: 'A pattern of a node or group as appears in ansible inventory'
                       required: False
-                  test-node:
+                  tester-node:
                       type: Value
                       help: The name of the node from where to run the patching
