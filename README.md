@@ -49,3 +49,7 @@ Add patch-components as a plugin:
 
 Run:
     infrared patch-components --host-ip A.B.C.D --host-username <user-name> --component-name <component-name>  --host-key_file ~/.ssh/id_rsa  --component-version <rhos version>
+
+### Contribute
+
+Contributions are made via GerritHub. Do not submit Pull Requests.
