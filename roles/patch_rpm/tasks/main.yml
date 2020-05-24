@@ -104,7 +104,6 @@
       chdir: "{{ tmp_dir }}/{{ install.component.name }}"
   register: component_patch_commitid
   tags:
-    - odl-package-rpm
     - skip_ansible_lint
     - build-opendaylight
 
@@ -165,12 +164,6 @@
 
 - name: Patch Component
   include_tasks: patch_component.yml
-  when: not (install.component.name | match("odl-.*")) | default(False)
-
-- name: Patch and build OpenDaylight
-  import_tasks: patch_opendaylight.yml
-  become: true
-  when: install.component.name | match("odl-.*") | default(False)
 
 - name: Create repository for patched RPMs
   command: "createrepo {{ patchedrpmdir }}"
