@@ -134,9 +134,9 @@
 # Clone component dist-git repo
 - name: Clone the component dist-git repo
   git:
-    repo="{{ component_dist_git_url }}"
-    version="{{ branch_prefix }}-rhel-{{ ansible_distribution_version|int }}{{ branch_trunk_str | default('') }}"
-    dest="{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
+    repo: "{{ component_dist_git_url }}"
+    version: "{{ branch_prefix }}-rhel-{{ ansible_distribution_version|int }}{{ branch_trunk_str | default('') }}"
+    dest: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
     accept_hostkey=true
   retries: 3
   delay: 120
@@ -150,9 +150,9 @@
 - name: Create patching logs directory
   become: yes
   file:
-    path="{{ logdir }}"
-    state=directory
-    mode=0777
+    path: "{{ logdir }}"
+    state: directory
+    mode: 0777
   tags: logs
 
 - name: set patchedrpmdir fact

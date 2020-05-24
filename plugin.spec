@@ -14,7 +14,7 @@ subparsers:
                       required: True
                   component-version:
                       type: Value
-                      help: 'branch of the component (5,6,7,8,9,10,11)'
+                      help: 'component RHOSP release'
                       required: True
                   component-path:
                       type: Value
