@@ -57,4 +57,3 @@ subparsers:
                   tester-node:
                       type: Value
                       help: The name of the node from where to run the patching
-                      default: 'undercloud-0'

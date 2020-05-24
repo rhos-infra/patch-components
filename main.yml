@@ -4,7 +4,7 @@
   tasks:
     - name: Add chosen node to tester group
       add_host:
-          name: "{{ install.tester.node|default(groups.tester|first) }}"
+          name: "{{ install.tester.node|default((groups.get('undercloud', {})|first))|default(groups.tester|first) }}"
           groups: "tester"
     - include_role:
           name: inventory-update
