@@ -9,7 +9,7 @@
   become: yes
   yum:
       name: 'rsync'
-      stat: present
+      state: present
   register: task_result
   until: task_result is success
   retries: 3
