@@ -2,9 +2,11 @@
 - name: Set tester node
   hosts: localhost
   tasks:
+    # TODO: change groups.tester to groups.tester|first when Ansible will be updated to at least 2.8.0 as there is a bug in ansible < 2.8.0
+    # where groups.tester|first causing 'name' value to evaluate groups.tester even if groups.undercloud is defined
     - name: Add chosen node to tester group
       add_host:
-          name: "{{ install.get('tester', {}).get('node', {})|default(groups.undercloud|first, true)|default(groups.tester|first) }}"
+          name: "{{ install.get('tester', {}).get('node')|default(groups.get('undercloud', {})|first, true)|default(groups.tester, true) }}"
           groups: "tester"
     - include_role:
           name: inventory-update
