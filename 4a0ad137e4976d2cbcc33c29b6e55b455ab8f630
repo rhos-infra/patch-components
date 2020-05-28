@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f9eb20de_e551fef9",
+        "filename": "main.yml",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1017875
+      },
+      "writtenOn": "2020-05-28T07:42:15Z",
+      "side": 1,
+      "message": "Thins one would also have to removed then I think?",
+      "range": {
+        "startLine": 49,
+        "startChar": 0,
+        "endLine": 53,
+        "endChar": 18
+      },
+      "revId": "4a0ad137e4976d2cbcc33c29b6e55b455ab8f630",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
