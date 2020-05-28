@@ -44,6 +44,7 @@
         state: directory
         suffix: "{{ ansible_date_time.iso8601 }}"
       register: tempdir_1
+      when: "'undercloud' not in groups['tester'][0]"
 
 - name: Copy RPMs
   hosts: "{{ install.pattern | default('tester') }}"
@@ -53,22 +54,26 @@
         src: "/patched_rpms/"
         dest: "{{ hostvars['localhost']['tempdir_1'].path }}/"
         mode: pull
+      when: "'undercloud' not in groups['tester'][0]"
 
 - name: Update undercloud node
   hosts: tester
   become: yes
   tasks:
-    - name: Setup repository in /etc/yum.repos.d
-      template:
-        src='patched_rpms.j2'
-        dest='/etc/yum.repos.d/patched_rpms.repo'
-      tags: patched-rpms-repo
+    - name: Copy RPMs to the undercloud
+      block:
+        - name: Setup repository in /etc/yum.repos.d
+          template:
+            src='patched_rpms.j2'
+            dest='/etc/yum.repos.d/patched_rpms.repo'
+          tags: patched-rpms-repo
 
-    - name: Copy RPMs to the undercloud if created on an another node
-      synchronize:
-        src: "{{ hostvars['localhost']['tempdir_1'].path }}/"
-        dest: "/patched_rpms"
-        mode: push
+        - name: Copy RPMs to the undercloud if created on an another node
+          synchronize:
+            src: "{{ hostvars['localhost']['tempdir_1'].path }}/"
+            dest: "/patched_rpms"
+            mode: push
+      when: "'undercloud' not in groups['tester'][0]"
 
 - name: Cleanup
   hosts: localhost
@@ -77,4 +82,6 @@
       file:
         path: "{{ tempdir_1.path }}"
         state: absent
-      when: tempdir_1.path is defined
+      when:
+        - tempdir_1.path is defined
+        - "'undercloud' not in groups['tester'][0]"
