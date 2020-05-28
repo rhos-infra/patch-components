@@ -2,16 +2,16 @@
 - name: Set tester node
   hosts: localhost
   tasks:
-    # TODO: change groups.tester to groups.tester|first when Ansible will be updated to at least 2.8.0 as there is a bug in ansible < 2.8.0
-    # where groups.tester|first causing 'name' value to evaluate groups.tester even if groups.undercloud is defined
     - name: Add chosen node to tester group
       add_host:
-          name: "{{ install.get('tester', {}).get('node')|default(groups.get('undercloud', {})|first, true)|default(groups.tester, true) }}"
+          name: "{{ install.get('tester', {}).get('node') | default(groups.get('undercloud', [])|first, true) }}"
           groups: "tester"
+      when: groups.tester is not defined or groups.tester|length < 1
     - include_role:
           name: inventory-update
       vars:
           inventory_file_name: 'hosts-test'
+      when: groups.tester is not defined or groups.tester|length < 1
 
 
 - name: add hosts to run the code using ansible-playbook
@@ -44,6 +44,7 @@
         state: directory
         suffix: "{{ ansible_date_time.iso8601 }}"
       register: tempdir_1
+      when: "'undercloud' not in groups['tester'][0]"
 
 - name: Copy RPMs
   hosts: "{{ install.pattern | default('tester') }}"
@@ -53,6 +54,7 @@
         src: "/patched_rpms/"
         dest: "{{ hostvars['localhost']['tempdir_1'].path }}/"
         mode: pull
+      when: "'undercloud' not in groups['tester'][0]"
 
 - name: Update undercloud node
   hosts: tester
@@ -60,8 +62,8 @@
   tasks:
     - name: Setup repository in /etc/yum.repos.d
       template:
-        src='patched_rpms.j2'
-        dest='/etc/yum.repos.d/patched_rpms.repo'
+        src: 'patched_rpms.j2'
+        dest: '/etc/yum.repos.d/patched_rpms.repo'
       tags: patched-rpms-repo
 
     - name: Copy RPMs to the undercloud if created on an another node
@@ -69,6 +71,7 @@
         src: "{{ hostvars['localhost']['tempdir_1'].path }}/"
         dest: "/patched_rpms"
         mode: push
+      when: "'undercloud' not in groups['tester'][0]"
 
 - name: Cleanup
   hosts: localhost
@@ -77,4 +80,6 @@
       file:
         path: "{{ tempdir_1.path }}"
         state: absent
-      when: tempdir_1.path is defined
+      when:
+        - tempdir_1.path is defined
+        - "'undercloud' not in groups['tester'][0]"
