@@ -36,24 +36,6 @@
     - { role: copy_component }
     - { role: patch_rpm }
 
-- name: Create tmp directory on a local node and copy RPMs
-  hosts: localhost
-  tasks:
-    - name: Create tmp dir
-      tempfile:
-        state: directory
-        suffix: "{{ ansible_date_time.iso8601 }}"
-      register: tempdir_1
-
-- name: Copy RPMs
-  hosts: "{{ install.pattern | default('tester') }}"
-  tasks:
-    - name: Copy RPMs using rsync
-      synchronize:
-        src: "/patched_rpms/"
-        dest: "{{ hostvars['localhost']['tempdir_1'].path }}/"
-        mode: pull
-
 - name: Update undercloud node
   hosts: tester
   become: yes
