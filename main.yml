@@ -2,7 +2,6 @@
 - name: Set tester node
   hosts: localhost
   tasks:
-    - when: groups.tester is not defined or groups.tester|length < 1
       block:
         - name: Add chosen node to tester group
           add_host:
@@ -12,6 +11,7 @@
               name: inventory-update
           vars:
               inventory_file_name: 'hosts-test'
+      when: groups.tester is not defined or groups.tester|length < 1
 
 
 - name: add hosts to run the code using ansible-playbook
