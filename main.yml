@@ -73,6 +73,11 @@
         mode: push
       when: "'undercloud' not in groups['tester'][0]"
 
+    - name: SELinux - svirt_sandbox_file_t - allow containers to read mounted patched_rpms
+      shell: >
+        chcon -Rt svirt_sandbox_file_t /patched_rpms
+      when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
+
 - name: Cleanup
   hosts: localhost
   tasks:
