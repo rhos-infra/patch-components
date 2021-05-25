@@ -21,7 +21,7 @@
       become: yes
       shell: |
         set -euo pipefail
-        {{ dnf_bin }} -y module enable libselinux-python
+        {{ dnf_bin }} -y module enable libselinux-python || true
         {{ dnf_bin }} -y install libselinux-python
         {{ dnf_bin }} -y module enable python36
         {{ dnf_bin }} -y install python36
