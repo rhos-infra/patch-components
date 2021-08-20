@@ -86,14 +86,15 @@
       retries: 3
       delay: 3
 
-    # Install rdopkg from pip for RHEL8
-    - name: Install rdopkg from pip as it's not yet fully packaged
+    # Install rdopkg from EPEL repository
+    - name: Install rdopkg from EPEL repository
       become: yes
-      pip:
+      yum:
         name:
           - 'rdopkg'
         state: present
-        executable: pip-3.6
+        enablerepo: "epel"
+      register: task_result
       until: task_result is success
       retries: 3
       delay: 3
