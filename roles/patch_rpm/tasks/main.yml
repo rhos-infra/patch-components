@@ -185,3 +185,21 @@
   when: install.component.version|int >= 13
   until: task_result is success
   retries: 3
+
+
+- name: remove RHEL8 specific packages
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
+  block:
+    # Remove pyOpenSSL and rdopkg from pip for RHEL8
+    - name: remove pyOpenSSL and rdopkg from pip
+      become: yes
+      pip:
+        name:
+          - 'pyOpenSSL'
+          - 'rdopkg'
+        state: absent
+        executable: pip-3.6
+      until: task_result is success
+      retries: 3
+      delay: 3
+
