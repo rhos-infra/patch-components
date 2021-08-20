@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "91df5b85_a06d9163",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1016110
+      },
+      "writtenOn": "2021-08-20T23:04:51Z",
+      "side": 1,
+      "message": "Please revert, this is not the fix. I\u0027ve even sent a notice. The fix is \nhttps://review.gerrithub.io/c/rhos-infra/patch-components/+/522624",
+      "revId": "2f81c8f9aed38cec0438b51d8be0cbd75b42a029",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
