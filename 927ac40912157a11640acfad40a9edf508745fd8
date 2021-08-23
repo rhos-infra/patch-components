@@ -16,6 +16,24 @@
       "message": "still tempest fails to get cirros image from https.\n\nlets see if \n\nhttps://review.gerrithub.io/c/redhat-openstack/infrared/+/522656/ \n\nwill help.\n\nThe build with 522656 is https://url.corp.redhat.com/with-522656 ",
       "revId": "927ac40912157a11640acfad40a9edf508745fd8",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1862905f_54a2ea96",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1016110
+      },
+      "writtenOn": "2021-08-23T08:04:33Z",
+      "side": 1,
+      "message": "That\u0027s a different problem that has been discussed internally and it\u0027s probably related to the host where cirros is downloaded from.",
+      "parentUuid": "2cc2df11_0905af6c",
+      "revId": "927ac40912157a11640acfad40a9edf508745fd8",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
