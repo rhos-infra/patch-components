@@ -76,15 +76,6 @@
         - rhelosp-{{ install.component.version | regex_replace('(^[0-9]+$)', '\\1.0') }}-unittest
         - rhelosp-{{ install.component.version | regex_replace('(^[0-9]+$)', '\\1.0') }}-test-deps
 
-    - name: Install rhpkg repos for RHEL-7
-      become: yes
-      yum_repository:
-        name: rhpkg
-        description: rhpkg for Red Hat Enterprise Linux
-        baseurl: "http://download.devel.redhat.com/rhel-7/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-RHEL-7/compose/Server/x86_64/os/"
-        gpgcheck: no
-        enabled: yes
-
 - name: RHEL8 specific repositories
   when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
   tags:

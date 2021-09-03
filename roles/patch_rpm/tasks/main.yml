@@ -39,7 +39,7 @@
           - 'gcc'
           - 'git'
           - 'libffi-devel'
-          - 'mock'
+          - 'http://download.eng.tlv.redhat.com/rhel-7/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-RHEL-7/compose/Server/x86_64/os/Packages/mock-1.2.21-1.el7eng.noarch.rpm'
           - 'openssl-devel'
           - 'rpm-build'
         state: present
