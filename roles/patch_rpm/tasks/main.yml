@@ -41,8 +41,19 @@
           - 'libffi-devel'
           - 'mock'
           - 'openssl-devel'
+        state: present
+      register: task_result
+      until: task_result is success
+      retries: 3
+      delay: 3
+
+    - name: Install rpm-build from non-rhpkg repository
+      become: yes
+      yum:
+        name:
           - 'rpm-build'
         state: present
+        disablerepo: 'rhpkg'
       register: task_result
       until: task_result is success
       retries: 3
