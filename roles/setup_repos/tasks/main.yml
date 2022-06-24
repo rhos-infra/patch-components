@@ -1,32 +1,4 @@
 ---
-- name: RHEL8 specific preparation
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
-  tags:
-    - skip_ansible_lint
-  block:
-    # Standard yum is failing
-    # Ansible expects dnf from python2, needs to use shell
-    - name: Install rhos-release - RHEL-8
-      become: yes
-      shell: |
-        {{ dnf_bin }} -y install http://download.devel.redhat.com/rcm-guest/puddles/OpenStack/rhos-release/rhos-release-latest.noarch.rpm
-
-    - name: Execute rhos-release for initial install of RHOS repos
-      become: yes
-      shell: "{{ rhos_release_bin }} -u"
-      tags:
-        - skip_ansible_lint
-
-    - name: Enable correct python/selinux modules for RHEL-8
-      become: yes
-      shell: |
-        set -euo pipefail
-        {{ dnf_bin }} -y module enable libselinux-python || true
-        {{ dnf_bin }} -y install libselinux-python
-        {{ dnf_bin }} -y module enable python36
-        {{ dnf_bin }} -y install python36
-        {{ alternatives_bin }} --set python /usr/bin/python3
-
 # This task will register all repos on the system to disable each one of them
 # with the second task.
 - name: Register all the repositories
@@ -45,26 +17,19 @@
     replace: "enabled=0"
   with_items: "{{ yum_repos.stdout_lines }}"
 
+- name: Deploy rhos-release
+  include_role:
+      name: rhos-release
+  vars:
+      release: "{{ install.component.version }}"
+      build: "latest"
+      rhos_release_rpm: "https://url.corp.redhat.com/rhos-release-latest-rpm"
 
 - name: RHEL7 specific repositories
   when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '7' | default(false)
   tags:
     - skip_ansible_lint
   block:
-    - name: Install rhos-release - RHEL-7
-      become: yes
-      yum:
-        name: "http://download.devel.redhat.com/rcm-guest/puddles/OpenStack/rhos-release/rhos-release-latest.noarch.rpm"
-      register: task_result
-      until: task_result is success
-      retries: 3
-      delay: 3
-
-    - name: Execute rhos-release to install rhos repos
-      become: yes
-      shell: "{{ rhos_release_bin }} -x; {{ rhos_release_bin }} -P -r {{ ansible_distribution_version }} {{ install.component.version }}"
-      changed_when: true
-
     - name: Enable unittest and test-deps repositories
       become: yes
       ini_file:
@@ -76,33 +41,20 @@
         - rhelosp-{{ install.component.version | regex_replace('(^[0-9]+$)', '\\1.0') }}-unittest
         - rhelosp-{{ install.component.version | regex_replace('(^[0-9]+$)', '\\1.0') }}-test-deps
 
-    - name: Install rhpkg repos for RHEL-7
-      become: yes
-      yum_repository:
-        name: rhpkg
-        description: rhpkg for Red Hat Enterprise Linux
-        baseurl: "http://download.devel.redhat.com/rhel-7/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-RHEL-7/compose/Server/x86_64/os/"
-        gpgcheck: no
-        enabled: yes
-
 - name: RHEL8 specific repositories
   when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
   tags:
     - skip_ansible_lint
   block:
-    - name: Execute rhos-release to install rhos repos
+    - name: Enable correct python/selinux modules for RHEL-8
       become: yes
-      shell: "{{ rhos_release_bin }} -x; {{ rhos_release_bin }} -P -r {{ ansible_distribution_version }} {{ install.component.version }}"
-      changed_when: true
-
-    - name: Install rhpkg repos for RHEL-8
-      become: yes
-      yum_repository:
-        name: rhpkg
-        description: rhpkg for Red Hat Enterprise Linux
-        baseurl: "http://download.devel.redhat.com/rhel-8/rel-eng/RCMTOOLS/latest-RCMTOOLS-2-RHEL-8/compose/BaseOS/x86_64/os/"
-        gpgcheck: no
-        enabled: yes
+      shell: |
+        set -euo pipefail
+        {{ dnf_bin }} -y module enable libselinux-python || true
+        {{ dnf_bin }} -y install libselinux-python
+        {{ dnf_bin }} -y module enable python36
+        {{ dnf_bin }} -y install python36
+        {{ alternatives_bin }} --set python /usr/bin/python3
 
     - name: Enable correct Virt modules for RHEL-8
       become: yes
@@ -111,11 +63,12 @@
         {{ dnf_bin }} -y module disable virt
         {{ dnf_bin }} -y module enable virt
 
-    - name: Install packages required for patching - workaround - RHEL-8
-      become: yes
-      shell: |
-        set -euo pipefail
-        {{ dnf_bin }} install -y http://download.devel.redhat.com/brewroot/vol/rhel-8/packages/python-distro/1.4.0/1.el8eng/noarch/python3-distro-1.4.0-1.el8eng.noarch.rpm
+- name: Install rhpkg repos
+  become: yes
+  get_url:
+    url: https://url.corp.redhat.com/rcm-tools-el{{ ansible_distribution_major_version }}-repo
+    dest: /etc/yum.repos.d/rcm-tools-rhel{{ ansible_distribution_major_version }}.repo
+    validate_certs: no
 
 # To satisfy rdopkg and its dependencies.
 - name: Install EPEL repository
