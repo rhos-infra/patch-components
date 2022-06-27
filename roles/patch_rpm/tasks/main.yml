@@ -53,7 +53,9 @@
         name:
           - 'rpm-build'
         state: present
-        disablerepo: 'rhpkg'
+        disablerepo:
+          - rcm-tools-rhel-7-server-rpms
+          - rcm-tools-rhel-7-server-optional-rpms
       register: task_result
       until: task_result is success
       retries: 3
