@@ -49,11 +49,22 @@
 
     - name: Install rpm-build from non-rhpkg repository
       become: yes
+      vars:
+        disabled_repos:
+          '7':
+            - rcm-tools-rhel-7-server-rpms
+            - rcm-tools-rhel-7-server-optional-rpms
+          '8':
+            - rcm-tools-rhel-8-baseos-rpms
+            - rcm-tools-rhel-8-server-optional-rpms
+          '9':
+            - rcm-tools-rhel-9-baseos-rpms
+            - rcm-tools-rhel-9-server-optional-rpms
       yum:
         name:
           - 'rpm-build'
         state: present
-        disablerepo: 'rhpkg'
+        disablerepo: "{{ disabled_repos[ansible_distribution_major_version]|default(omit) }}" 
       register: task_result
       until: task_result is success
       retries: 3
