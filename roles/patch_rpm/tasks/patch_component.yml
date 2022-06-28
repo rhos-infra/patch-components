@@ -21,6 +21,9 @@
     git branch {{ branch_prefix }}{{ branch_trunk_str | default('') }}-patches patches/gerrit-patch;
   args:
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
+  environment:
+    # temporary variable until rdopkg is always installed from RPMs
+    PATH: "{{ ansible_env.PATH }}:~/.local/bin"
   tags:
     - skip_ansible_lint
   when: install.component.version|int < component_pre_rel_version|int
@@ -44,6 +47,9 @@
       dest: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}/patch.sh"
       force: yes
       mode: "u+rwx"
+  environment:
+    # temporary variable until rdopkg is always installed from RPMs
+    PATH: "{{ ansible_env.PATH }}:~/.local/bin"
   when: install.component.version|int == component_pre_rel_version|int
 
 - name: Prepare dist-git repo for patching and performs actual patching
