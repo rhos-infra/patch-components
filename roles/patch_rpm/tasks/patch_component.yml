@@ -33,6 +33,9 @@
     rdopkg patch -p patches/{{ branch_prefix }}{{ branch_trunk_str | default('') }}-patches;
   args:
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
+  environment:
+    # temporary variable until rdopkg is always installed from RPMs
+    PATH: "{{ ansible_env.PATH }}:~/.local/bin"
   changed_when: true
   tags:
     - skip_ansible_lint
@@ -52,6 +55,9 @@
   shell: ./patch.sh TARGET="{{ install.component.name }}" TARGET_DIR="{{ tmp_dir }}" PRE_RELEASE="{{ pre_rel_switch }}"
   args:
     chdir: "{{ tmp_dir }}/dist-git/{{ component_dist_git_name }}"
+  environment:
+    # temporary variable until rdopkg is always installed from RPMs
+    PATH: "{{ ansible_env.PATH }}:~/.local/bin"
   register: patch
   tags:
     - skip_ansible_lint
