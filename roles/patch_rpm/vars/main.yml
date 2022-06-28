@@ -1,7 +1,7 @@
 # Make sure to increment pre_rel_version when version is released
 map_component_to_pre_rel_version:
   default:
-    pre_rel_version: '17'
+    pre_rel_version: '18'
 #  cinder:
 #    pre_rel_version: '16'
 
