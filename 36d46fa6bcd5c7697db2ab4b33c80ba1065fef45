@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0060b707_1ca3095f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006664
+      },
+      "writtenOn": "2022-06-29T10:38:08Z",
+      "side": 1,
+      "message": "see OSPCRE-640 for ore details on the verification. @tosky, thanks a lot.",
+      "revId": "36d46fa6bcd5c7697db2ab4b33c80ba1065fef45",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
