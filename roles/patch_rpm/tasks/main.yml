@@ -75,10 +75,10 @@
       retries: 3
       delay: 3
 
-- name: RHEL8 specific packages
-  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version == '8' | default(false)
+- name: RHEL>=8 specific packages
+  when: ansible_os_family == 'RedHat' and ansible_distribution_major_version|int >= 8 | default(false)
   block:
-    - name: Install packages required for patching - RHEL-8
+    - name: Install packages required for patching - RHEL >= 8
       become: yes
       dnf:
         name:
