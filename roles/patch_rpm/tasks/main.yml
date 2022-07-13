@@ -200,6 +200,14 @@
       - patched-rpms-repo
       - skip_ansible_lint
 
+- name: Fix SELinux for the patched RPMs (match yum one)
+  file:
+    path: "{{ patchedrpmdir }}"
+    recurse: yes
+    selevel: system_u
+    serole: object_r
+    setype: rpm_var_cache_t
+
 - name: Remove patching requirements
   become: yes
   yum:
