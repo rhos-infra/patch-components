@@ -16,6 +16,23 @@
       "message": "Are we sure this is the issue?",
       "revId": "385a09b7650e34af0f0275e2dec8a1dcf3e8a2c6",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e805a218_72c914c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1016110
+      },
+      "writtenOn": "2023-02-09T09:53:29Z",
+      "side": 1,
+      "message": "Also, this should have been probably limited to the case when el8 is used, not just everywhere. Epel usage should be avoided whenever possible.",
+      "revId": "385a09b7650e34af0f0275e2dec8a1dcf3e8a2c6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ],
   "submitRequirementResults": []
