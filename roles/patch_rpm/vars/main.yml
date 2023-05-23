@@ -47,3 +47,9 @@ map_component_to_distgit:
     dist_git: 'openstack-tripleo-heat-templates'
   python-neutron-tests-tempest:
     dist_git: 'python-neutron-tests-tempest'
+  python-manila-tests-tempest:
+    dist_git: 'python-manila-tests-tempest'
+  python-cinder-tests-tempest:
+    dist_git: 'python-cinder-tests-tempest'
+  python-glance-tests-tempest:
+    dist_git: 'python-glance-tests-tempest'
