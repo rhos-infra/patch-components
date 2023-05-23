@@ -16,6 +16,24 @@
       "message": "I\u0027m pretty sure (also looking at the other elements in the list) that the dist-git is the source RPM name, not the binary RPM.\n\nThis means python-manila-tests-tempest, etc",
       "revId": "74d5905d6c4ac31273ef868d857c51c22b8ac215",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abdb2251_652fb71b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1014216
+      },
+      "writtenOn": "2023-05-23T09:27:22Z",
+      "side": 1,
+      "message": "Yes, that\u0027s what it looks like..",
+      "parentUuid": "4110553b_daedb4a6",
+      "revId": "74d5905d6c4ac31273ef868d857c51c22b8ac215",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
