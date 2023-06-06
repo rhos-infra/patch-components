@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a122756_8431c70e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1017622
+      },
+      "writtenOn": "2023-06-06T11:51:14Z",
+      "side": 1,
+      "message": "it has been verified on staging Jenkins, job DFG-network-ovn-bgp-agent-17.1_director-rhel-virthost-basic_topology-ipv4-geneve-fix-patch-components",
+      "revId": "2d30f8f9b132437f93242415960a4b1f32e250d0",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
