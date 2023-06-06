@@ -53,3 +53,5 @@ map_component_to_distgit:
     dist_git: 'python-cinder-tests-tempest'
   python-glance-tests-tempest:
     dist_git: 'python-glance-tests-tempest'
+  ovn-bgp-agent:
+    dist_git: 'ovn-bgp-agent'
