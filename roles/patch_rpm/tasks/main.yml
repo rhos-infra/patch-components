@@ -9,7 +9,7 @@
 
 - name: Setting component_dist_git_url
   set_fact:
-      component_dist_git_url: "git://pkgs.devel.redhat.com/rpms/{{ component_dist_git_name }}"
+      component_dist_git_url: "https://pkgs.devel.redhat.com/git/rpms/{{ component_dist_git_name }}"
   tags: dist-git
 
 
