@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41389f28_b8a21481",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006664
+      },
+      "writtenOn": "2023-09-05T13:33:20Z",
+      "side": 1,
+      "message": "verified by https://url.corp.redhat.com/d8d852f",
+      "revId": "ba19efda1320edbb16fd8775c8bc3c43f3e32341",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
