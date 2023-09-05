@@ -1,0 +1,9 @@
+Code-Review+1: Luigi Toscano <ltoscano@redhat.com>
+Verified+1: David Sariel <dsariel@redhat.com>
+Code-Review+2: David Sariel <dsariel@redhat.com>
+Submitted-by: David Sariel <dsariel@redhat.com>
+Submitted-at: Tue, 05 Sep 2023 13:33:26 +0000
+Reviewed-on: https://review.gerrithub.io/c/rhos-infra/patch-components/+/1168505
+Comments-Total: 1
+Project: rhos-infra/patch-components
+Branch: refs/heads/master
