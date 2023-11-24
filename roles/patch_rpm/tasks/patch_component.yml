@@ -57,6 +57,18 @@
     - skip_ansible_lint
   when: install.component.version|int == component_pre_rel_version|int
 
+- name: Update ansible_facts.packages
+  package_facts:
+
+- name: Disable use_bootstrap_image from mock configuration if version is higher than 5
+  become: yes
+  lineinfile:
+    path: "/etc/mock/site-defaults.cfg"
+    regex: >-
+      ^config_opts\['use_bootstrap_image'\]
+    line: "config_opts['use_bootstrap_image'] = False"
+  when: ansible_facts.packages.mock[0].version is version("5.0", ">=")
+
 # Now that the repo is patched, generate RPMs from it
 - block:
     - name: Build new RPM from patched dist-git repo
