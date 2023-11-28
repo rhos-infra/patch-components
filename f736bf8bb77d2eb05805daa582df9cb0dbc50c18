@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6fb840dc_24dc700d",
+        "filename": "roles/patch_rpm/tasks/patch_component.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1016110
+      },
+      "writtenOn": "2023-11-28T08:54:06Z",
+      "side": 1,
+      "message": "Ok, I didn\u0027t remember lineinfile has a fallback behavior of inserting if the regex is not found, so all is good.",
+      "parentUuid": "982c3c6d_231f4a12",
+      "revId": "f736bf8bb77d2eb05805daa582df9cb0dbc50c18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "64c305d6_00a71e3a",
         "filename": "roles/patch_rpm/tasks/patch_component.yml",
         "patchSetId": 3
