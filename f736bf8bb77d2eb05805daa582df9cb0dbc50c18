@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "982c3c6d_231f4a12",
+        "filename": "roles/patch_rpm/tasks/patch_component.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1016110
+      },
+      "writtenOn": "2023-11-28T08:39:11Z",
+      "side": 1,
+      "message": "shouldn\u0027t the option be unconditionally set to False, even when the option is not found? Or at least on Fedora I see that /etc/mock/site-defaults.cfg is basically empty and /usr/share/doc/mock/site-defaults.cfg shows that that value is True by default",
+      "revId": "f736bf8bb77d2eb05805daa582df9cb0dbc50c18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "64c305d6_00a71e3a",
         "filename": "roles/patch_rpm/tasks/patch_component.yml",
         "patchSetId": 3
