@@ -18,6 +18,24 @@
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb28c1ad_460bd60d",
+        "filename": "roles/patch_rpm/tasks/patch_component.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1017622
+      },
+      "writtenOn": "2023-11-28T08:46:09Z",
+      "side": 1,
+      "message": "Do you mean to add the line to the file when the regex is not found in the file?\nYes, that\u0027s how it works.\n\nhttps://docs.ansible.com/ansible/latest/collections/ansible/builtin/lineinfile_module.html\nIf the regular expression is not matched, the line will be added to the file in keeping with insertbefore or insertafter settings.",
+      "parentUuid": "982c3c6d_231f4a12",
+      "revId": "f736bf8bb77d2eb05805daa582df9cb0dbc50c18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "64c305d6_00a71e3a",
