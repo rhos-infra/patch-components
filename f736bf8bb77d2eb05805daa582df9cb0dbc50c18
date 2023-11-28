@@ -22,6 +22,30 @@
       },
       "revId": "f736bf8bb77d2eb05805daa582df9cb0dbc50c18",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2280c194_d60488f1",
+        "filename": "roles/patch_rpm/tasks/patch_component.yml",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1017622
+      },
+      "writtenOn": "2023-11-28T08:19:45Z",
+      "side": 1,
+      "message": "mock is installed at lines 42 or 93 from this file:\nhttps://github.com/rhos-infra/patch-components/blob/master/roles/patch_rpm/tasks/main.yml",
+      "parentUuid": "64c305d6_00a71e3a",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 70,
+        "endChar": 70
+      },
+      "revId": "f736bf8bb77d2eb05805daa582df9cb0dbc50c18",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
