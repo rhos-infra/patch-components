@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca62fb65_6fca8ff1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1014339
+      },
+      "writtenOn": "2023-12-06T18:16:25Z",
+      "side": 1,
+      "message": "validated in http://rhos-ci-logs.lab.eng.tlv2.redhat.com/logs/rcj/DFG-all-unified-16.2_director-rhel-virthost-3cont_2comp-ipv4-vxlan-lvm-default/1251/test_results/tempest-results-neutron.1.html",
+      "revId": "0674b809530522827bbf545dd15fbb1177520c9d",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
