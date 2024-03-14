@@ -57,3 +57,12 @@ subparsers:
                   tester-node:
                       type: Value
                       help: The name of the node from where to run the patching
+                  tls-ca:
+                      type: Value
+                      help: |
+                          Specifies the custom CA public key. Might be URL or a link to local file.
+                          Might be several certificates provided, separated with coma
+                          Example:
+                              --tls-ca=https://foo.com/ca.pem,http://bar.org/cert.pem
+                              --tls-ca=/foo/bar/ca.pem
+                      default: ''

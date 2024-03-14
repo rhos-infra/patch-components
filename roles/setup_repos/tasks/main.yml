@@ -1,4 +1,12 @@
 ---
+- name: Install the CA
+  become: yes
+  include_role:
+      name: tls-ca
+  vars:
+      tlsca: "{{ install.tls.ca }}"
+  when: install.tls.ca != ''
+
 # This task will register all repos on the system to disable each one of them
 # with the second task.
 - name: Register all the repositories
